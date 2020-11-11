@@ -1,9 +1,21 @@
-﻿@{
+﻿@model RQST.Models.Login
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <h1>Welcome to RQST! </h1>
+    <div class="container" id="loginbox">
+        <form asp-controller="Home" asp-action="Index" method="post">
+            <p style="color:red;">@TempData["Message"]</p>
+            <p>Email</p>
+            <input type="email" asp-for="Email" />
+            <br />
+            <p>Password</p>
+            <input type="password" asp-for="Password" />
+            <br />
+            <input type="submit" value="Login" />
+        </form>
+    </div>
+    
 </div>
