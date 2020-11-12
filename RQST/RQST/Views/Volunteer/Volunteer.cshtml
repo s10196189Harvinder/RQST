@@ -1,7 +1,26 @@
-﻿@*
+﻿@model RQST.Models.Request
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
-
+<!-- this is a demo for submitting-->
 <h2>Volunteer page</h2>
+
+<div class="container" id="loginbox">
+    <form asp-controller="Volunteer" asp-action="Volunteer" method="post">
+        <p style="color:red;">@TempData["Message"]</p>
+        <p>Name</p>
+        <input asp-for="Name" />
+        <br />
+        <p>Address</p>
+        <input asp-for="Address" />
+        <br/>
+        <p>Deliverable</p>
+        <input  asp-for="Deliverables" />
+        <br />
+        <p>Special need</p>
+        <input asp-for="SpecialRequest" />
+        <input type="submit" value="submit" />
+    </form>
+</div>

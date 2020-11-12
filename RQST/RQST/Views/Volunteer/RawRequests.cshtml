@@ -1,0 +1,23 @@
+﻿@model List<Request>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<table style="border: 1px black;padding:4px;">
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Deliverables</th>
+        <th>Special Needs</th>
+    </tr>
+    @foreach(Request request in Model)
+    {
+        <tr>
+            <td>@request.Name</td>
+            <td>@request.Address</td>
+            <td>@request.Deliverables</td>
+            <td>@request.SpecialRequest</td>
+        </tr>
+    }
+</table>

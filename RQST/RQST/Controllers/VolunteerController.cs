@@ -2,15 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RQST.DAL;
+using RQST.Models;
 
 namespace RQST.Controllers
 {
     public class VolunteerController : Controller
     {
+        private DataDAL DataDALContext = new DataDAL();
         public IActionResult Volunteer()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> VolunteerAsync(string Name, string Deliverables, string SpecialRequest, string Address)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            await DataDALContext.postdata(Name, Deliverables, SpecialRequest, Address, auth);
+            return RedirectToAction("Requests");
+        }
+        public async Task<IActionResult> RawRequestsAsync()
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            List<Request> reqlist = await DataDALContext.getdata(auth);
+            return View(reqlist);
         }
     }
 }
