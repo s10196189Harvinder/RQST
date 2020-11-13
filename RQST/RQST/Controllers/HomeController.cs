@@ -23,12 +23,17 @@ namespace RQST.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+
+        public IActionResult LoginPage()
+        {
             HttpContext.Session.Clear();
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> IndexAsync(string email, string password)
+        public async Task<IActionResult> LoginPageAsync(string email, string password)
         {
             IDictionary<string, string> response = new Dictionary<string, string>();
             response = await loginDALContext.loginAsync(email, password);       //reponse obtained from the DALs
@@ -45,10 +50,6 @@ namespace RQST.Controllers
             if (emailname.Contains("admin"))                                    //Checking for which type of email the user is signing in with
             {
                 return RedirectToAction("Admin","Admin");     //Admin home page
-            }
-            else if (emailname.Contains("vol"))
-            {
-                return RedirectToAction("Volunteer", "Volunteer");  //Volunteer home page
             }
             else
             {
