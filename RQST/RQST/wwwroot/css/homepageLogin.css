@@ -1,0 +1,17 @@
+﻿.form {
+    position: relative;
+}
+
+.input {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    opacity: 0.3;
+}
