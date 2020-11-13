@@ -26,13 +26,8 @@ namespace RQST.Controllers
             return View();
         }
 
-        public IActionResult LoginPage()
-        {
-            return View();
-        }
-
         [HttpPost]
-        public async Task<IActionResult> LoginPageAsync(string email, string password)
+        public async Task<IActionResult> IndexAsync(string email, string password)
         {
             string auth = "";
             try
@@ -48,6 +43,10 @@ namespace RQST.Controllers
             if (emailname.Contains("admin"))
             {
                 return RedirectToAction("Admin","Admin");
+            }
+            else if (emailname.Contains("vol"))
+            {
+                return RedirectToAction("Volunteer", "Volunteer");
             }
             else
             {
