@@ -58,17 +58,12 @@ namespace RQST.Controllers
             }
         }
 
-        public IActionResult Privacy()
+
+        public IActionResult ForgotPass()
         {
             return View();
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-        public IActionResult ForgotPass()
+        public IActionResult ResetSent()
         {
             return View();
         }
@@ -81,7 +76,7 @@ namespace RQST.Controllers
                 TempData["Message"] = result;
                 return View();
             }
-            return RedirectToAction("ResetSent", "Home");
+            return RedirectToAction("ResetSent","Home");
         }
     }
 }

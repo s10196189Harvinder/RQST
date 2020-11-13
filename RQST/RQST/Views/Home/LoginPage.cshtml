@@ -1,6 +1,6 @@
-﻿@model RQST.Models.Login
+﻿@model Login;
 @{
-    ViewData["Title"] = "Login Page";
+    ViewData["Title"] = "Home";
 }
 
 <div class="text-center">
@@ -16,6 +16,7 @@
             <br />
             <input type="submit" value="Login" />
         </form>
+        <a asp-controller="Home" asp-action="ForgotPass">Forgot Password?</a>
     </div>
-    
+
 </div>
