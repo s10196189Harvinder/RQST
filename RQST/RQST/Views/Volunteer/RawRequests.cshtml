@@ -3,20 +3,24 @@
     Layout = "AdminMenu";
 }
 
-<table style="border: 1px black;padding:4px;">
-    <tr>
-        <th>Name</th>
-        <th>Address</th>
-        <th>Deliverables</th>
-        <th>Special Needs</th>
-    </tr>
-    @foreach (Request request in Model)
-    {
+<table id="viewInfo" class="table table-striped table-bordered" style="border: 1px black;padding:4px;">
+    <thead class="thead-dark">
         <tr>
-            <td>@request.Name</td>
-            <td>@request.Address</td>
-            <td>@request.Deliverables</td>
-            <td>@request.SpecialRequest</td>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Deliverables</th>
+            <th>Special Needs</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (Request request in Model)
+        {
+            <tr>
+                <td>@request.Name</td>
+                <td>@request.Address</td>
+                <td>@request.Deliverables</td>
+                <td>@request.SpecialRequest</td>
+            </tr>
+        }
+    </tbody>
 </table>
