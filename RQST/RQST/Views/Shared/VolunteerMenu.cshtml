@@ -12,7 +12,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <img src="~/img/webicon.jpg" class="img-fluid" height="100" width="100" style="padding-right: inherit"/>
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RQST</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Volunteer" asp-action="Volunteer">Volunteer Menu</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,10 +20,17 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Volunteer" asp-action="Volunteer">User Requests</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Volunteer" asp-action="Volunteer">Where To?</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Volunteer" asp-action="Volunteer">Near Me!</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- A link for logging out user -->
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Log Out</a>
                         </li>
                     </ul>
                 </div>
