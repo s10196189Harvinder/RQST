@@ -58,6 +58,10 @@ namespace RQST.Controllers
             }
         }
 
+        public IActionResult Privacy()
+        {
+            return View();
+        }
 
         public IActionResult ForgotPass()
         {
