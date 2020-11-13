@@ -45,5 +45,29 @@ namespace RQST.DAL
                 return response;
             }
         }
+        public async Task<string> resetpass(string email)
+        {
+            var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
+            string result = "";
+            try
+            {
+                await ap.SendPasswordResetEmailAsync(email);
+                result = "Success";
+            }
+            catch(FirebaseAuthException ex)
+            {
+                if (ex.Reason.ToString()== "UnknownEmailAddress")
+                {
+                    result = "Invalid Email";
+                }
+                else
+                {
+                    result = "An unknown error has occured. Please try again later.";
+                }
+
+            }
+            
+            return result;
+        }
     }
 }

@@ -67,5 +67,20 @@ namespace RQST.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        public IActionResult ForgotPass()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassAsync(string email)
+        {
+            string result = await loginDALContext.resetpass(email);
+            if (result != "Success")
+            {
+                TempData["Message"] = result;
+                return View();
+            }
+            return RedirectToAction("ResetSent", "Home");
+        }
     }
 }
