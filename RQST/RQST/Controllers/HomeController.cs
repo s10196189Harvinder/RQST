@@ -23,18 +23,23 @@ namespace RQST.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+
+        public IActionResult LoginPage()
+        {
             HttpContext.Session.Clear();
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> IndexAsync(string email, string password)
+        public async Task<IActionResult> LoginPageAsync(string email, string password)
         {
             IDictionary<string, string> response = new Dictionary<string, string>();
             response = await loginDALContext.loginAsync(email, password);       //reponse obtained from the DALs
             string emailname = email.Split('@')[0];
             string exception = "";
-            if (response.TryGetValue("Exception",out exception))                //Attempts to get any value if Dictionary has an "Exception" key. Only occurs if an exception happens while signing in.
+            if (response.TryGetValue("Exception", out exception))                //Attempts to get any value if Dictionary has an "Exception" key. Only occurs if an exception happens while signing in.
             {
                 TempData["Message"] = exception;
                 return View();
@@ -44,11 +49,7 @@ namespace RQST.Controllers
             HttpContext.Session.SetString("auth", auth);                       //Stores token in the session
             if (emailname.Contains("admin"))                                    //Checking for which type of email the user is signing in with
             {
-                return RedirectToAction("Admin","Admin");     //Admin home page
-            }
-            else if (emailname.Contains("vol"))
-            {
-                return RedirectToAction("Volunteer", "Volunteer");  //Volunteer home page
+                return RedirectToAction("Admin", "Admin");     //Admin home page
             }
             else
             {

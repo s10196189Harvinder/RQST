@@ -1,12 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@model RQST.Models.Login
+@{
+    ViewData["Title"] = "Login Page";
 }
 
-<<<<<<< HEAD
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <div class="container" id="loginbox">
-        <form asp-controller="Home" asp-action="Index" method="post">
+        <form asp-controller="Home" asp-action="LoginPage" method="post">
             <p style="color:red;">@TempData["Message"]</p>
             <p>Email</p>
             <input type="email" asp-for="Email" />
@@ -16,12 +16,6 @@
             <br />
             <input type="submit" value="Login" />
         </form>
-        <a asp-controller="Home" asp-action="ForgotPass">Forgot Password?</a>
     </div>
     
 </div>
-=======
-<h1>@ViewData["Title"]</h1>
-
-<p>Welcome to WithinReach's home page</p>
->>>>>>> cf58e63c92caf7b0ec6e13d7e13841593cb39ff8

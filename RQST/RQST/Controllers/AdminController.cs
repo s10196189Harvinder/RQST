@@ -17,11 +17,13 @@ namespace RQST.Controllers
             return View();
         }
 
-        public IActionResult RawRequests()
+        [HttpPost]
+        public async Task<IActionResult> AdminAsync(string Name, string Deliverables, string SpecialRequest, string Address)
         {
-            return View();
+            string auth = HttpContext.Session.GetString("auth");
+            await DataDALContext.postdata(Name, Deliverables, SpecialRequest, Address, auth);       //gets auth token, passes to DAL
+            return RedirectToAction("RawRequests");
         }
-
         public async Task<IActionResult> RawRequestsAsync()
         {
             string auth = HttpContext.Session.GetString("auth");
