@@ -13,5 +13,10 @@ namespace RQST.Models
         public string PostalCode { get; set; }
         public string AreaName { get; set; }
         public int PostalDistrict { get; set; }
+        public List<items> itemlist { get; set; } = new List<items>();
+        public void addItem(items item)
+        {
+            itemlist.Add(item);
+        }
     }
 }

@@ -12,8 +12,8 @@ namespace RQST.Models
         [JsonProperty("content")]
         public IDictionary<string, int> Contents { get; set; }
 
-        [JsonProperty("delTimeStart")]
-        public long DelTimeStart { get; set; }
+        [JsonProperty("delSlotStart")]
+        public long DelSlotStart { get; set; }
 
         [JsonProperty("status")]
         public string Status { get; set; }

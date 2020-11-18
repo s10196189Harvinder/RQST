@@ -45,7 +45,6 @@ namespace RQST.DAL
             elderly.Name = name;
             elderly.Gender = gender;
             elderly.Email = email;
-            elderly.Password = password;
             elderly.Address = address;
             elderly.PostalCode = postalcode;
             await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
@@ -84,6 +83,21 @@ namespace RQST.DAL
             {
                 UserRequests request = new UserRequests();
                 request.Requests = usrrequest.Object.Values.ToList();
+                foreach(var request1 in request.Requests)
+                {
+                    var arequest = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("requests")
+                        .Child(request1)
+                        .OnceSingleAsync<Request>();
+                    foreach (var item in arequest.Contents.Keys)
+                    {
+                        var anItem = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("items")
+                        .Child(item)
+                        .OnceSingleAsync<items>();
+                        request.itemlist.Add(anItem);
+                    }
+                }
                 request.UserID = usrrequest.Key;
                 userRequests.Add(request);
             }
@@ -98,13 +112,9 @@ namespace RQST.DAL
                 var userdata = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
                         .Child("elderly")
                         .Child(request.UserID)
-                        .OnceSingleAsync<IDictionary<string, string>>();
-                string address = "";
-                string postalcode = "";
-                userdata.TryGetValue("address", out address);
-                userdata.TryGetValue("postalCode", out postalcode);
-                request.Address = address;
-                request.PostalCode = postalcode;
+                        .OnceSingleAsync<Elderly>();
+                request.Address = userdata.Address;
+                request.PostalCode = userdata.PostalCode;
             }
             return userRequests;                                                 //Returns the list of requests
         }
@@ -120,19 +130,6 @@ namespace RQST.DAL
                 elderlylist.Add(elderly.Object);
             }
             return elderlylist;                                                 //Returns the list of requests
-        }
-        public async Task<IDictionary<string, items>> getitems(string auth)               //This method obtains data from the firebase
-        {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
-            var items = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
-                        .Child("items")
-                        .OnceAsync<items>();
-            IDictionary<string, items> itemlist = new Dictionary<string, items>();                        //Turns all objects inside "requests" into Request objects
-            foreach (var item in items)
-            {
-                itemlist.Add(item.Key, item.Object);
-            }
-            return itemlist;                                         //Returns the list of requests
         }
 
         public async Task<FirebaseClient> InitClientAsync(string auth)

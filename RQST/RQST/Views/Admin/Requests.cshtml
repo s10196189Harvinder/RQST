@@ -1,46 +1,73 @@
-﻿@model List<UserRequests>
+﻿@model List<Area>
 @{
     Layout = "AdminMenu";
 }
 
-@foreach (UserRequests rqst in Model)
+@foreach (Area area in Model)
 {
-    List<string> areas = new List<string>();
-    string area = areas.Find(x => x == rqst.AreaName);
-    if (area == null)
+    if (area.reqlist.Count != 0)
     {
-        areas.Add(rqst.AreaName);
-        <h2 class="names">@rqst.AreaName</h2>
-        <table id="@rqst.AreaName">
+        <h2>@area.AreaName</h2>
+        <table>
             <thead>
                 <tr>
                     <th>UserID</th>
-                    <th>Requests</th>
+                    <th>Items</th>
+                    <th>Item amnt</th>
                     <th>Address</th>
                     <th>Postal Code</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        @rqst.UserID
-                    </td>
-                    <td>@string.Join(",", rqst.Requests.ToArray())</td>
-                    <td>@rqst.Address</td>
-                    <td>@rqst.PostalCode</td>
-                </tr>
+                @foreach (UserRequests requests in area.reqlist)
+                {
+                    int count = 0;
+                    foreach (items item in requests.itemlist)
+                    {
+                        if (count == 0)
+                        {
+                            <tr>
+                                <td rowspan="@requests.itemlist.Count">@requests.UserID</td>
+                                <td>@requests.itemlist[0].Name</td>
+                                <td>@requests.itemlist[0].Requested</td>
+                                <td rowspan="@requests.itemlist.Count">@requests.Address</td>
+                                <td rowspan="@requests.itemlist.Count">@requests.PostalCode</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td></td>
+                                <td>@requests.itemlist[count].Name</td>
+                                <td>@requests.itemlist[count].Requested</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                        count++;
+                    }
+
+                }
             </tbody>
         </table>
-    }
-    else
-    {
-        <script>
-            var table = document.getElementById("@area");
-            var row = table.insertRow();
-            var cell1 = row.insertCell("@rqst.UserID")
-            var cell2 = row.insertCell("@rqst.Requests.ToString()")
-            var cell3 = row.insertCell("@rqst.Address")
-            var cell4 = row.insertCell("@rqst.PostalCode")
-        </script>
+        <h3>Area Summary</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Items</th>
+                    <th>Total Items</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (items item in area.itemsList)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Requested</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
     }
 }
