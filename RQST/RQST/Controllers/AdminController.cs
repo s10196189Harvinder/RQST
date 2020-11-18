@@ -19,6 +19,49 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode)
+        {
+            if (ModelState.IsValid)
+            {
+                string auth = HttpContext.Session.GetString("auth");
+                await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, auth);
+                return RedirectToAction("_ViewElderly");
+            }
+
+            else
+            {
+                return View();
+            }
+        }
+
+        public async Task<IActionResult> _ViewElderlyAsync()
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            List<Elderly> elderlylist = await DataDALContext.getElderly(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            return View(elderlylist);
+        }
+
+        [HttpPost]
+        public ActionResult CreateVolunteer(Volunteer volunteer)
+        {
+            if (ModelState.IsValid)
+            {
+                // auto assign serial no of volunteer
+                return RedirectToAction("Admin");
+            }
+
+            else 
+            {
+                return View(volunteer);
+            }
+        }
+
+        public IActionResult CreateVolunteer()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AdminAsync(string Name, string Deliverables, string SpecialRequest, string Address)
         {
             string auth = HttpContext.Session.GetString("auth");
@@ -36,7 +79,7 @@ namespace RQST.Controllers
             string auth = HttpContext.Session.GetString("auth");
             List<UserRequests> something = await DataDALContext.getuserrequests(auth);
             something = await DataDALContext.getUserRequestsAdress(auth, something);
-            foreach(UserRequests usrqst in something)
+            foreach (UserRequests usrqst in something)
             {
                 string prefix = usrqst.PostalCode.Substring(0, 2);
                 int pre = Convert.ToInt32(prefix);
@@ -65,7 +108,7 @@ namespace RQST.Controllers
                     usrqst.AreaName = "Bukit Merah, Queenstown, Tiong Bahru";
                     usrqst.PostalDistrict = 3;
                 }
-                else if (17==pre)
+                else if (17 == pre)
                 {
                     usrqst.AreaName = "High Street, Beach Road (part) ";
                     usrqst.PostalDistrict = 6;
@@ -120,7 +163,7 @@ namespace RQST.Controllers
                     usrqst.AreaName = "Bedok, Upper East Coast, Eastwood, Kew Drive ";
                     usrqst.PostalDistrict = 16;
                 }
-                else if (49 <= pre || pre < 51 || pre==81)
+                else if (49 <= pre || pre < 51 || pre == 81)
                 {
                     usrqst.AreaName = "Loyang, Changi ";
                     usrqst.PostalDistrict = 17;
@@ -130,7 +173,7 @@ namespace RQST.Controllers
                     usrqst.AreaName = "Simei, Tampines, Pasir Ris ";
                     usrqst.PostalDistrict = 18;
                 }
-                else if (53 <= pre || pre < 55 || pre==82)
+                else if (53 <= pre || pre < 55 || pre == 82)
                 {
                     usrqst.AreaName = "Serangoon Garden, Hougang, Punggol ";
                     usrqst.PostalDistrict = 19;
@@ -182,6 +225,10 @@ namespace RQST.Controllers
                 }
             }
             return View(something);
+        }
+        public async Task<IActionResult> CreateElderlyAsync()
+        {
+            return View();
         }
     }
 }

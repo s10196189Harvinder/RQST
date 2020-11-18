@@ -1,18 +1,18 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-}
-<div class="text-center">
-    <h1 class="display-4">Forgot Password</h1>
-    <div class="container">
-        <form asp-controller="Home" asp-action="ForgotPass" method="post">
-            <p style="color:red;">@TempData["Message"]</p>
-            <p>Email</p>
-            <input name="email" />
-            <br />
-            <input type="submit" value="Send" />
-        </form>
-    </div>
 
+<title>Login</title>
+<link href="~/css/forgotPSW.css" rel="stylesheet" />
+
+<div class="main" style="float:right">
+    <p class="login" align="center">Forgot Password</p>
+
+    <form asp-controller="Home" asp-action="ForgotPass" class="form1" method="post">
+        <p style="color:red;">@TempData["Message"]</p>
+        <input type="text" name="Email" placeholder="Email" class="email" required>
+        <div class="sendRQSTBtn">
+            <input type="submit" value="Send" class="sendRQST">
+        </div>
+    </form>
 </div>
