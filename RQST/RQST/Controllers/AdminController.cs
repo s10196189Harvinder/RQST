@@ -39,6 +39,11 @@ namespace RQST.Controllers
             }
         }
 
+        public async Task<IActionResult> CreateElderlyAsync()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> _ViewElderlyAsync()
         {
             string auth = HttpContext.Session.GetString("auth");
@@ -47,23 +52,31 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateVolunteer(Volunteer volunteer)
+        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Nric, string Contact, string Attendance, string Status)
         {
             if (ModelState.IsValid)
             {
-                // auto assign serial no of volunteer
-                return RedirectToAction("Admin");
+                string auth = HttpContext.Session.GetString("auth");
+                await DataDALContext.postVolunteer(Name, Nric, Contact, Attendance, Status, auth);
+                return RedirectToAction("_ViewVolunteer");
             }
 
             else 
             {
-                return View(volunteer);
+                return View();
             }
         }
 
-        public IActionResult CreateVolunteer()
+        public async Task<IActionResult> CreateVolunteerAsync()
         {
             return View();
+        }
+
+        public async Task<IActionResult> _ViewVolunteerAsync()
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            List<Volunteer> volunteerlist = await DataDALContext.getVolunteer(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            return View(volunteerlist);
         }
 
         [HttpPost]
@@ -409,10 +422,6 @@ namespace RQST.Controllers
                 }
             }
             return View(arealist);
-        }
-        public async Task<IActionResult> CreateElderlyAsync()
-        {
-            return View();
         }
     }
 }

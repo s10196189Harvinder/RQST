@@ -14,7 +14,7 @@ namespace RQST.Models
         public string Nric { get; set; }
         public string Contact { get; set; }
         [JsonProperty(PropertyName = "Attending")]
-        public char Attendance { get; set; }
+        public string Attendance { get; set; }
         public string Status { get; set; }
     }
 }
