@@ -21,7 +21,7 @@ body {
 
 
 /* Full-width input fields */
-input[type=text], input[type=password] {
+input[type=text] {
   width: 90%;
   padding: 15px;
   margin: 5px 0 22px 18px;
@@ -30,7 +30,7 @@ input[type=text], input[type=password] {
   background: #f1f1f1;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus {
   background-color: #ddd;
   outline: none;
 }
@@ -42,7 +42,7 @@ hr {
 }
 
 /* Set a style for the submit/register button */
-.loginBtn {
+.sendRQST {
     cursor: pointer;
     border-radius: 5em;
     color: #fff;
@@ -58,7 +58,7 @@ hr {
     box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
 }
 
-.loginBtn:hover {
+.sendRQST:hover {
   opacity:0.8;
 }
 
@@ -73,7 +73,7 @@ a {
   text-align: center;
 }
 
-.email, .psw {
+.email {
     width: 76%;
     color: rgb(38, 50, 56);
     font-weight: 700;
@@ -92,7 +92,7 @@ a {
     font-family: 'Roboto Mono', monospace;
 }
 
-.email:focus, .psw:focus {
+.email:focus {
     border: 2px solid rgba(0, 0, 0, 0.18) !important;
 }
 
@@ -104,17 +104,9 @@ a {
     font-size: 30px;
 }
 
-.forgotpsw {
-    text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
-    color: black;
-    padding-left: 17px;
-}
-.forgotPSWpos{
-    padding-right: 160px;
-}
-.loginBtnpos{
-    padding-left: 180px;
-    padding-bottom: 10px;
+.sendRQSTBtn{
+    padding-top: 180px;
+    padding-left: 190px;
 }
 
 @media (max-width: 600px) {
