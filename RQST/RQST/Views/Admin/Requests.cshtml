@@ -1,12 +1,16 @@
 ﻿@model List<UserRequests>
+@{
+    Layout = "AdminMenu";
+}
 
 @foreach (UserRequests rqst in Model)
 {
     List<string> areas = new List<string>();
-    string area = areas.Find(x=>x==rqst.AreaName);
-    if (area==null){
+    string area = areas.Find(x => x == rqst.AreaName);
+    if (area == null)
+    {
         areas.Add(rqst.AreaName);
-<h2 class="names">@rqst.AreaName</h2>
+        <h2 class="names">@rqst.AreaName</h2>
         <table id="@rqst.AreaName">
             <thead>
                 <tr>
@@ -21,7 +25,7 @@
                     <td>
                         @rqst.UserID
                     </td>
-                    <td>@string.Join(",",rqst.Requests.ToArray())</td>
+                    <td>@string.Join(",", rqst.Requests.ToArray())</td>
                     <td>@rqst.Address</td>
                     <td>@rqst.PostalCode</td>
                 </tr>
