@@ -31,16 +31,30 @@ namespace RQST.DAL
         public async Task<bool> postElderly(string name, char gender, string email, string password, string address, string postalcode, string auth)     //This method POSTS data to the firebase
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
-            Elderly elderly = new Elderly();                                    //Creates a request object (can be improved, too lazy)
+            var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
+            FirebaseAuthLink res;
+            try
+            {
+                res = await ap.CreateUserWithEmailAndPasswordAsync(email, password);      //Attemps to create user
+            }
+            catch
+            {
+                return false;
+            }
+            Elderly elderly = new Elderly();                                    //Creates a elderly 
             elderly.Name = name;
             elderly.Gender = gender;
             elderly.Email = email;
             elderly.Password = password;
             elderly.Address = address;
             elderly.PostalCode = postalcode;
-            var smth = await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
+            await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
                     .Child("Elderly")
-                    .PostAsync(elderly);
+                    .Child(res.User.LocalId)
+                    .PutAsync(elderly);
+            await firebaseClient
+                .Child("authroles")
+                .PatchAsync("{\"" + res.User.LocalId + "\":\"elderly\"}");
             return true;
         }
 

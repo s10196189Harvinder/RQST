@@ -24,7 +24,12 @@ namespace RQST.Controllers
             if (ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
-                await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, auth);
+                bool success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, auth);
+                if (success != true)
+                {
+                    TempData["Message"] = "Failed";
+                    return View();
+                }
                 return RedirectToAction("_ViewElderly");
             }
 
