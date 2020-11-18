@@ -13,7 +13,7 @@ namespace RQST.DAL
 {
     public class DataDAL
     {
-        
+
         //public async Task<bool> postdata(string name, string deliverable, string specialneeds, string address, string auth)     //This method POSTS data to the firebase
         //{
         //    FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
@@ -27,6 +27,24 @@ namespace RQST.DAL
         //            .PostAsync(request);
         //    return true;
         //}
+
+        public async Task<bool> postElderly(string name, char gender, string email, string password, string address, string postalcode, string auth)     //This method POSTS data to the firebase
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
+            Elderly elderly = new Elderly();                                    //Creates a request object (can be improved, too lazy)
+            elderly.Name = name;
+            elderly.Gender = gender;
+            elderly.Email = email;
+            elderly.Password = password;
+            elderly.Address = address;
+            elderly.PostalCode = postalcode;
+            var smth = await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
+                    .Child("Elderly")
+                    .PostAsync(elderly);
+            return true;
+        }
+
+
         public async Task<List<Request>> getrequests(string auth)               //This method obtains data from the firebase
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
@@ -40,6 +58,21 @@ namespace RQST.DAL
             }
             return reqlist;                                                 //Returns the list of requests
         }
+
+        public async Task<List<Elderly>> getElderly(string auth)               //This method obtains data from the firebase
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
+            var elderlies = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("Elderly")
+                        .OnceAsync<Elderly>();
+            List<Elderly> elderlylist = new List<Elderly>();                        //Turns all objects inside "requests" into Request objects
+            foreach (var elderly in elderlies)
+            {
+                elderlylist.Add(elderly.Object);
+            }
+            return elderlylist;                                                 //Returns the list of requests
+        }
+
         public async Task<IDictionary<string, items>> getitems(string auth)               //This method obtains data from the firebase
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client

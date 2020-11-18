@@ -11,6 +11,7 @@ namespace RQST.Models
     {
         public int SerialNo { get; set; }
         public string Name { get; set; }
+        public string Nric { get; set; }
         public string Contact { get; set; }
         [JsonProperty(PropertyName = "Attending")]
         public char Attendance { get; set; }

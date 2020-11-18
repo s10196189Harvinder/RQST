@@ -1,0 +1,55 @@
+﻿@model List<Elderly>
+@{
+    Layout = "AdminMenu";
+}
+
+<table id="viewInfo" class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr style="text-align: center">
+            <th>
+                Name
+            </th>
+            <th>
+                Gender
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Postal Code
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (Elderly elderly in Model)
+        {
+            <tr class='table-primary' style="text-align: center">
+                <td>
+                    @Html.DisplayFor(modelItem => elderly.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => elderly.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => elderly.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => elderly.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => elderly.PostalCode)
+                </td>
+                <td style="font-weight: bold;">
+                    <a asp-controller="Admin" asp-action="" asp-route-id="">Edit Elderly Info</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
