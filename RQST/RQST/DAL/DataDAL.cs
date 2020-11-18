@@ -58,6 +58,20 @@ namespace RQST.DAL
             return true;
         }
 
+        public async Task<bool> postVolunteer(string name, string nric, string contact, string attendance, string status, string auth)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            Volunteer volunteer = new Volunteer();
+            volunteer.Name = name;
+            volunteer.Nric = nric;
+            volunteer.Contact = contact;
+            volunteer.Attendance = attendance;
+            volunteer.Status = status;
+            var volreq = await firebaseClient
+                .Child("Volunteer")
+                .PostAsync(volunteer);
+            return true;
+        }
 
         public async Task<List<Request>> getrequests(string auth)               //This method obtains data from the firebase
         {
@@ -121,6 +135,21 @@ namespace RQST.DAL
             }
             return elderlylist;                                                 //Returns the list of requests
         }
+
+        public async Task<List<Volunteer>> getVolunteer(string auth)               //This method obtains data from the firebase
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
+            var volunteers = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("Volunteer")
+                        .OnceAsync<Volunteer>();
+            List<Volunteer> volunteerlist = new List<Volunteer>();                        //Turns all objects inside "requests" into Request objects
+            foreach (var volunteer in volunteers)
+            {
+                volunteerlist.Add(volunteer.Object);
+            }
+            return volunteerlist;                                                 //Returns the list of requests
+        }
+
         public async Task<IDictionary<string, items>> getitems(string auth)               //This method obtains data from the firebase
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client

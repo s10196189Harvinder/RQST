@@ -1,0 +1,61 @@
+﻿@model List<Volunteer>
+@{
+    Layout = "AdminMenu";
+}
+
+<table id="viewInfo" class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr style="text-align: center">
+            <th>
+                Volunteer ID
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                NRIC
+            </th>
+            <th>
+                Contact
+            </th>
+            <th>
+                Attendance
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (Volunteer volunteer in Model)
+        {
+            <tr class='table-primary' style="text-align: center">
+                <td>
+                    @Html.DisplayFor(modelItem => volunteer.SerialNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => volunteer.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => volunteer.Nric)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => volunteer.Contact)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => volunteer.Attendance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => volunteer.Status)
+                </td>
+                <td style="font-weight: bold;">
+                    <a asp-controller="Admin" asp-action="" asp-route-id="">Edit Volunteer Info</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
