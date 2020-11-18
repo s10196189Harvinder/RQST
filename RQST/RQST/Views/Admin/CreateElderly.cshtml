@@ -5,44 +5,25 @@
     Layout = "AdminMenu";
 }
 <link href="~/css/elderlystyle.css" rel="stylesheet" />
-<h4>Create New Elderly</h4>
-<div class="main">
-    <p class="create" align="center"></p>
 
-        <form asp-action="CreateElderly" class="form2">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input type="text" asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <input type="text" asp-for="Gender" class="form-control" />
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input type="text" asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input type="text" asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input type="text" asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PostalCode" class="control-label"></label>
-                <input type="text" asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create Elderly" class="createBtn" />
-            </div>
-        </form>
+<div class="main">
+    <p class="create" align="center">Create New Elderly</p>
+    <form asp-action="CreateElderly" class="form2">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+        <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required/>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+        <input type="text" asp-for="Email" class="inputbox" placeholder="Email" required/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+        <input type="text" asp-for="Password" class="inputbox" placeholder="Password" required/>
+        <span asp-validation-for="Password" class="text-danger"></span>
+        <input type="text" asp-for="Address" class="inputbox" placeholder="Address" required/>
+        <span asp-validation-for="Address" class="text-danger"></span>
+        <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required/>
+        <span asp-validation-for="PostalCode" class="text-danger"></span>
+        <input type="submit" value="Create Elderly" class="createBtn" />
+
+    </form>
 </div>
