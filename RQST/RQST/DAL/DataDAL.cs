@@ -49,7 +49,7 @@ namespace RQST.DAL
             elderly.Address = address;
             elderly.PostalCode = postalcode;
             await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
-                    .Child("Elderly")
+                    .Child("elderly")
                     .Child(res.User.LocalId)
                     .PutAsync(elderly);
             await firebaseClient
