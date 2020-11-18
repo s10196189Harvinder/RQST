@@ -21,13 +21,13 @@ namespace RQST.Controllers
         public async Task<IActionResult> AdminAsync(string Name, string Deliverables, string SpecialRequest, string Address)
         {
             string auth = HttpContext.Session.GetString("auth");
-            await DataDALContext.postdata(Name, Deliverables, SpecialRequest, Address, auth);       //gets auth token, passes to DAL
+            //await DataDALContext.postdata(Name, Deliverables, SpecialRequest, Address, auth);       //gets auth token, passes to DAL
             return RedirectToAction("RawRequests");
         }
         public async Task<IActionResult> RawRequestsAsync()
         {
             string auth = HttpContext.Session.GetString("auth");
-            List<Request> reqlist = await DataDALContext.getdata(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            List<Request> reqlist = await DataDALContext.getrequests(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
             return View(reqlist);                                           //Returns the list to the view
         }
     }

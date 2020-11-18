@@ -9,11 +9,14 @@ namespace RQST.Models
     //Not final
     public class Request
     {
-        public string Name { get; set; }
-        public string Address { get; set; }
-        public string Deliverables { get; set; }
-        [JsonProperty(PropertyName = "Special Request")]
-        public string SpecialRequest { get; set; }
+        [JsonProperty("contents")]
+        public IDictionary<string, int> Contents { get; set; }
+
+        [JsonProperty("delTimeStart")]
+        public long DelTimeStart { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
     }
-    
+
 }
