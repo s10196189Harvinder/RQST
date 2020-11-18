@@ -4,40 +4,26 @@
     ViewData["Title"] = "CreateVolunteer";
     Layout = "AdminMenu";
 }
+<link href="~/css/volunteerstyle.css" rel="stylesheet" />
 
-<h4>Create New Volunteer</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateVolunteer">
+<div class="main">
+    <p class="create" align="center">Create New Volunteer</p>
+        <form asp-action="CreateVolunteer" class="form2">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+
+            <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+            <input type="text" asp-for="Nric" class="inputbox" placeholder="NRIC" required />
+            <span asp-validation-for="Nric" class="text-danger"></span>
+            <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact Number" required />
+            <span asp-validation-for="Contact" class="text-danger"></span>
+            <input type="text" asp-for="Attendance" class="inputbox" placeholder="Attendance" required />
+            <span asp-validation-for="Attendance" class="text-danger"></span>
+            <input type="text" asp-for="Status" class="inputbox" placeholder="Status" required />
+            <span asp-validation-for="Status" class="text-danger"></span>
+            <div class="createBtnpos">
+                <input type="submit" value="Create" class="createBtn" />
             </div>
-            <div class="form-group">
-                <label asp-for="Nric" class="control-label"></label>
-                <input asp-for="Nric" class="form-control" />
-                <span asp-validation-for="Nric" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Contact" class="control-label"></label>
-                <input asp-for="Contact" class="form-control" />
-                <span asp-validation-for="Contact" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Attendance" class="control-label"></label>
-                <input asp-for="Attendance" class="form-control" />
-                <span asp-validation-for="Attendance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <br />
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <input type="submit" value="Create Volunteer" class="createBtn" />
         </form>
-    </div>
 </div>
+

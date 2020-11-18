@@ -11,19 +11,20 @@
     <form asp-action="CreateElderly" class="form2">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required/>
+        <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required />
         <span asp-validation-for="Name" class="text-danger"></span>
-        <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required/>
+        <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required />
         <span asp-validation-for="Gender" class="text-danger"></span>
-        <input type="text" asp-for="Email" class="inputbox" placeholder="Email" required/>
+        <input type="text" asp-for="Email" class="inputbox" placeholder="Email" required />
         <span asp-validation-for="Email" class="text-danger"></span>
-        <input type="text" asp-for="Password" class="inputbox" placeholder="Password" required/>
+        <input type="text" asp-for="Password" class="inputbox" placeholder="Password" required />
         <span asp-validation-for="Password" class="text-danger"></span>
-        <input type="text" asp-for="Address" class="inputbox" placeholder="Address" required/>
+        <input type="text" asp-for="Address" class="inputbox" placeholder="Address" required />
         <span asp-validation-for="Address" class="text-danger"></span>
-        <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required/>
+        <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required />
         <span asp-validation-for="PostalCode" class="text-danger"></span>
-        <input type="submit" value="Create Elderly" class="createBtn" />
-
+        <div class="createBtnpos">
+            <input type="submit" value="Create" class="createBtn" />
+        </div>
     </form>
 </div>
