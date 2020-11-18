@@ -145,8 +145,6 @@ namespace RQST.DAL
             }
             return elderlylist;                                                 //Returns the list of requests
         }
-<<<<<<< HEAD
-=======
 
         public async Task<List<Volunteer>> getVolunteer(string auth)               //This method obtains data from the firebase
         {
@@ -175,7 +173,6 @@ namespace RQST.DAL
             }
             return itemlist;                                         //Returns the list of requests
         }
->>>>>>> 42ba965b906eebdf000471f0624faa4cb2646714
 
         public async Task<FirebaseClient> InitClientAsync(string auth)
         {
