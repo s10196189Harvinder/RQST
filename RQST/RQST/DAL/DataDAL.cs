@@ -44,22 +44,31 @@ namespace RQST.DAL
 
         public async Task<FirebaseClient> InitClientAsync(string auth)
         {
+            var deserializedAuth = JsonConvert.DeserializeObject<FirebaseAuthLink>(auth);       //Deserializes the JSON into the token OBJECT
             var firebaseClient = new FirebaseClient(
                                 "https://kasei-bb0e0.firebaseio.com/",              //Sets the firebase project to use
                                 new FirebaseOptions
                                 {
-                                    AuthTokenAsyncFactory = () => getToken(auth)    //Sets the authentication token for the client.
+                                    AuthTokenAsyncFactory = () => refreshToken(deserializedAuth)    //Sets the authentication token for the client.
                                 });
+            var role = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("authroles")
+                        .Child(deserializedAuth.User.LocalId)
+                        .OnceSingleAsync<string>();
+            if (role != "admin")
+            {
+                throw new Exception("Not an admin");
+            }
             return firebaseClient;
         }
-        public async Task<string> getToken(string auth)                         //Function returns the authentication token
+        public async Task<string> refreshToken(FirebaseAuthLink auth)                         //Function returns the authentication token
         {
-            var deserializedAuth = JsonConvert.DeserializeObject<FirebaseAuthLink>(auth);       //Deserializes the JSON into the token OBJECT
-            if (deserializedAuth.IsExpired())                                   //Have not tested this part of the code yet as expiry takes 3600 seconds, no thanks
+            
+            if (auth.IsExpired())                                   //Have not tested this part of the code yet as expiry takes 3600 seconds, no thanks
             {
-                await deserializedAuth.GetFreshAuthAsync();
+                await auth.GetFreshAuthAsync();
             }
-            return deserializedAuth.FirebaseToken;
+            return auth.FirebaseToken;
         }
     }
 }
