@@ -1,0 +1,42 @@
+﻿@model List<UserRequests>
+
+@foreach (UserRequests rqst in Model)
+{
+    List<string> areas = new List<string>();
+    string area = areas.Find(x=>x==rqst.AreaName);
+    if (area==null){
+        areas.Add(rqst.AreaName);
+<h2 class="names">@rqst.AreaName</h2>
+        <table id="@rqst.AreaName">
+            <thead>
+                <tr>
+                    <th>UserID</th>
+                    <th>Requests</th>
+                    <th>Address</th>
+                    <th>Postal Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @rqst.UserID
+                    </td>
+                    <td>@string.Join(",",rqst.Requests.ToArray())</td>
+                    <td>@rqst.Address</td>
+                    <td>@rqst.PostalCode</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <script>
+            var table = document.getElementById("@area");
+            var row = table.insertRow();
+            var cell1 = row.insertCell("@rqst.UserID")
+            var cell2 = row.insertCell("@rqst.Requests.ToString()")
+            var cell3 = row.insertCell("@rqst.Address")
+            var cell4 = row.insertCell("@rqst.PostalCode")
+        </script>
+    }
+}

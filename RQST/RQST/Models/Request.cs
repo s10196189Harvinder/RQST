@@ -9,7 +9,7 @@ namespace RQST.Models
     //Not final
     public class Request
     {
-        [JsonProperty("contents")]
+        [JsonProperty("content")]
         public IDictionary<string, int> Contents { get; set; }
 
         [JsonProperty("delTimeStart")]

@@ -40,6 +40,90 @@ namespace RQST.DAL
             }
             return reqlist;                                                 //Returns the list of requests
         }
+
+        public async Task<List<UserRequests>> getuserrequests(string auth)               //This method obtains data from the firebase
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
+            var requests = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("userRequests")
+                        .OnceAsync<IDictionary<string,string>>();
+            List<UserRequests> userRequests = new List<UserRequests>();
+            foreach (var usrrequest in requests)
+            {
+                UserRequests request = new UserRequests();
+                request.Requests = usrrequest.Object.Values.ToList();
+                request.UserID = usrrequest.Key;
+                userRequests.Add(request);
+            }
+            return userRequests;                                                 //Returns the list of requests
+        }
+
+        public async Task<List<UserRequests>> getUserRequestsAdress(string auth, List<UserRequests> userRequests)               //This method obtains data from the firebase
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
+            foreach (UserRequests request in userRequests)
+            {
+                var userdata = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("elderly")
+                        .Child(request.UserID)
+                        .OnceSingleAsync<IDictionary<string, string>>();
+                string address = "";
+                string postalcode = "";
+                userdata.TryGetValue("address", out address);
+                userdata.TryGetValue("postalCode", out postalcode);
+                request.Address = address;
+                request.PostalCode = postalcode;
+            }
+            return userRequests;                                                 //Returns the list of requests
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public async Task<IDictionary<string, items>> getitems(string auth)               //This method obtains data from the firebase
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
