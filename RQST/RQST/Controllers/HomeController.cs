@@ -47,15 +47,7 @@ namespace RQST.Controllers
             string auth = "";
             response.TryGetValue("Auth", out auth);                             //Obtains the authentication token (in JSON)
             HttpContext.Session.SetString("auth", auth);                       //Stores token in the session
-            if (emailname.Contains("admin"))                                    //Checking for which type of email the user is signing in with
-            {
-                return RedirectToAction("Admin", "Admin");     //Admin home page
-            }
-            else
-            {
-                TempData["Message"] = "You cannot login with this email.";  //Neither volunteer nor admin
-                return View();
-            }
+            return RedirectToAction("Admin", "Admin");                          //Admin home page
         }
 
         public IActionResult Privacy()

@@ -25,6 +25,22 @@ namespace RQST.DAL
             {
                 var auth = await ap.SignInWithEmailAndPasswordAsync(email, password);           //Attempts to sign in via the Authentication provider, with the credentials
                 var serialauth = JsonConvert.SerializeObject(auth);                             //Once authentication is obtained from the sign in function, it is serialized as JSON
+
+                var firebaseClient = new FirebaseClient(
+                                    "https://kasei-bb0e0.firebaseio.com/",              //Sets the firebase project to use
+                                    new FirebaseOptions
+                                    {
+                                        AuthTokenAsyncFactory = () => Task.FromResult(auth.FirebaseToken)    //Sets the authentication token for the client.
+                                    });
+                var role = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("authroles")
+                        .Child(auth.User.LocalId)
+                        .OnceSingleAsync<string>();
+                if (role != "admin")
+                {
+                    response.Add("Exception", "Not an admin");
+                    return response;
+                }
                 response.Add("Auth", serialauth);                                               //Adds the serialized JSON into the dictioniary
                 return response;
             }
