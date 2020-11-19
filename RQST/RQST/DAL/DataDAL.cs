@@ -69,12 +69,11 @@ namespace RQST.DAL
                 .PostAsync(item);
             return true;
         }
-        public async Task<bool> postVolunteer(string name, string nric, string contact, string attendance, string status, string auth)
+        public async Task<bool> postVolunteer(string name, string contact, string attendance, string status, string auth)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             Volunteer volunteer = new Volunteer();
             volunteer.Name = name;
-            volunteer.Nric = nric;
             volunteer.Contact = contact;
             volunteer.Attendance = attendance;
             volunteer.Status = status;
