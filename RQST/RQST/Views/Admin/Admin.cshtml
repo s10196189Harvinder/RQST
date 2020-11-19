@@ -13,6 +13,8 @@
         padding: 0;
     }
 </style>
+<link href="~/css/tableDesign.css" rel="stylesheet" />
+<link href="~/css/adminpage.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
@@ -42,18 +44,17 @@
         {
 
             foreach (items item in area.itemsList){
-                items itemF = Titemlist.Find(x => x.Name == item.Name);
-                if (itemF == null)
-                {
-                    items nItem = new items(item.Name, item.Requested, item.Icon,item.Remaining,item.BgCol);
-                    Titemlist.Add(nItem);
+                    items itemF = Titemlist.Find(x => x.Name == item.Name);
+                    if (itemF == null)
+                    {
+                        items nItem = new items(item.Name, item.Requested, item.Icon, item.Remaining, item.BgCol);
+                        Titemlist.Add(nItem);
+                    }
+                    else
+                    {
+                        itemF.Requested += item.Requested;
+                    }
                 }
-                else
-                {
-                    itemF.Requested += item.Requested;
-                }
-
-            }
             foreach (UserRequests requests in area.reqlist)
             {
                 string words = "Item summary\n";
@@ -93,24 +94,36 @@
             }
         }
     }
-    <table>
-        <thead>
-            <tr>
-                <th>Item name</th>
-                <th>Total requested Amount</th>
-                <th>Total Remaining</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (items item in Titemlist) { 
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Requested</td>
-                    <td>@item.Remaining</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <button class="open-button" onclick="openForm()">Show Deliverables</button>
+    <script src="~/js/tempdeliverables.js"></script>
+    <div class="form-popup" id="myForm">
+        <div class="main">
+            <div class="tableDesign">
+                <form class="form-container">
+                    <table id="viewInfo" class="table">
+                        <thead>
+                            <tr style="text-align: center">
+                                <th>Item name</th>
+                                <th>Total requested Amount</th>
+                                <th>Total Remaining</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (items item in Titemlist)
+                            {
+                                <tr class='table-primary' style="text-align: center">
+                                    <td>@item.Name</td>
+                                    <td>@item.Requested</td>
+                                    <td>@item.Remaining</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
 }
 
 <script>
