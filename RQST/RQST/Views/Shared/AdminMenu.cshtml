@@ -28,21 +28,22 @@
                             </div>
                         </div>
                         <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Volunteers</a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a asp-controller="Admin" asp-action="CreateVolunteer">Add new Volunteers</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a asp-controller="Admin" asp-action="_ViewVolunteer">List of Volunteers</a></li>
-                                <li class="dropdown-divider"></li>
-                                <li><a asp-controller="Admin" asp-action="Admin">Assign Volunteers</a></li>
-                            </ul>
+                            <button class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Volunteers</button>
+                            <div class="dropdown-menu" role="menu">
+                                <a asp-controller="Admin" asp-action="CreateVolunteer">Add new Volunteers</a>
+                                <div class="dropdown-divider"></div>
+                                <a asp-controller="Admin" asp-action="_ViewVolunteer">List of Volunteers</a>
+                                <div class="dropdown-divider"></div>
+                                <a asp-controller="Admin" asp-action="Admin">Assign Volunteers</a>
+                            </div>
                         </div>
                         <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Request</a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a asp-controller="Admin" asp-action="Requests">Requests</a></li>
-                                <li><a asp-controller="Admin" asp-action="RawRequests">Raw Request</a></li>
-                            </ul>
+                            <button class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Request</button>
+                            <div class="dropdown-menu" role="menu">
+                                <a asp-controller="Admin" asp-action="Requests">Requests</a>
+                                <div class="dropdown-divider"></div>
+                                <a asp-controller="Admin" asp-action="RawRequests">Raw Request</a>
+                            </div>
                         </div>
                         <div class="nav-item mr-auto">
                             <!-- A link for logging out user -->
