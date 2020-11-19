@@ -99,78 +99,119 @@ namespace RQST.DAL
         }
 
         public async Task<List<UserRequests>> getuserrequests(string auth)//Method populates UserRequests, which shows Users' IDs, their requests,
-        {                                                                 //Their adddress, popstalcode, name of area they're in and itemlist.
+        {                                                                 //Their adddress, popstalcode,itemlist.
+            DateTime start = DateTime.UtcNow;
             FirebaseClient firebaseClient = await InitClientAsync(auth);    
-            var requestsData = await firebaseClient                   //Gets all user requests under /userRequests            
+            var userRequestsData = await firebaseClient                   //Gets all user requests under /userRequests    
                         .Child("userRequests")
                         .OnceAsync<IDictionary<string,string>>();
-            List<UserRequests> userRequests = new List<UserRequests>();
-            foreach (var usrrequest in requestsData)
-            {
-                UserRequests user = new UserRequests();
-                user.Requests = usrrequest.Object.Values.ToList(); //Obtains the values (requests) of the user
-                foreach(var request in user.Requests)
-                {
-                    var requestData = await firebaseClient        //Gets more information about the request
+            var requestData = await firebaseClient           //Gets information about request; mainly items required and amount of items.
                         .Child("requests")
-                        .Child(request)
-                        .OnceSingleAsync<Request>();
-                    foreach (var item in requestData.Contents.Keys) //Each item has a key, which is the ID of the item
-                    {
-                        var anItem = await firebaseClient       //Obtains more details about the item
+                        .OnceAsync<Request>();
+            var itemData = await firebaseClient              //Obtains all item types from item
                         .Child("items")
-                        .Child(item)
-                        .OnceSingleAsync<items>();
-                        int userRequested;
-                        requestData.Contents.TryGetValue(item, out userRequested);
-                        anItem.Requested = userRequested;       //Overwrite the item requested with the user's requested amount
-                        user.itemlist.Add(anItem);
-                    }
-                }
-                user.UserID = usrrequest.Key;
-                var userdata = await firebaseClient           //Obtains address from /elderly                    
-                        .Child("elderly")
-                        .Child(user.UserID)
-                        .OnceSingleAsync<Elderly>();
-                user.Address = userdata.Address;
-                user.PostalCode = userdata.PostalCode;
-                userRequests.Add(user);
-            }
-            return userRequests;                                                
-        }
+                        .OnceAsync<items>();
 
-        public async Task<List<Elderly>> getElderly(string auth)               //This method obtains data from the firebase
-        {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
-            var elderlies = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+
+            var elder = await firebaseClient       //Gets all elderly in the system. May not be good for bigger dataaset due to lag from getting much data
                         .Child("elderly")
                         .OnceAsync<Elderly>();
-            List<Elderly> elderlylist = new List<Elderly>();                        //Turns all objects inside "requests" into Request objects
+
+
+            List<UserRequests> userRequests = new List<UserRequests>();
+            List<Request> requests = new List<Request>();
+            List<items> items = new List<items>();
+
+
+
+            List<Elderly> oldpeople = new List<Elderly>();
+            foreach(var eld in elder)
+            {
+                eld.Object.ID = eld.Key;
+                oldpeople.Add(eld.Object);
+            }
+
+
+
+            foreach(var request in requestData)
+            {
+                request.Object.ID = request.Key;
+                requests.Add(request.Object);
+            }
+            foreach(var item in itemData)
+            {
+                item.Object.ID = item.Key;
+                items.Add(item.Object);
+            }
+            foreach(var currRequest in userRequestsData)
+            {
+                UserRequests request = new UserRequests();
+                request.UserID = currRequest.Key;
+                foreach(var uniqueReq in currRequest.Object.Values)
+                {
+                    string reqid = requests.Find(x => x.ID==uniqueReq).ID;
+                    request.Requests.Add(reqid);
+                }
+                foreach(var req in request.Requests)
+                {
+                    Request foundReq = requests.Find(x => x.ID == req);
+                    foreach (var key in foundReq.Contents.Keys)
+                    {
+                        items item = items.Find(x => x.ID == key);
+                        int requested;
+                        foundReq.Contents.TryGetValue(key, out requested);
+                        item.Requested = requested;
+                        request.addItem(item);
+                    }
+                }
+                //var elder = await firebaseClient       //Other way to get the elderly address, may be better where data set is huge
+                //        .Child("elderly")              //For now, other way is better.
+                //        .Child(currRequest.Key)
+                //        .OnceSingleAsync<Elderly>();
+                //request.Address = elder.Address;
+                //request.PostalCode = elder.PostalCode;
+
+
+                Elderly oldman = oldpeople.Find(x => x.ID == currRequest.Key);
+                userRequests.Add(request);
+                request.Address = oldman.Address;
+                request.PostalCode = oldman.PostalCode;
+            }
+            return userRequests;
+        }
+
+        public async Task<List<Elderly>> getElderly(string auth)              
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);      
+            var elderlies = await firebaseClient                              
+                        .Child("elderly")
+                        .OnceAsync<Elderly>();
+            List<Elderly> elderlylist = new List<Elderly>();                  
             foreach (var elderly in elderlies)
             {
                 elderlylist.Add(elderly.Object);
             }
-            return elderlylist;                                                 //Returns the list of requests
+            return elderlylist;                                               
         }
 
-        public async Task<List<Volunteer>> getVolunteer(string auth)               //This method obtains data from the firebase
+        public async Task<List<Volunteer>> getVolunteer(string auth)            
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
-            var volunteers = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+            FirebaseClient firebaseClient = await InitClientAsync(auth);        
+            var volunteers = await firebaseClient                               
                         .Child("volunteer")
                         .OnceAsync<Volunteer>();
-            List<Volunteer> volunteerlist = new List<Volunteer>();                        //Turns all objects inside "requests" into Request objects
+            List<Volunteer> volunteerlist = new List<Volunteer>();              
             foreach (var volunteer in volunteers)
             {
                 volunteerlist.Add(volunteer.Object);
             }
-            return volunteerlist;                                                 //Returns the list of requests
+            return volunteerlist;                                               
         }
 
-        public async Task<IDictionary<string, items>> getitems(string auth)               //This method obtains data from the firebase
+        public async Task<IDictionary<string, items>> getitems(string auth) 
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
-            var items = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+            FirebaseClient firebaseClient = await InitClientAsync(auth);    
+            var items = await firebaseClient                                
                         .Child("items")
                         .OnceAsync<items>();
             IDictionary<string, items> itemlist = new Dictionary<string, items>();                        //Turns all objects inside "requests" into Request objects

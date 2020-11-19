@@ -35,23 +35,24 @@
 </div>
 
 @{
-    List<items> itemlist = new List<items>();
+    List<items> Titemlist = new List<items>();
     foreach (Area area in Model)
     {
         if (area.reqlist.Count != 0)
         {
-            foreach (items item in area.itemsList)
-            {
-                items curritem = itemlist.Find(x => x.Name == item.Name);
-                if (curritem != null)
+
+            foreach (items item in area.itemsList){
+                items itemF = Titemlist.Find(x => x.Name == item.Name);
+                if (itemF == null)
                 {
-                    curritem.Requested += item.Requested;
+                    items nItem = new items(item.Name, item.Requested, item.Icon,item.Remaining,item.BgCol);
+                    Titemlist.Add(nItem);
                 }
                 else
                 {
-                    items newitem = new items(item.Name,item.Requested,item.Icon,item.Remaining,item.BgCol);
-                    itemlist.Add(item);
+                    itemF.Requested += item.Requested;
                 }
+
             }
             foreach (UserRequests requests in area.reqlist)
             {
@@ -101,8 +102,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (items item in itemlist)
-            {
+            @foreach (items item in Titemlist) { 
                 <tr>
                     <td>@item.Name</td>
                     <td>@item.Requested</td>
