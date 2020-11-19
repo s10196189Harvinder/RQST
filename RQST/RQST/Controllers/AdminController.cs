@@ -95,8 +95,7 @@ namespace RQST.Controllers
         public async Task<IActionResult> RequestsAsync()
         {
             string auth = HttpContext.Session.GetString("auth");
-            List<UserRequests> something = await DataDALContext.getuserrequests(auth);
-            something = await DataDALContext.getUserRequestsAdress(auth, something);
+            List<UserRequests> something = await DataDALContext.getuserrequests(auth); 
             List<Area> arealist = new List<Area>();
             arealist.Add(new Area("Raffles Place, Cecil, Marina, People's Park"));
             arealist.Add(new Area("Anson, Tanjong Pagar"));
