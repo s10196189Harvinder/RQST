@@ -13,6 +13,8 @@
         padding: 0;
     }
 </style>
+<link href="~/css/tableDesign.css" rel="stylesheet" />
+<link href="~/css/adminpage.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
@@ -49,7 +51,7 @@
                 }
                 else
                 {
-                    items newitem = new items(item.Name,item.Requested,item.Icon,item.Remaining,item.BgCol);
+                    items newitem = new items(item.Name, item.Requested, item.Icon, item.Remaining, item.BgCol);
                     itemlist.Add(item);
                 }
             }
@@ -92,25 +94,37 @@
             }
         }
     }
-    <table>
-        <thead>
-            <tr>
-                <th>Item name</th>
-                <th>Total requested Amount</th>
-                <th>Total Remaining</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (items item in itemlist)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Requested</td>
-                    <td>@item.Remaining</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+    <button class="open-button" onclick="openForm()">Show Deliverables</button>
+    <script src="~/js/tempdeliverables.js"></script>
+    <div class="form-popup" id="myForm">
+        <div class="main">
+            <div class="tableDesign">
+                <form class="form-container">
+                    <table id="viewInfo" class="table">
+                        <thead>
+                            <tr style="text-align: center">
+                                <th>Item name</th>
+                                <th>Total requested Amount</th>
+                                <th>Total Remaining</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (items item in itemlist)
+                            {
+                                <tr class='table-primary' style="text-align: center">
+                                    <td>@item.Name</td>
+                                    <td>@item.Requested</td>
+                                    <td>@item.Remaining</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
 }
 
 <script>
