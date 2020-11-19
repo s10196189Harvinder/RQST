@@ -37,7 +37,6 @@
                                 else
                                 {
                                     <tr>
-                                        <td></td>
                                         <td>@requests.itemlist[count].Name</td>
                                         <td>@requests.itemlist[count].Requested</td>
                                         <td></td>
@@ -51,18 +50,16 @@
                     </tbody>
                 </table>
                 <hr>
-                <h3 class="titleDisplay">Area Summary</h3>
-                <table>
-                    <thead>
-                        <tr class="titleDisplay">
-                            <th class="titleDisplay">Items</th>
-                            <th class="titleDisplay">Total Items</th>
+                <h2 class="titleDisplay">Area Summary</h2>
+                <table id="viewInfo" class="table titleDisplay">
+                        <tr style="text-align: center">
+                            <th >Items</th>
+                            <th >Total Items</th>
                         </tr>
-                    </thead>
                     <tbody>
                         @foreach (items item in area.itemsList)
                         {
-                            <tr class="titleDisplay">
+                            <tr >
                                 <td>@item.Name</td>
                                 <td>@item.Requested</td>
                             </tr>
