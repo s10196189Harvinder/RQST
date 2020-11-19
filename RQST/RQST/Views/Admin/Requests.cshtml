@@ -9,6 +9,7 @@
         {
             if (area.reqlist.Count != 0)
             {
+            
                 <h2 class="titleDisplay">@area.AreaName</h2>
                 <table id="viewInfo" class="table titleDisplay">
                     <tr style="text-align: center">
@@ -52,20 +53,21 @@
                 <hr>
                 <h2 class="titleDisplay">Area Summary</h2>
                 <table id="viewInfo" class="table titleDisplay">
-                        <tr style="text-align: center">
-                            <th >Items</th>
-                            <th >Total Items</th>
-                        </tr>
+                    <tr style="text-align: center">
+                        <th>Items</th>
+                        <th>Total Items</th>
+                    </tr>
                     <tbody>
                         @foreach (items item in area.itemsList)
                         {
-                            <tr >
+                            <tr>
                                 <td>@item.Name</td>
                                 <td>@item.Requested</td>
                             </tr>
                         }
                     </tbody>
                 </table>
+                
 
             }
         }
