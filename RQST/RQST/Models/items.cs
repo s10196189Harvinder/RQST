@@ -13,5 +13,11 @@ namespace RQST.Models
 
         [JsonProperty("requested")]
         public int Requested { get; set; }
+        [JsonProperty("icon")]
+        public string Icon { get; set; }
+        [JsonProperty("remaining")]
+        public int Remaining { get; set; }
+        [JsonProperty("bgCol")]
+        public string BgCol { get; set; }
     }
 }

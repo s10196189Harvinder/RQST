@@ -56,7 +56,32 @@ namespace RQST.DAL
                 .PatchAsync("{\"" + res.User.LocalId + "\":\"elderly\"}");
             return true;
         }
-
+        public async Task<bool> AddCat(string auth, string category, string icon)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var volreq = await firebaseClient
+                .Child("categories")
+                .PostAsync("{\"category\":\""+category+"\",\"icon\":\""+icon+"\"}");
+            return true;
+        }
+        public async Task<bool> AddItemtoCat(string auth, string id, string categoryid)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var item = await firebaseClient
+                .Child("categories")
+                .Child(categoryid)
+                .Child("items")
+                .PostAsync("{'"+categoryid + "':'" + categoryid+ "'}");
+            return true;
+        }
+        public async Task<bool> AddItem(string auth, items item)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var itemp = await firebaseClient
+                .Child("items")
+                .PostAsync(item);
+            return true;
+        }
         public async Task<bool> postVolunteer(string name, string nric, string contact, string attendance, string status, string auth)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
