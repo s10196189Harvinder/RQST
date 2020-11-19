@@ -34,20 +34,32 @@
 
 </div>
 
-
-@foreach (Area area in Model)
-{
-    if (area.reqlist.Count != 0)
+@{
+    List<items> itemlist = new List<items>();
+    foreach (Area area in Model)
     {
-        foreach (UserRequests requests in area.reqlist)
+        if (area.reqlist.Count != 0)
         {
-            string words = "Item summary\n";
-<script>
-    $(document).ready(function(){
+            foreach (items item in area.itemsList)
+            {
+                items curritem = itemlist.Find(x => x.Name == item.Name);
+                if (curritem != null)
+                {
+                    curritem.Requested += item.Requested;
+                }
+                else
+                {
+                    itemlist.Add(item);
+                }
+            }
+            foreach (UserRequests requests in area.reqlist)
+            {
+                string words = "Item summary\n";
+                <script>
+                $(document).ready(function(){
                     var gaddress = "Singapore " +@requests.PostalCode;
-        var lat1;
-        var lng1;
-                 lng1;
+                    var lat1;
+                    var lng1;
                     axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
                         params: {
                             address: gaddress,
@@ -60,7 +72,7 @@
                             lng1 = Number(response.data.results[0].geometry.location.lng);
                             console.log(lat1);
                             console.log(lng1);
-                            
+
                             @foreach (items item in requests.itemlist)
                             {
                                 words += item.Name + " :" + item.Requested + "\n";
@@ -74,10 +86,28 @@
                                 infoWindow.open(map, marker)
                             });
                         });
-    });
-</script>
+                    });
+                </script>
+            }
         }
     }
+    <table>
+        <thead>
+            <tr>
+                <th>Item name</th>
+                <th>Total requested Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (items item in itemlist)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Requested</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 <script>
