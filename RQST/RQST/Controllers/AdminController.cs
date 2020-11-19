@@ -13,9 +13,10 @@ namespace RQST.Controllers
     public class AdminController : Controller
     {
         private DataDAL DataDALContext = new DataDAL();
-        public IActionResult Admin()
+        public async Task<IActionResult> AdminAsync()
         {
-            return View();
+            List<Area> arealist = await InitRequestsAsync();
+            return View(arealist);
         }
 
         [HttpPost]
@@ -83,7 +84,6 @@ namespace RQST.Controllers
         public async Task<IActionResult> AdminAsync(string Name, string Deliverables, string SpecialRequest, string Address)
         {
             string auth = HttpContext.Session.GetString("auth");
-            //await DataDALContext.postdata(Name, Deliverables, SpecialRequest, Address, auth);       //gets auth token, passes to DAL
             return RedirectToAction("RawRequests");
         }
         public async Task<IActionResult> RawRequestsAsync()
@@ -94,8 +94,13 @@ namespace RQST.Controllers
         }
         public async Task<IActionResult> RequestsAsync()
         {
+            List<Area> arealist = await InitRequestsAsync();
+            return View(arealist);
+        }
+        public async Task<List<Area>> InitRequestsAsync()
+        {
             string auth = HttpContext.Session.GetString("auth");
-            List<UserRequests> something = await DataDALContext.getuserrequests(auth); 
+            List<UserRequests> something = await DataDALContext.getuserrequests(auth);
             List<Area> arealist = new List<Area>();
             arealist.Add(new Area("Raffles Place, Cecil, Marina, People's Park"));
             arealist.Add(new Area("Anson, Tanjong Pagar"));
@@ -133,7 +138,7 @@ namespace RQST.Controllers
                 {
                     usrqst.AreaName = "Raffles Place, Cecil, Marina, People's Park";
                     arealist[0].AddReq(usrqst);
-                    foreach(var item in usrqst.itemlist)
+                    foreach (var item in usrqst.itemlist)
                     {
                         arealist[0].AddItem(item);
                     }
@@ -420,7 +425,7 @@ namespace RQST.Controllers
                     usrqst.PostalDistrict = 28;
                 }
             }
-            return View(arealist);
+            return arealist;
         }
     }
 }

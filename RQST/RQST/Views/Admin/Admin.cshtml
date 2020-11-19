@@ -1,9 +1,10 @@
-﻿@{
+﻿@model List<Area>;
+@{
     Layout = "AdminMenu";
 }
 <style>
     #map {
-        height: 100%;
+        height: 500px;
     }
 
     html, body {
@@ -12,6 +13,20 @@
         padding: 0;
     }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    let map;
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 1.3562033, lng: 103.8281415 },
+            zoom: 11,
+        })
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk&callback=initMap">
+</script>
 
 
 <h2>Admin page</h2>
@@ -20,16 +35,56 @@
 </div>
 
 
+@foreach (Area area in Model)
+{
+    if (area.reqlist.Count != 0)
+    {
+        foreach (UserRequests requests in area.reqlist)
+        {
+            string words = "<h2>Item summary</h2>";
 <script>
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: -34.397, lng: 150.644 },
-            zoom: 8,
-        });
+    $(document).ready(function(){
+                    var gaddress = "Singapore " +@requests.PostalCode;
+        var lat1;
+        var lng1;
+                 lng1;
+                    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                        params: {
+                            address: gaddress,
+                            key: 'AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk'
+                        }
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                            lat1 = Number(response.data.results[0].geometry.location.lat);
+                            lng1 = Number(response.data.results[0].geometry.location.lng);
+                            console.log(lat1);
+                            console.log(lng1);
+                            
+                            @foreach (items item in requests.itemlist)
+                            {
+                                words += item.Name + " :" + item.Requested;
+                            }
+                            var contents = "@words";
+                            var marker = new google.maps.Marker({ position: { lat: lat1, lng: lng1 }, map: map, content: contents });
+                            var infoWindow = new google.maps.InfoWindow({
+                                content: contents
+                            });
+                            marker.addListener('click', function () {
+                                infoWindow.open(map, marker)
+                            });
+                        });
+    });
+</script>
+        }
+    }
+}
+
+<script>
+    function addMarker(coords) {
+        var marker = new google.maps.Marker({
+            position: coords.coords,
+            map: map
+        })
     }
 </script>
-<script defer
-        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
-</script>
-
-
