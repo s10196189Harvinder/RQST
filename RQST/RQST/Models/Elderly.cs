@@ -17,5 +17,8 @@ namespace RQST.Models
 
         [Display(Name = "Postal Code")]
         public string PostalCode { get; set; }
+
+        [Display(Name = "Special Needs")]
+        public string SpecialNeeds { get; set; }
     }
 }

@@ -46,12 +46,12 @@ namespace RQST.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode)
+        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode, string SpecialNeeds)
         {
             if (ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
-                bool success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, auth);
+                bool success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, SpecialNeeds, auth);
                 if (success != true)
                 {
                     TempData["Message"] = "Failed";
