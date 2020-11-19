@@ -35,9 +35,7 @@ namespace RQST.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginPageAsync(string email, string password)
         {
-            IDictionary<string, string> response = new Dictionary<string, string>();
-            response = await loginDALContext.loginAsync(email, password);       //reponse obtained from the DALs
-            string emailname = email.Split('@')[0];
+            IDictionary<string, string> response = await loginDALContext.loginAsync(email, password);       //reponse obtained from the DALs
             string exception = "";
             if (response.TryGetValue("Exception", out exception))                //Attempts to get any value if Dictionary has an "Exception" key. Only occurs if an exception happens while signing in.
             {

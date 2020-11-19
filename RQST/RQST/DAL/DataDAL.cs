@@ -13,21 +13,6 @@ namespace RQST.DAL
 {
     public class DataDAL
     {
-
-        //public async Task<bool> postdata(string name, string deliverable, string specialneeds, string address, string auth)     //This method POSTS data to the firebase
-        //{
-        //    FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
-        //    Request request = new Request();                                    //Creates a request object (can be improved, too lazy)
-        //    request.Name = name;
-        //    request.Address = address;
-        //    request.SpecialRequest = specialneeds;
-        //    request.Deliverables = deliverable;
-        //    var smth = await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
-        //            .Child("Requests")
-        //            .PostAsync(request);
-        //    return true;
-        //}
-
         public async Task<bool> postElderly(string name, char gender, string email, string password, string address, string postalcode, string specialneeds, string auth)     //This method POSTS data to the firebase
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
@@ -50,7 +35,7 @@ namespace RQST.DAL
             elderly.PostalCode = postalcode;
             elderly.SpecialNeeds = specialneeds;
             await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
-                    .Child("Elderly")
+                    .Child("elderly")
                     .Child(res.User.LocalId)
                     .PutAsync(elderly);
             await firebaseClient
@@ -94,7 +79,7 @@ namespace RQST.DAL
             volunteer.Attendance = attendance;
             volunteer.Status = status;
             var volreq = await firebaseClient
-                .Child("Volunteer")
+                .Child("volunteer")
                 .PostAsync(volunteer);
             return true;
         }
@@ -158,7 +143,7 @@ namespace RQST.DAL
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
             var elderlies = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
-                        .Child("Elderly")
+                        .Child("elderly")
                         .OnceAsync<Elderly>();
             List<Elderly> elderlylist = new List<Elderly>();                        //Turns all objects inside "requests" into Request objects
             foreach (var elderly in elderlies)
@@ -172,7 +157,7 @@ namespace RQST.DAL
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
             var volunteers = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
-                        .Child("Volunteer")
+                        .Child("volunteer")
                         .OnceAsync<Volunteer>();
             List<Volunteer> volunteerlist = new List<Volunteer>();                        //Turns all objects inside "requests" into Request objects
             foreach (var volunteer in volunteers)

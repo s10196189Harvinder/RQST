@@ -8,6 +8,15 @@ namespace RQST.Models
 {
     public class items
     {
+        public items(string name, int requested, string icon, int remaining, string bgCol)
+        {
+            Name = name;
+            Requested = requested;
+            Icon = icon;
+            Remaining = remaining;
+            BgCol = bgCol;
+        }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 
@@ -19,5 +28,6 @@ namespace RQST.Models
         public int Remaining { get; set; }
         [JsonProperty("bgCol")]
         public string BgCol { get; set; }
+        
     }
 }

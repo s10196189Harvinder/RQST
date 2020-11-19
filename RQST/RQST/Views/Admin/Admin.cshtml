@@ -49,6 +49,7 @@
                 }
                 else
                 {
+                    items newitem = new items(item.Name,item.Requested,item.Icon,item.Remaining,item.BgCol);
                     itemlist.Add(item);
                 }
             }
@@ -96,6 +97,7 @@
             <tr>
                 <th>Item name</th>
                 <th>Total requested Amount</th>
+                <th>Total Remaining</th>
             </tr>
         </thead>
         <tbody>
@@ -104,6 +106,7 @@
                 <tr>
                     <td>@item.Name</td>
                     <td>@item.Requested</td>
+                    <td>@item.Remaining</td>
                 </tr>
             }
         </tbody>

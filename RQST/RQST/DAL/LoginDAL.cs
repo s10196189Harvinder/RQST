@@ -24,8 +24,6 @@ namespace RQST.DAL
             try
             {
                 var auth = await ap.SignInWithEmailAndPasswordAsync(email, password);           //Attempts to sign in via the Authentication provider, with the credentials
-                var serialauth = JsonConvert.SerializeObject(auth);                             //Once authentication is obtained from the sign in function, it is serialized as JSON
-
                 var firebaseClient = new FirebaseClient(
                                     "https://kasei-bb0e0.firebaseio.com/",              //Sets the firebase project to use
                                     new FirebaseOptions
@@ -41,6 +39,7 @@ namespace RQST.DAL
                     response.Add("Exception", "Not an admin");
                     return response;
                 }
+                var serialauth = JsonConvert.SerializeObject(auth);                             //Once authentication is obtained from the sign in function, it is serialized as JSON
                 response.Add("Auth", serialauth);                                               //Adds the serialized JSON into the dictioniary
                 return response;
             }
