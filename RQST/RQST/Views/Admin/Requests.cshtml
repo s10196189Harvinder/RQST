@@ -2,72 +2,72 @@
 @{
     Layout = "AdminMenu";
 }
-
-@foreach (Area area in Model)
-{
-    if (area.reqlist.Count != 0)
-    {
-        <h2>@area.AreaName</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>UserID</th>
-                    <th>Items</th>
-                    <th>Item amnt</th>
-                    <th>Address</th>
-                    <th>Postal Code</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (UserRequests requests in area.reqlist)
-                {
-                    int count = 0;
-                    foreach (items item in requests.itemlist)
-                    {
-                        if (count == 0)
-                        {
-                            <tr>
-                                <td rowspan="@requests.itemlist.Count">@requests.UserID</td>
-                                <td>@requests.itemlist[0].Name</td>
-                                <td>@requests.itemlist[0].Requested</td>
-                                <td rowspan="@requests.itemlist.Count">@requests.Address</td>
-                                <td rowspan="@requests.itemlist.Count">@requests.PostalCode</td>
-                            </tr>
-                        }
-                        else
-                        {
-                            <tr>
-                                <td></td>
-                                <td>@requests.itemlist[count].Name</td>
-                                <td>@requests.itemlist[count].Requested</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        }
-                        count++;
-                    }
-
-                }
-            </tbody>
-        </table>
-        <h3>Area Summary</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Items</th>
-                    <th>Total Items</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (items item in area.itemsList)
-                {
-                    <tr>
-                        <td>@item.Name</td>
-                        <td>@item.Requested</td>
+<link href="~/css/tableDesign2.css" rel="stylesheet" />
+<div class="main">
+    <div class="tableDesign">
+        @foreach (Area area in Model)
+        {
+            if (area.reqlist.Count != 0)
+            {
+                <h2 class="titleDisplay">@area.AreaName</h2>
+                <table id="viewInfo" class="table titleDisplay">
+                    <tr style="text-align: center">
+                        <th>UserID</th>
+                        <th>Items</th>
+                        <th>Item amnt</th>
+                        <th>Address</th>
+                        <th>Postal Code</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                    <tbody>
+                        @foreach (UserRequests requests in area.reqlist)
+                        {
+                            int count = 0;
+                            foreach (items item in requests.itemlist)
+                            {
+                                if (count == 0)
+                                {
+                                    <tr>
+                                        <td rowspan="@requests.itemlist.Count">@requests.UserID</td>
+                                        <td>@requests.itemlist[0].Name</td>
+                                        <td>@requests.itemlist[0].Requested</td>
+                                        <td rowspan="@requests.itemlist.Count">@requests.Address</td>
+                                        <td rowspan="@requests.itemlist.Count">@requests.PostalCode</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>@requests.itemlist[count].Name</td>
+                                        <td>@requests.itemlist[count].Requested</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                count++;
+                            }
 
-    }
-}
+                        }
+                    </tbody>
+                </table>
+                <hr>
+                <h2 class="titleDisplay">Area Summary</h2>
+                <table id="viewInfo" class="table titleDisplay">
+                        <tr style="text-align: center">
+                            <th >Items</th>
+                            <th >Total Items</th>
+                        </tr>
+                    <tbody>
+                        @foreach (items item in area.itemsList)
+                        {
+                            <tr >
+                                <td>@item.Name</td>
+                                <td>@item.Requested</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            }
+        }
+    </div>
+</div>
