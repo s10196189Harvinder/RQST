@@ -1,0 +1,19 @@
+﻿@model items
+<title>Login</title>
+<link href="~/css/loginstyle.css" rel="stylesheet" />
+
+<div class="main" style="float:right">
+    <p style="color:green">@TempData["GMessage"]</p>
+    <form asp-controller="Admin" asp-action="AddItem" method="post">
+        <input type="text" asp-for="BgCol" placeholder="BgCol" required>
+        <input type="text" asp-for="Icon" placeholder="Icon" class="psw" required>
+        <input type="text" asp-for="Name" placeholder="Name" required>
+        <input type="text" asp-for="Remaining" placeholder="Remaining" required>
+        <input type="text" asp-for="Requested" placeholder="Requested" required>
+        <div class="loginBtnpos">
+            <input type="submit" value="Add" class="loginBtn">
+        </div>
+
+
+    </form>
+</div>

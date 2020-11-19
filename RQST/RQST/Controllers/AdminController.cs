@@ -18,14 +18,40 @@ namespace RQST.Controllers
             List<Area> arealist = await InitRequestsAsync();
             return View(arealist);
         }
+        public IActionResult AddItem()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddItemAsync(items items)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            await DataDALContext.AddItem(auth, items);
+            TempData["GMessage"] = "Created successfully !";
+            return View();
+        }
+
+        public IActionResult AddCat()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddCatAsync(string category,string icon)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            await DataDALContext.AddCat(auth,category,icon);
+            TempData["GMessage"] = "Created successfully !";
+            return View();
+        }
+
 
         [HttpPost]
-        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode)
+        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode, string SpecialNeeds)
         {
             if (ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
-                bool success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, auth);
+                bool success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, SpecialNeeds, auth);
                 if (success != true)
                 {
                     TempData["Message"] = "Failed";

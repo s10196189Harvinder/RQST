@@ -1,0 +1,15 @@
+﻿<title>Add Category</title>
+<link href="~/css/loginstyle.css" rel="stylesheet" />
+
+<div class="main" style="float:right">
+    <p style="color:green">@TempData["GMessage"]</p>
+    <form asp-controller="Admin" asp-action="AddCat" method="post">
+        <input name="category" placeholder="Category" required>
+        <input name="icon" placeholder="Icon" class="psw" required>
+        <div class="loginBtnpos">
+            <input type="submit" value="Add" class="loginBtn">
+        </div>
+
+
+    </form>
+</div>

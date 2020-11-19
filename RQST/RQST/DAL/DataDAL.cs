@@ -28,7 +28,7 @@ namespace RQST.DAL
         //    return true;
         //}
 
-        public async Task<bool> postElderly(string name, char gender, string email, string password, string address, string postalcode, string auth)     //This method POSTS data to the firebase
+        public async Task<bool> postElderly(string name, char gender, string email, string password, string address, string postalcode, string specialneeds, string auth)     //This method POSTS data to the firebase
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
             var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
@@ -39,6 +39,7 @@ namespace RQST.DAL
             }
             catch
             {
+
                 return false;
             }
             Elderly elderly = new Elderly();                                    //Creates a elderly 
@@ -47,8 +48,9 @@ namespace RQST.DAL
             elderly.Email = email;
             elderly.Address = address;
             elderly.PostalCode = postalcode;
+            elderly.SpecialNeeds = specialneeds;
             await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
-                    .Child("elderly")
+                    .Child("Elderly")
                     .Child(res.User.LocalId)
                     .PutAsync(elderly);
             await firebaseClient
@@ -56,7 +58,32 @@ namespace RQST.DAL
                 .PatchAsync("{\"" + res.User.LocalId + "\":\"elderly\"}");
             return true;
         }
-
+        public async Task<bool> AddCat(string auth, string category, string icon)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var volreq = await firebaseClient
+                .Child("categories")
+                .PostAsync("{\"category\":\""+category+"\",\"icon\":\""+icon+"\"}");
+            return true;
+        }
+        public async Task<bool> AddItemtoCat(string auth, string id, string categoryid)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var item = await firebaseClient
+                .Child("categories")
+                .Child(categoryid)
+                .Child("items")
+                .PostAsync("{'"+categoryid + "':'" + categoryid+ "'}");
+            return true;
+        }
+        public async Task<bool> AddItem(string auth, items item)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var itemp = await firebaseClient
+                .Child("items")
+                .PostAsync(item);
+            return true;
+        }
         public async Task<bool> postVolunteer(string name, string nric, string contact, string attendance, string status, string auth)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
