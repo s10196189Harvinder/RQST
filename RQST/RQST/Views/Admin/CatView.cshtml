@@ -1,1 +1,45 @@
-﻿
+﻿@model List<Categories>
+
+<table>
+    <thead>
+        <tr>
+            <th>Category Name</th>
+            <th>Category Icon</th>
+            <th>Items</th>
+            <th>Add item to category</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (Categories cat in Model)
+            {
+                List<string> items = new List<string>();
+                foreach (string key in cat.Contents.Keys)
+                {
+                    string item;
+                    cat.Contents.TryGetValue(key, out item);
+                    items.Add(item);
+                }
+                for (int i = 0; i < items.Count; i++)
+                {
+                    if (i == 0)
+                    {
+                        <tr>
+                            <td rowspan=@cat.Contents.Count>@cat.Name</td>
+                            <td rowspan=@cat.Contents.Count>@cat.Icon</td>
+                            <td>@items[i]</td>
+                            <td rowspan=@cat.Contents.Count><a href="/Admin/AddItoC?catid=@cat.ID" class="btn btn-primary btn-success btn-block">Add</a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@items[i]</td>
+                        </tr>
+                    }
+                }
+
+            }
+        }
+    </tbody>
+</table>

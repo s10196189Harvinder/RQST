@@ -1,0 +1,18 @@
+﻿@model Categories;
+@{
+    ViewData["Title"] = "additoc";
+    Layout = "AdminMenu";
+}
+<link href="~/css/elderlystyle.css" rel="stylesheet" />
+
+<div class="main">
+    <p class="create" align="center">Item</p>
+    <form class="form2" asp-controller="Admin" asp-action="AddItoC" asp-route-catid=@Model.ID>
+        <div class="text-danger"></div>
+
+        <input type="text" name="name" class="inputbox" placeholder="Name" required />
+        <div class="createBtnpos">
+            <input type="submit" value="Create" class="createBtn" />
+        </div>
+    </form>
+</div>

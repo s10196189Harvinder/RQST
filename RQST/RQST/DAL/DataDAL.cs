@@ -193,6 +193,43 @@ namespace RQST.DAL
             return elderlylist;                                               
         }
 
+        public async Task<List<Categories>> getCat(string auth)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var elderlies = await firebaseClient
+                        .Child("categories")
+                        .OnceAsync<Categories>();
+            List<Categories> catlist = new List<Categories>();
+            foreach (var elderly in elderlies)
+            {
+                elderly.Object.ID = elderly.Key;
+                catlist.Add(elderly.Object);
+            }
+            return catlist;
+        }
+
+        public async Task<Categories> getaCat(string auth,string id)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var cat = await firebaseClient
+                        .Child("categories")
+                        .Child(id)
+                        .OnceSingleAsync<Categories>();
+            return cat;
+        }
+
+        public async Task<bool> putIinC(string auth, string cat, string id)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            await firebaseClient
+                        .Child("categories")
+                        .Child(cat)
+                        .Child("items")
+                        .PatchAsync("{\"" + id + "\":\"" + id + "\"}");
+            return true;
+        }
+
+
         public async Task<List<Volunteer>> getVolunteer(string auth)            
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        

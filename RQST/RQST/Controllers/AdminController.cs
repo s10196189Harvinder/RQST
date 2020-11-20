@@ -44,6 +44,12 @@ namespace RQST.Controllers
             return View();
         }
 
+        public async Task<IActionResult> CatViewAsync(string category, string icon)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            List<Categories> catlist = await DataDALContext.getCat(auth);
+            return View(catlist);
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode, string SpecialNeeds)
@@ -98,6 +104,22 @@ namespace RQST.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> AddItoC(string catid)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            Categories cat = await DataDALContext.getaCat(auth,catid);
+            return View(cat);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddItoC(string name, string catid)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            await DataDALContext.putIinC(auth, catid, name);
+            return View();
+            
+        }
+
 
         public async Task<IActionResult> _ViewVolunteerAsync()
         {
