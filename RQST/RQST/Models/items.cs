@@ -28,6 +28,7 @@ namespace RQST.Models
         public int Remaining { get; set; }
         [JsonProperty("bgCol")]
         public string BgCol { get; set; }
-        
+        public string ID { get; set; }
+
     }
 }
