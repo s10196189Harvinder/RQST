@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +16,7 @@ namespace RQST.Controllers
 {
     public class AdminController : Controller
     {
+        private static readonly HttpClient client = new HttpClient();
         private DataDAL DataDALContext = new DataDAL();
         public async Task<IActionResult> AdminAsync()
         {
@@ -57,6 +62,16 @@ namespace RQST.Controllers
             if (ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
+                /*List<Subzone> SZList = JsonConvert.DeserializeObject<List<Subzone>>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Get subzones 
+                var jsonstring = "{ \"address\" : " + PostalCode + ",\"key\": \"AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk\"}";                        //Get lat+lng of postal code
+                var content = new StringContent(jsonstring, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("https://maps.googleapis.com/maps/api/geocode/json", content);                                //Request currently not working
+                var responseString = await response.Content.ReadAsStringAsync();
+                var responseJson = Json(responseString);
+                foreach (Subzone sz in SZList)
+                {
+                    //bool isIn = check(sz);
+                }*/
                 bool success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, SpecialNeeds, auth);
                 if (success != true)
                 {
@@ -71,7 +86,23 @@ namespace RQST.Controllers
                 return View();
             }
         }
-
+        public static bool check(PointF[] polygon, PointF testPoint)    //Uses raycasting to check if point is within the subzone
+        {
+            bool result = false;
+            int j = polygon.Count() - 1;
+            for (int i = 0; i < polygon.Count(); i++)
+            {
+                if (polygon[i].Y < testPoint.Y && polygon[j].Y >= testPoint.Y || polygon[j].Y < testPoint.Y && polygon[i].Y >= testPoint.Y)
+                {
+                    if (polygon[i].X + (testPoint.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) * (polygon[j].X - polygon[i].X) < testPoint.X)
+                    {
+                        result = !result;
+                    }
+                }
+                j = i;
+            }
+            return result;
+        }
         public async Task<IActionResult> CreateElderlyAsync()
         {
             return View();
