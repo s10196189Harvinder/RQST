@@ -13,7 +13,7 @@ namespace RQST.DAL
 {
     public class DataDAL
     {
-        public async Task<bool> postElderly(string name, char gender, string email, string password, string address, string postalcode, string specialneeds, string auth)     //This method POSTS data to the firebase
+        public async Task<bool> postElderly(string name, char gender, string email, string password, string address, string postalcode, string specialneeds, Subzone zone, string auth)     //This method POSTS data to the firebase
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
             var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
@@ -27,13 +27,7 @@ namespace RQST.DAL
 
                 return false;
             }
-            Elderly elderly = new Elderly();                                    //Creates a elderly 
-            elderly.Name = name;
-            elderly.Gender = gender;
-            elderly.Email = email;
-            elderly.Address = address;
-            elderly.PostalCode = postalcode;
-            elderly.SpecialNeeds = specialneeds;
+            Elderly elderly = new Elderly(name,gender,email,address,postalcode,specialneeds,zone);                                    //Creates a elderly 
             await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
                     .Child("elderly")
                     .Child(res.User.LocalId)

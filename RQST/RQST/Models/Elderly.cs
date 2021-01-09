@@ -30,5 +30,17 @@ namespace RQST.Models
         public string SpecialNeeds { get; set; }
 
         public string ID { get; set; }
+        public Subzone Zone { get; set; }
+        
+        public Elderly(string name, char gender, string email, string address, string postalcode, string specialneeds, Subzone zone)
+        {
+            Name = name;
+            Gender = gender;
+            Email = email;
+            Address = address;
+            PostalCode = postalcode;
+            SpecialNeeds = specialneeds;
+            Zone = zone;
+        }
     }
 }

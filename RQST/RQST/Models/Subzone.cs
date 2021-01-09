@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RQST.Models
 {
-    public class Properties
+    public class Subzone
     {
         public string Name { get; set; }
         public object description { get; set; }
@@ -28,10 +28,10 @@ namespace RQST.Models
         public List<List<List<object>>> coordinates { get; set; }
     }
 
-    public class Subzone
+    public class SubzoneRoot
     {
         public string type { get; set; }
-        public Properties properties { get; set; }
+        public Subzone properties { get; set; }
         public Geometry geometry { get; set; }
     }
 }
