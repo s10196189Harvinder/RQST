@@ -41,9 +41,6 @@ itemamnt - styling for the item amnt
 <link href="~/css/tableDesign.css" rel="stylesheet" />
 <link href="~/css/adminpage.css" rel="stylesheet" />
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk&callback=initMap">
-</script>
 
 <h2>Admin page</h2>
 <div id="map">
@@ -145,11 +142,6 @@ itemamnt - styling for the item amnt
         };
     </script>
 }
-<script>
-    function addMarker(coords) {
-        var marker = new google.maps.Marker({
-            position: coords.coords,
-            map: map
-        })
-    }
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk&callback=initMap">
 </script>
