@@ -3,10 +3,11 @@
     Layout = "~/Views/Shared/AdminMenu.cshtml";
 }
 <link href="~/css/tableDesign2.css" rel="stylesheet" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <div class="">
     <div class="">
         @{
-            
+
             foreach (Area area in Model)
             {
                 List<items> Titemlist = new List<items>();
@@ -25,48 +26,48 @@
                             itemF.Requested += item.Requested;
                         }
                     }
-                <div class="main">
-                    <h2 class="titleDisplay">@area.AreaName</h2>
-                    <table id="viewInfo" class="table titleDisplay">
-                        <tr style="text-align: center">
-                            <th>UserID</th>
-                            <th>Items</th>
-                            <th>Item amnt</th>
-                            <th>Address</th>
-                            <th>Postal Code</th>
-                        </tr>
-                        <tbody>
-                            @foreach (UserRequests requests in area.reqlist)
-                            {
-                                int count = 0;
-                                foreach (items item in requests.itemlist)
+                    <div class="main">
+                        <h2 class="titleDisplay">@area.AreaName</h2>
+                        <table id="viewInfo" class="table titleDisplay">
+                            <tr style="text-align: center">
+                                <th>UserID</th>
+                                <th>Items</th>
+                                <th>Item amnt</th>
+                                <th>Address</th>
+                                <th>Postal Code</th>
+                            </tr>
+                            <tbody>
+                                @foreach (UserRequests requests in area.reqlist)
                                 {
-                                    if (count == 0)
+                                    int count = 0;
+                                    foreach (items item in requests.itemlist)
                                     {
-                                        <tr>
-                                            <td rowspan="@requests.itemlist.Count">@requests.UserID</td>
-                                            <td>@requests.itemlist[0].Name</td>
-                                            <td>@requests.itemlist[0].Requested</td>
-                                            <td rowspan="@requests.itemlist.Count">@requests.Address</td>
-                                            <td rowspan="@requests.itemlist.Count">@requests.PostalCode</td>
-                                        </tr>
+                                        if (count == 0)
+                                        {
+                                            <tr>
+                                                <td rowspan="@requests.itemlist.Count">@requests.User.ID</td>
+                                                <td>@requests.itemlist[0].Name</td>
+                                                <td>@requests.itemlist[0].Requested</td>
+                                                <td rowspan="@requests.itemlist.Count">@requests.User.Address</td>
+                                                <td rowspan="@requests.itemlist.Count">@requests.User.PostalCode</td>
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td>@requests.itemlist[count].Name</td>
+                                                <td>@requests.itemlist[count].Requested</td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                        count++;
                                     }
-                                    else
-                                    {
-                                        <tr>
-                                            <td>@requests.itemlist[count].Name</td>
-                                            <td>@requests.itemlist[count].Requested</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    }
-                                    count++;
-                                }
 
-                            }
-                        </tbody>
-                    </table>
-                    <hr>
+                                }
+                            </tbody>
+                        </table>
+                        <hr>
                         <h2 class="titleDisplay">Area Summary</h2>
                         <table id="viewInfo" class="table titleDisplay">
                             <tr style="text-align: center">

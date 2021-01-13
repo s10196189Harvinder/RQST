@@ -1,7 +1,17 @@
-﻿@model List<Area>;
+﻿@using Newtonsoft.Json;
+@using GeoJSON.Net.Feature;
+@model List<UserRequests>;
 @{
     Layout = "AdminMenu";
 }
+<!--
+CSS doers
+infotitle, itemname, itemamnt are css for the windows that pop up when you click on the circle
+
+infotitle - The request count at the top
+itemname - styling for the item name
+itemamnt - styling for the item amnt
+-->
 <style>
     #map {
         height: 500px;
@@ -12,125 +22,126 @@
         margin: 0;
         padding: 0;
     }
+
+    .infotitle {
+        font-size: 12px;
+        font-weight: bold;
+        justify-content: center;
+    }
+
+    .itemname {
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .itemamnt {
+        font-size: 11px;
+    }
 </style>
 <link href="~/css/tableDesign.css" rel="stylesheet" />
 <link href="~/css/adminpage.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    let map;
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 1.3562033, lng: 103.8281415 },
-            zoom: 11,
-        })
-    }
-</script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk&callback=initMap">
-</script>
 
-
-<h2>Admin page</h2>
+<h2 style="text-align:center">Order Request</h2>
 <div id="map">
 
 </div>
-
 @{
-    List<items> Titemlist = new List<items>();
-    foreach (Area area in Model)
-    {
-        if (area.reqlist.Count != 0)
-        {
-
-            foreach (items item in area.itemsList){
-                    items itemF = Titemlist.Find(x => x.Name == item.Name);
-                    if (itemF == null)
-                    {
-                        items nItem = new items(item.Name, item.Requested, item.Icon, item.Remaining, item.BgCol);
-                        Titemlist.Add(nItem);
+    var text = (System.IO.File.ReadAllText(@"wwwroot\subzones.geojson"));
+    <script>
+        var json = @Html.Raw(text);
+        function hslToHex(h, s, l) {
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');   // convert to Hex and prefix "0" if needed
+            };
+            return `#${f(0)}${f(8)}${f(4)}`;
+        }
+        let map;
+        function initMap() {
+            var infowindow = new google.maps.InfoWindow();
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 1.3562033, lng: 103.8281415 },
+                zoom: 11,
+            })
+            map.data.addGeoJson(json);
+            map.data.setStyle(function (feature) {
+                var requests = feature.getProperty('requests');
+                color = 'grey';
+                if (requests > 0) {
+                    if (requests > 9) {
+                        var h = (1 - ((9.9) / 10)) * 240
+                        color = hslToHex(h, 100, 50);
                     }
-                    else
-                    {
-                        itemF.Requested += item.Requested;
+                    else {
+                        var h = (1 - ((requests) / 10)) * 240
+                        color = hslToHex(h, 100, 50);
                     }
                 }
-            foreach (UserRequests requests in area.reqlist)
-            {
-                string words = "Item summary\n";
-                <script>
-                $(document).ready(function(){
-                    var gaddress = "Singapore " +@requests.PostalCode;
-                    var lat1;
-                    var lng1;
-                    axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-                        params: {
-                            address: gaddress,
-                            key: 'AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk'
-                        }
-                    })
-                        .then(function (response) {
-                            console.log(response);
-                            lat1 = Number(response.data.results[0].geometry.location.lat);
-                            lng1 = Number(response.data.results[0].geometry.location.lng);
-                            console.log(lat1);
-                            console.log(lng1);
+                var weight = requests > 0 ? 2 : 0.3;
+                var opacity = requests > 0 ? 0.7 : 0.3
+                return {
+                    fillColor: color,
+                    strokeWeight: weight,
+                    fillOpacity: opacity
+                };
+            });
+            map.data.addListener('click', function (event) {
+                if (event.feature.getProperty('requests') > 0) {
+                    var feat = event.feature;
+                    infowindow.setContent(feat.getProperty("itemliststring"));
+                    infowindow.setPosition(event.latLng);
+                    infowindow.open(map);
+                }
+            });
+            map.data.addListener('mouseover', function (event) {
+                if (event.feature.getProperty("requests") > 0) {
+                    map.data.revertStyle();
+                    map.data.overrideStyle(event.feature, { fillOpacity: 1,strokeWeight:4, fillColor:"red" });
+                }
+            });
+            map.data.addListener('mouseout', function (event) {
+                map.data.revertStyle();
+            });
 
-                            @foreach (items item in requests.itemlist)
-                            {
-                                words += item.Name + " :" + item.Requested + "\n";
-                            }
-                            var contents = "@words";
-                            var marker = new google.maps.Marker({ position: { lat: lat1, lng: lng1 }, map: map, content: contents });
-                            var infoWindow = new google.maps.InfoWindow({
-                                content: contents
-                            });
-                            marker.addListener('click', function () {
-                                infoWindow.open(map, marker)
-                            });
-                        });
-                    });
-                </script>
-            }
         }
-    }
-    <button class="open-button" onclick="openForm()">Show Deliverables</button>
-    <script src="~/js/tempdeliverables.js"></script>
-    <div class="form-popup" id="myForm">
-        <div class="main">
-            <div class="tableDesign">
-                <form class="form-container">
-                    <table id="viewInfo" class="table">
-                        <thead>
-                            <tr style="text-align: center">
-                                <th>Item name</th>
-                                <th>Total requested Amount</th>
-                                <th>Total Remaining</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (items item in Titemlist)
-                            {
-                                <tr class='table-primary' style="text-align: center">
-                                    <td>@item.Name</td>
-                                    <td>@item.Requested</td>
-                                    <td>@item.Remaining</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-                </form>
-            </div>
-        </div>
-    </div>
-}
+    </script>
+    <script>
+        var objlist = [];
+    </script>
 
-<script>
-    function addMarker(coords) {
-        var marker = new google.maps.Marker({
-            position: coords.coords,
-            map: map
-        })
+    foreach (UserRequests request in Model)
+    {
+        string words = "<div class='infotitle'>Total Requests: " + @request.Requests.Count() + "</div></br>Item summary</br>";
+        foreach (items item in request.itemlist)
+        {
+            words += "<span class='itemname'>" + item.Name + "</span> : <span class='itemamnt'>" + item.Requested + "</span></br>";
+        }
+        <script>
+            var obj = {
+                name:@Html.Raw("\"" + request.User.Zone.Name + "\""),
+                requests:@Html.Raw(request.Requests.Count()),
+                itemliststring:"@Html.Raw(words)"
+            };
+            objlist.push(obj);
+        </script>
     }
+    <script>
+        window.onload = function () {
+            map.data.forEach(function (feature) {
+                var SD_NAME = feature.getProperty('Name');
+                if (objlist.some(item => item.name === SD_NAME)) {
+                    var req = objlist.filter(obj => { return obj.name === SD_NAME });
+                    feature.setProperty("requests", req[0].requests);
+                    feature.setProperty("itemliststring", req[0].itemliststring);
+                }
+            });
+        };
+    </script>
+}
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk&callback=initMap">
 </script>

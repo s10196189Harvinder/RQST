@@ -10,8 +10,6 @@ namespace RQST.Models
     //Not final
     public class Volunteer
     {
-        public int SerialNo { get; set; }
-
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Name is is too long! Enter a shorter name.")]
         public string Name { get; set; }
 

@@ -10,6 +10,7 @@
     <p class="create" align="center">Create New Elderly</p>
     <form asp-action="CreateElderly" class="form2">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>@TempData["Message"]</div>
 
         <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required />
         <span asp-validation-for="Name" class="text-danger"></span>
@@ -17,7 +18,7 @@
         <span asp-validation-for="Gender" class="text-danger"></span>
         <input type="text" asp-for="Email" class="inputbox" placeholder="Email" required />
         <span asp-validation-for="Email" class="text-danger"></span>
-        <input type="password" asp-for="Password" class="inputbox" placeholder="Password" required />
+        <input type="text" asp-for="Password" class="inputbox" placeholder="Password" required />
         <span asp-validation-for="Password" class="text-danger"></span>
         <input type="text" asp-for="Address" class="inputbox" placeholder="Address" required />
         <span asp-validation-for="Address" class="text-danger"></span>
