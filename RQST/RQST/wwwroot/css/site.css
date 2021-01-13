@@ -3,9 +3,6 @@ for details on configuring this project to bundle and minify static web assets. 
 
 body {
     font-family: 'Roboto Mono', monospace;
-    background-image: url(../img/background-image.png);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
 }
 
 
