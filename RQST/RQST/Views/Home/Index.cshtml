@@ -2,35 +2,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <h1>@ViewData["Title"]</h1>
 
+@model Login;
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<title>Login</title>
+<link href="~/css/loginstyle.css" rel="stylesheet" />
+
+<div class="main" style="float:right">
+    <p class="login" align="center"><img src="~/img/handshake-microsoft.png" class="img-fluid" height="100" width="100" /></p>
+
+    <form asp-controller="Home" asp-action="LoginPage" class="form1" method="post">
+        <input type="text" asp-for="Email" placeholder="Email" class="email" required>
+        <input type="password" asp-for="Password" placeholder="Password" class="psw" required>
+        <a asp-controller="Home" asp-action="ForgotPass" class="forgotpsw">Forgot Password?</a>
+        <div class="loginBtnpos">
+            <input type="submit" value="Login" class="loginBtn">
+        </div>
 
 
-<div class="slideshow-container">
-
-    <div class="mySlides fade">
-        <div class="numbertext">1 / 3</div>
-        <img src="~/img/delivery.jpg" style="width:100%">
-        <div class="text"><strong><i>To better serve the elderly community</i></strong></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">2 / 3</div>
-        <img src="~/img/volunteer-with-elderly-10.jpg" style="width:100%">
-        <div class="text"><strong><i>Empowering lives</i></strong></div>
-    </div>
-
-    <div class="mySlides fade">
-        <div class="numbertext">3 / 3</div>
-        <img src="~/img/20141125_volunteer-nuh_st_0.jpg" style="width:100%">
-        <div class="text"><strong><i>Ensure the care and love</i></strong></div>
-    </div>
-
+    </form>
 </div>
-<br>
-
-<div style="text-align:center">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-</div>
-
-<script src="~/js/slider.js"></script>
