@@ -7,14 +7,20 @@ namespace RQST.Models
 {
     public class UserRequests
     {
-        public string UserID { get; set; }
-        public List<string> Requests { get; set; } = new List<string>();
-        public string Address { get; set; }
-        public string PostalCode { get; set; }
+        public Elderly User { get; set; }
+        public List<Request> Requests { get; set; } = new List<Request>();
         public List<items> itemlist { get; set; } = new List<items>();
         public void addItem(items item)
         {
-            itemlist.Add(item);
+            items itemF = itemlist.Find(x => x.ID == item.ID);
+            if (itemF != null)
+            {
+                itemF.Requested += item.Requested;
+            }
+            else
+            {
+                itemlist.Add(item);
+            }
         }
     }
 }

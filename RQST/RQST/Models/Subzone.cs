@@ -8,18 +8,9 @@ namespace RQST.Models
 {
     public class Subzone
     {
+        public string name { get; set; }
         public string Name { get; set; }
-        public object description { get; set; }
-        public string SUBZONE_NO { get; set; }
-        public string SUBZONE_N { get; set; }
-        public string SUBZONE_C { get; set; }
-        public string CA_IND { get; set; }
-        public string PLN_AREA_N { get; set; }
-        public string PLN_AREA_C { get; set; }
-        public string REGION_N { get; set; }
-        public string REGION_C { get; set; }
-        public string INC_CRC { get; set; }
-        public string FMEL_UPD_D { get; set; }
+        public string Description { get; set; }
     }
 
     public class Geometry
@@ -33,5 +24,11 @@ namespace RQST.Models
         public string type { get; set; }
         public Subzone properties { get; set; }
         public Geometry geometry { get; set; }
+    }
+
+    public class SubzoneList
+    {
+        public string type { get; set; }
+        public List<SubzoneRoot> features { get; set; }
     }
 }

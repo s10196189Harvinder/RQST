@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,8 +23,9 @@ namespace RQST.Controllers
         private DataDAL DataDALContext = new DataDAL();
         public async Task<IActionResult> AdminAsync()
         {
-            List<Area> arealist = await InitRequestsAsync();
-            return View(arealist);
+            string auth = (HttpContext.Session.GetString("auth"));
+            List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);
+            return View(userreqlist);
         }
         public IActionResult AddItem()
         {
@@ -59,13 +61,13 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode, string SpecialNeeds)
+        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode, string SpecialNeeds)//not working as intended currently
         {
             if (ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
 
-                List<SubzoneRoot> SZList = JsonConvert.DeserializeObject<List<SubzoneRoot>>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
+                SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
                 string addr = "Singapore " + PostalCode;
                 var url = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}", addr, "AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk");
                 Geocoded res = await url
@@ -75,30 +77,30 @@ namespace RQST.Controllers
                 float lng = res.results[0].geometry.location.lng;
                 SubzoneRoot zone = null;
                 bool success = false;
-                PointF latlng = new PointF(lng, lat);       //Target point - Lat/Lng where request is
-                foreach (SubzoneRoot sz in SZList)
+                PointF latlng = new PointF(lat, lng);       //Target point - Lat/Lng where request is
+                foreach (SubzoneRoot sz in SZList.features)
                 {
                     foreach (var obj in sz.geometry.coordinates)        //Obtains Lat/Lng of subzones from the list.
                     {                                                   //Create polygon of pointF
                         List<PointF> subz = new List<PointF>();
                         for (int i = 0; i < obj.Count(); i++)
                         {
-                            if (obj[i].Count() == 2)
+                            for (int y = 0; y < obj[i].Count(); y++)
                             {
-                                double lng2 = Convert.ToDouble(obj[i][1]);
-                                double lat2 = Convert.ToDouble(obj[i][0]);
-                                PointF point = new PointF((float)lat2, (float)lng2);
-                                subz.Add(point);
-                            }
-                            else
-                            {
-                                for (int y = 0; y < obj[i].Count(); y++)
+                                PointF point = new PointF();
+                                if (obj[i].Count() != 3)
                                 {
-                                    JArray pts = new JArray(obj[i][y]);
-                                    PointF point;
-                                    point = new PointF((float)Convert.ToDouble(pts[0][1]), (float)Convert.ToDouble(pts[0][0]));
-                                    subz.Add(point);
+                                    foreach (var coorpair in obj[i])
+                                    {
+                                        JArray pts = new JArray(coorpair);
+                                        point = new PointF((float)Convert.ToDouble(pts[0][1]), (float)Convert.ToDouble(pts[0][0]));
+                                    }
                                 }
+                                else
+                                {
+                                    point = new PointF((float)Convert.ToDouble(obj[i][1]), (float)Convert.ToDouble(obj[i][0]));
+                                }
+                                subz.Add(point);
                             }
                         }
                         bool isIn = check(subz, latlng);        //Checks if target point is in subzone polygon
@@ -226,7 +228,7 @@ namespace RQST.Controllers
             List<Area> arealist = new List<Area>();
             foreach (UserRequests usrqst in something)
             {
-                string prefix = usrqst.PostalCode.Substring(0, 2);  //Get 1st 2 digits of postal code
+                string prefix = usrqst.User.PostalCode.Substring(0, 2);  //Get 1st 2 digits of postal code
                 int pre = Convert.ToInt32(prefix);
                 if (pre < 7)        //Checks postal code prefix
                 {

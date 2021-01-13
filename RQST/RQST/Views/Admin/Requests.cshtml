@@ -45,11 +45,11 @@
                                         if (count == 0)
                                         {
                                             <tr>
-                                                <td rowspan="@requests.itemlist.Count">@requests.UserID</td>
+                                                <td rowspan="@requests.itemlist.Count">@requests.User.ID</td>
                                                 <td>@requests.itemlist[0].Name</td>
                                                 <td>@requests.itemlist[0].Requested</td>
-                                                <td rowspan="@requests.itemlist.Count">@requests.Address</td>
-                                                <td rowspan="@requests.itemlist.Count">@requests.PostalCode</td>
+                                                <td rowspan="@requests.itemlist.Count">@requests.User.Address</td>
+                                                <td rowspan="@requests.itemlist.Count">@requests.User.PostalCode</td>
                                             </tr>
                                         }
                                         else
