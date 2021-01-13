@@ -1,11 +1,13 @@
-﻿* {box-sizing: border-box}
+﻿* {
+    box-sizing: border-box
+}
 
 body {
     font-family: 'Roboto Mono', monospace;
 }
 /* Add padding to containers */
 .container {
-  padding: 16px;
+    padding: 16px;
 }
 
 .main {
@@ -18,46 +20,37 @@ body {
 }
 
 /* left side text */
-.main2 {
-
-}
-
 
 .name {
+    padding-top: 100px;
     display: flex;
-    justify-content: center; /* align horizontal */
-    align-items: center; /* align vertical */
-    float: left;
-    margin: 7em auto;
-    border-radius: 1.5em;
-    width: 400px;
-    height: 200px;
+    align-items: center;
+    justify-content: center;
 }
 
-.slogan {
-    float: left;
-    width: 400px;
-    height: 200px;
+.slogan1 {
+    display: flex;
+    text-align: left;
 }
 
 /* Full-width input fields */
 input[type=text], input[type=password] {
-  width: 90%;
-  padding: 15px;
-  margin: 5px 0 22px 18px;
-  display: inline-block;
-  border: none;
-  background: #f1f1f1;
+    width: 90%;
+    padding: 15px;
+    margin: 5px 0 22px 18px;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
 }
 
-input[type=text]:focus, input[type=password]:focus {
-  background-color: #ddd;
-  outline: none;
-}
+    input[type=text]:focus, input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
 /* Overwrite default styles of hr */
 hr {
-  border: 1px solid #f1f1f1;
-  margin-bottom: 25px;
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
 }
 
 /* Set a style for the submit/register button */
@@ -77,19 +70,19 @@ hr {
     box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
 }
 
-.loginBtn:hover {
-  opacity:0.8;
-}
+    .loginBtn:hover {
+        opacity: 0.8;
+    }
 
 /* Add a blue text color to links */
 a {
-  color: dodgerblue;
+    color: dodgerblue;
 }
 
 /* Set a grey background color and center the text of the "sign in" section */
 .signin {
-  background-color: #f1f1f1;
-  text-align: center;
+    background-color: #f1f1f1;
+    text-align: center;
 }
 
 .email, .psw {
@@ -111,9 +104,9 @@ a {
     font-family: 'Roboto Mono', monospace;
 }
 
-.email:focus, .psw:focus {
-    border: 2px solid rgba(0, 0, 0, 0.18) !important;
-}
+    .email:focus, .psw:focus {
+        border: 2px solid rgba(0, 0, 0, 0.18) !important;
+    }
 
 .login {
     padding-top: 10px;
@@ -128,10 +121,12 @@ a {
     color: black;
     padding-left: 17px;
 }
-.forgotPSWpos{
+
+.forgotPSWpos {
     padding-right: 160px;
 }
-.loginBtnpos{
+
+.loginBtnpos {
     padding-left: 180px;
     padding-bottom: 10px;
 }

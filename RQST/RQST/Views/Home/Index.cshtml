@@ -1,5 +1,12 @@
 ﻿<link href="~/css/slideVisual.css" rel="stylesheet" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link href="~/css/loginstyle.css" rel="stylesheet" />
+
+
 <h1>@ViewData["Title"]</h1>
 
 @model Login;
@@ -9,28 +16,50 @@
 }
 
 <title>Login</title>
-<link href="~/css/loginstyle.css" rel="stylesheet" />
 
-<div class="main2">
-    <div class="name">
-        <h1>Kasei - RQST</h1>
-    </div>
-    <div class="slogan">
-        <h2>カセイ</h2>
-    </div>
-</div>
 
-<div class="main" style="float:right">
-    <p class="login" align="center"><img src="~/img/handshake-microsoft.png" class="img-fluid" height="100" width="100" /></p>
 
-    <form asp-controller="Home" asp-action="LoginPage" class="form1" method="post">
-        <input type="text" asp-for="Email" placeholder="Email" class="email" required>
-        <input type="password" asp-for="Password" placeholder="Password" class="psw" required>
-        <a asp-controller="Home" asp-action="ForgotPass" class="forgotpsw">Forgot Password?</a>
-        <div class="loginBtnpos">
-            <input type="submit" value="Login" class="loginBtn">
+<div class="container-fluid" style="max-width:50%; float:left;">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1 class="name">Kasei - RQST</h1>
         </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h2 class="slogan1">カセイ</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h4 class="slogan1">To innovate the way we volunteer</h4>
+        </div>
+    </div>
 
 
-    </form>
 </div>
+
+<div class="container-fluid" style="max-width:50%; float:right;">
+    <div class="col-sm-6">
+        <div class="main">
+            <p class="login" align="center"><img src="~/img/handshake-microsoft.png" class="img-fluid" height="100" width="100" /></p>
+
+            <form asp-controller="Home" asp-action="LoginPage" class="form1" method="post">
+                <input type="text" asp-for="Email" placeholder="Email" class="email" required>
+                <input type="password" asp-for="Password" placeholder="Password" class="psw" required>
+                <a asp-controller="Home" asp-action="ForgotPass" class="forgotpsw">Forgot Password?</a>
+                <div class="loginBtnpos">
+                    <input type="submit" value="Login" class="loginBtn">
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
