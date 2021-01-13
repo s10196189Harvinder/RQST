@@ -50,7 +50,7 @@ itemamnt - styling for the item amnt
 
 </div>
 @{
-    var text = (System.IO.File.ReadAllText(@"C:\Users\Arjun\Documents\School\2.2\P2\PORTFOLIO II PROJECT\RQST\RQST\wwwroot\subzones.geojson"));
+    var text = (System.IO.File.ReadAllText(@"wwwroot\subzones.geojson"));
     <script>
         var json = @Html.Raw(text);
         function hslToHex(h, s, l) {
