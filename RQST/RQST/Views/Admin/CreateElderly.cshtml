@@ -4,28 +4,106 @@
     ViewData["Title"] = "CreateElderly";
     Layout = "AdminMenu";
 }
-<link href="~/css/elderlystyle.css" rel="stylesheet" />
+<link href="~/css/elderlystyle2.css" rel="stylesheet" />
 
-<div class="main">
-    <p class="create" align="center">Create New Elderly</p>
+
+<body>
+    <h1>Register New Elderly</h1>
+
     <form asp-action="CreateElderly" class="form2">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div>@TempData["Message"]</div>
+        <div class="contentform">
+            <div id="sendmessage"> The account has been created successfully! </div>
+            @*Name, Gender, Email, Password, Address, Postal Code, Special Needs, Create*@
+            <div class="leftcontact">
+                <div class="form-group">
+                    <p>Name <span>*</span></p>
+                    <span asp-validation-for="Name" id="icon-case" class="text-danger"></span>
+                    <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
+                </div>
 
-        <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required />
-        <span asp-validation-for="Name" class="text-danger"></span>
-        <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required />
-        <span asp-validation-for="Gender" class="text-danger"></span>
-        <input type="text" asp-for="Email" class="inputbox" placeholder="Email" required />
-        <span asp-validation-for="Email" class="text-danger"></span>
-        <input type="password" asp-for="Password" class="inputbox" placeholder="Password" required />
-        <span asp-validation-for="Password" class="text-danger"></span>
-        <input type="text" asp-for="Address" class="inputbox" placeholder="Address" required />
-        <span asp-validation-for="Address" class="text-danger"></span>
-        <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required />
-        <span asp-validation-for="PostalCode" class="text-danger"></span>
-        <input type="text" asp-for="SpecialNeeds" class="inputbox" placeholder="Special Needs" />
-        <span asp-validation-for="SpecialNeeds" class="text-danger"></span>
-        <input type="submit" value="Create" class="createBtn" />
+                <div class="form-group">
+                    <p>Gender <span>*</span></p>
+                    <span asp-validation-for="Gender" id="icon-case" class="text-danger">@*<i class="fa fa-male"></i>*@</span>
+                    <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required data-msg="Check your input on the fields: The 'Gender' field must be completed." />
+                </div>
+
+                <div class="form-group">
+                    <p>E-mail <span>*</span></p>
+                    <span asp-validation-for="Email" id="icon-case" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
+                    <input type="email" asp-for="Email" class="inputbox" placeholder="Email" required data-msg="Vérifiez votre saisie sur les champs : Le champ 'E-mail' est obligatoire." />
+                </div>
+
+                <div class="form-group">
+                    <p>Password <span>*</span></p>
+                    <span asp-validation-for="Password" id="icon-case" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
+                    <input type="password" asp-for="Password" class="inputbox" placeholder="********" required data-msg="Vérifiez votre saisie sur les champs : Le champ 'Fonction' doit être renseigné." />
+                </div>
+            </div>
+
+            <div class="rightcontact">
+                @*Address, Postal Code, Special Needs*@
+                <div class="form-group">
+                    <p>Address <span>*</span></p>
+                    <span asp-validation-for="PostalCode" class="text-danger" id="icon-case">@*<i class="fa fa-building-o"></i>*@</span>
+                    <input type="text" asp-for="Address" class="inputbox" placeholder="Address" required data-msg="Vérifiez votre saisie sur les champs : Le champ 'Ville' doit être renseigné." />
+                </div>
+
+                <div class="form-group">
+                    <p>Postal Code <span>*</span></p>
+                    <span asp-validation-for="PostalCode" class="text-danger" id="icon-case">@*<i class="fa fa-map-marker"></i>*@</span>
+                    <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required data-msg="Vérifiez votre saisie sur les champs : Le champ 'Code postal' doit être renseigné." />
+                </div>
+                @*
+            <div class="form-group">
+                <p>Phone number <span>*</span></p>
+                <span class="icon-case"><i class="fa fa-phone"></i></span>
+                <input type="text" name="phone" id="phone" data-rule="maxlen:10" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Téléphone' doit être renseigné. Minimum 10 chiffres" />
+                <div class="validation"></div>
+            </div>
+                *@
+
+                <div class="form-group">
+                    <p>Special Needs <span>*</span></p>
+                    <span asp-validation-for="SpecialNeeds" class="text-danger" id="icon-case">@*<i class="fa fa-comment-o"></i>*@</span>
+                    <input type="text" asp-for="SpecialNeeds" class="inputbox" placeholder="e.g. Halal, Vegetarian, Allergics" name="sujet" id="sujet" data-rule="required" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Sujet' doit être renseigné." />
+                </div>
+
+            </div>
+            <input type="submit" value="Create" class="createBtn" />
+        </div>
+        
+
     </form>
-</div>
+
+
+</body>
+
+
+
+
+
+
+
+@*<div class="main">
+        <p class="create" align="center">Create New Elderly</p>
+        <form asp-action="CreateElderly" class="form2">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>@TempData["Message"]</div>
+
+            <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required />
+            <span asp-validation-for="Name" class="text-danger"></span>
+            <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required />
+            <span asp-validation-for="Gender" class="text-danger"></span>
+            <input type="text" asp-for="Email" class="inputbox" placeholder="Email" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+            <input type="password" asp-for="Password" class="inputbox" placeholder="Password" required />
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <input type="text" asp-for="Address" class="inputbox" placeholder="Address" required />
+            <span asp-validation-for="Address" class="text-danger"></span>
+            <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required />
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+            <input type="text" asp-for="SpecialNeeds" class="inputbox" placeholder="Special Needs" />
+            <span asp-validation-for="SpecialNeeds" class="text-danger"></span>
+            <input type="submit" value="Create" class="createBtn" />
+        </form>
+    </div>*@
