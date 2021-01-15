@@ -17,7 +17,7 @@
     color: #F6AA93;
 }
 
-form h1 {
+form h2 {
     font-size: 18px;
     background: #F6AA93 none repeat scroll 0% 0%;
     color: rgb(255, 255, 255);
@@ -48,7 +48,7 @@ p {
     color: #333;
 }
 
-h1 {
+h2 {
     text-align: center;
     color: #666;
     text-shadow: 1px 1px 0px #FFF;
@@ -82,6 +82,7 @@ textarea {
 .form-group {
     overflow: hidden;
     clear: both;
+    margin-bottom: 0 !important;
 }
 
 #icon-case {

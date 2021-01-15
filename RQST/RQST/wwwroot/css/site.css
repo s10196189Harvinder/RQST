@@ -10,7 +10,7 @@ a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
-    justify-content: left !important;
+    justify-content: right !important;
 }
 
 
@@ -18,14 +18,22 @@ a.navbar-brand {
     padding: 16px;
 }
 
+.container-design {
+    max-width: 1300px !important;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .navbar, .navbar-brand {
     background-color: black;
     color: white;
 }
 
-.navbar > .container, .navbar > .container-fluid {
-    justify-content: left !important;
-}
+    .navbar > .container, .navbar > .container-fluid {
+        justify-content: right !important;
+    }
 
 /* Provide sufficient contrast against white background */
 a {

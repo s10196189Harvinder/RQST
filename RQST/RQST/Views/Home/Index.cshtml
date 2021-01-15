@@ -21,20 +21,20 @@
 
 <div class="container-fluid" style="max-width:50%; float:left;">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <h1 class="name">Kasei - RQST</h1>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
-            <h2 class="slogan1">カセイ</h2>
+        <div class="col-sm-12">
+            <h2 class="japSlogan"><mark>カセイ</mark></h2>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-6">
-            <h4 class="slogan1">To innovate the way we volunteer</h4>
+        <div class="col-sm-12">
+            <h4 class="slogan">To innovate the way we volunteer</h4>
         </div>
     </div>
 
@@ -42,14 +42,21 @@
 </div>
 
 <div class="container-fluid" style="max-width:50%; float:right;">
-    <div class="col-sm-6">
+    <div class="col-sm-12">
         <div class="main">
             <p class="login" align="center"><img src="~/img/handshake-microsoft.png" class="img-fluid" height="100" width="100" /></p>
-
+            <h2 class="loginHeader">Login</h2>
             <form asp-controller="Home" asp-action="LoginPage" class="form1" method="post">
-                <input type="text" asp-for="Email" placeholder="Email" class="email" required>
-                <input type="password" asp-for="Password" placeholder="Password" class="psw" required>
+                <div class="inputFields">
+                    <input type="text" asp-for="Email" placeholder="Email" class="email" required />
+                </div>
+
+                <div class="inputFields">
+                    <input type="password" asp-for="Password" placeholder="Password" class="psw" required />
+                </div>
+
                 <a asp-controller="Home" asp-action="ForgotPass" class="forgotpsw">Forgot Password?</a>
+
                 <div class="loginBtnpos">
                     <input type="submit" value="Login" class="loginBtn">
                 </div>
@@ -61,5 +68,3 @@
 </div>
 
 </div>
-
-

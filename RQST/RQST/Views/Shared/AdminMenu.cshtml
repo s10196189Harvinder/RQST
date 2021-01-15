@@ -9,16 +9,23 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" style="background: linear-gradient(45deg, #000000, #121212)">
             <div class="container">
 
-                <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="Admin"><img src="~/img/webicon.jpg" class="img-fluid" height="100" width="100" style="padding-right: inherit" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <div>
+                    <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="Admin">
+                        <img src="~/img/webicon.jpg" class="img-fluid" height="100" width="100" style="padding-right: inherit" />
+                    </a>
+                </div>
+                
+                @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button>*@
+            <div class="container-fluid d-flex justify-content-end">
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" id="staffNavbar">
                     <div class="navbar-nav flex-grow-1">
+
                         <div class="nav-item dropdown">
                             <button class="nav-link dropdown-toggle" data-toggle="dropdown" href="">Elderly</button>
                             <div class="dropdown-menu" role="menu">
@@ -47,22 +54,23 @@
                         </div>
                         <div class="nav-item mr-auto">
                             <!-- A link for logging out user -->
-                            <a class="nav-link"  asp-area="" asp-controller="Home" asp-action="Index">Log Out</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Log Out</a>
                         </div>
                     </div>
                 </div>
             </div>
+            </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container container-design">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted" style="background: linear-gradient(45deg, #000000, #121212)">
         <div class="container">
-            &copy; 2020 - RQST - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - RQST
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
