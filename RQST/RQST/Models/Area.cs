@@ -7,28 +7,16 @@ namespace RQST.Models
 {
     public class Area
     {
-        public string AreaName { get; set; }
-        public int AreaNum { get; set; }
-        public double Lat { get; set; }
-        public double Lng { get; set; }
-        public double Radius { get; set; }
-        public List<items> itemsList { get; set; } = new List<items>();
-        public void AddItem(items item)
+        public string AreaCode { get; set; }
+        public List<SubArea> SubArea { get; set; } = new List<SubArea>();
+        public Area(string areacode)
         {
-            itemsList.Add(item);
+            AreaCode = areacode;
         }
+    }
+    public class SubArea
+    {
+        public string Name { get; set; }
         public List<UserRequests> reqlist { get; set; } = new List<UserRequests>();
-        public void AddReq(UserRequests req)
-        {
-            reqlist.Add(req);
-        }
-        public Area(string areaname, int areanum, double lat, double lng, double radius)
-        {
-            AreaName = areaname;
-            AreaNum = areanum;
-            Lat = lat;
-            Lng = lng;
-            Radius = radius;
-        }
     }
 }

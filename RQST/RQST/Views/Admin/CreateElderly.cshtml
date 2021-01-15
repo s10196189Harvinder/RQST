@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <p>Name <span>*</span></p>
                     <span asp-validation-for="Name" id="icon-case" class="text-danger"></span>
-                    <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
+                    <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required data-msg="Check your input on the fields: The 'Name' field must be completed."/>
                 </div>
 
                 <div class="form-group">
@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <p>Password <span>*</span></p>
                     <span asp-validation-for="Password" id="icon-case" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
-                    <input type="password" asp-for="Password" class="inputbox" placeholder="********" required data-msg="Vérifiez votre saisie sur les champs : Le champ 'Fonction' doit être renseigné." />
+                    <input type="password" asp-for="Password" class="inputbox" placeholder="********" required data-msg="Vérifiez votre saisie sur les champs : Le champ 'Fonction' doit être renseigné."  autocomplete="new-password"/>
                 </div>
             </div>
 
