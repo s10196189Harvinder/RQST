@@ -39,13 +39,12 @@
 
     </div>*@
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/2.3.0/list.min.js"></script>
-    
 <div class="main">
     <h2>List of Elderly Details</h2>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search here" title="Type in to search...">
     <div class="tableDesign">
-        <table id="viewInfo" class="table">
-            <tr style="text-align: center">
+        <table id="table_id" class="table">
+            <tr class="header" style="text-align: center">
                 <th>Name</th>
                 <th>Gender</th>
                 <th>Email</th>
@@ -54,35 +53,34 @@
                 <th>Special Needs</th>
                 <th>Edit</th>
             </tr>
-            <tbody>
-                @foreach (Elderly elderly in Model)
-                {
-                    <tr class='table-primary' style="text-align: center">
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Gender)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Address)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.PostalCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.SpecialNeeds)
-                        </td>
-                        <td style="font-weight: bold;">
-                            <a asp-controller="Admin" asp-action="" asp-route-id="">Edit Elderly Info</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
+            @foreach (Elderly elderly in Model)
+            {
+                <tr class='table-primary' style="text-align: center">
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.PostalCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.SpecialNeeds)
+                    </td>
+                    <td style="font-weight: bold;">
+                        <a asp-controller="Admin" asp-action="" asp-route-id="">Edit Elderly Info</a>
+                    </td>
+                </tr>
+            }
         </table>
     </div>
 </div>
+
 
