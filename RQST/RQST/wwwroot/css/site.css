@@ -18,6 +18,14 @@ a.navbar-brand {
     padding: 16px;
 }
 
+.container-design {
+    max-width: 1300px !important;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .navbar, .navbar-brand {
     background-color: black;
     color: white;

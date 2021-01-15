@@ -5,51 +5,58 @@
 }
 <link href="~/css/tableDesign.css" rel="stylesheet" />
 
-<div class="container container-design">
-    <h2>List of Elderly Details</h2>
-    <ul class="responsive-table">
-        <li class="table-header" style="font:bold">
-            <div class="col col-1">Name</div>
-            <div class="col col-2">Gender</div>
-            <div class="col col-3">Email</div>
-            <div class="col col-4">Address</div>
-            <div class="col col-5">Postal Code</div>
-            <div class="col col-6">Special Needs</div>
-            <div class="col col-7">Edit Elderly Info</div>
-        </li>
-        <tbody>
-            </tbody>
-            @foreach (Elderly elderly in Model)
-            {
-        <li class="table-row">
-            <div class="col col-1">@Html.DisplayFor(modelItem => elderly.Name)</div>
-            <div class="col col-2">@Html.DisplayFor(modelItem => elderly.Gender)</div>
-            <div class="col col-3">@Html.DisplayFor(modelItem => elderly.Email)</div>
-            <div class="col col-4">@Html.DisplayFor(modelItem => elderly.Address)</div>
-            <div class="col col-5">@Html.DisplayFor(modelItem => elderly.PostalCode)</div>
-            <div class="col col-6">@Html.DisplayFor(modelItem => elderly.SpecialNeeds)</div>
-            <div class="col col-7"><a asp-controller="Admin" asp-action="" asp-route-id="">Edit Elderly Info</a></div>
-        </li>
-            }
-        </ul>
-</div>
+@*<div class="container container-design">
+        <h2>List of Elderly Details</h2>
+        <h2></h2>
+        <button class="sort" data-sort="name">
+            Sort
+        </button>
 
-@*
+            <ul class="responsive-table table-header" id="elderlyinfo">
+                <li class=" ">Name</li>
+                <li class="">Gender</li>
+                <li class=" ">Email</li>
+                <li class=" ">Address</li>
+                <li class=" ">Postal Code</li>
+                <li class=" ">Special Needs</li>
+                <li class="">Edit Elderly Info</li>
+            </ul>
+
+            <ul class="responsive-table table-header" id="elderlyinfo">
+
+                @foreach (Elderly elderly in Model)
+                {
+                    <li class="">@Html.DisplayFor(modelItem => elderly.Name)</li>
+                    <li class="">@Html.DisplayFor(modelItem => elderly.Gender)</li>
+                    <li class="">@Html.DisplayFor(modelItem => elderly.Email)</li>
+                    <li class="">@Html.DisplayFor(modelItem => elderly.Address)</li>
+                    <li class="">@Html.DisplayFor(modelItem => elderly.PostalCode)</li>
+                    <li class="">@Html.DisplayFor(modelItem => elderly.SpecialNeeds)</li>
+                    <li class=""><a asp-controller="Admin" asp-action="" asp-route-id="">Edit Elderly Info</a></li>
+                }
+
+            </ul>
+
+    </div>*@
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/2.3.0/list.min.js"></script>
+    
 <div class="main">
+    <h2>List of Elderly Details</h2>
     <div class="tableDesign">
         <table id="viewInfo" class="table">
-                <tr style="text-align: center">
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Postal Code</th>
-                    <th>Special Needs</th>
-                    <th></th>
-                </tr>
+            <tr style="text-align: center">
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Postal Code</th>
+                <th>Special Needs</th>
+                <th>Edit</th>
+            </tr>
             <tbody>
                 @foreach (Elderly elderly in Model)
-                { 
+                {
                     <tr class='table-primary' style="text-align: center">
                         <td>
                             @Html.DisplayFor(modelItem => elderly.Name)
@@ -78,4 +85,4 @@
         </table>
     </div>
 </div>
-*@
+
