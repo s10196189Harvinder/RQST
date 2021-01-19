@@ -4,21 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RQST.Models
 {
     //Not final
     public class Volunteer
     {
-        [StringLength(100, MinimumLength = 3, ErrorMessage = "Name is is too long! Enter a shorter name.")]
+        [JsonPropertyName("Assigned-Zones")]
+        public string AssignedZones { get; set; }
+
+        [JsonPropertyName("CompletedRequests")]
+        public int CompletedRequests { get; set; }
+
+        [JsonPropertyName("Contact")]
+        public int Contact { get; set; }
+
+        [JsonPropertyName("Name")]
         public string Name { get; set; }
 
-        [RegularExpression(@"[0-9]{8}")]
-        public string Contact { get; set; }
-
-        [JsonProperty(PropertyName = "Attending")]
-        public string Attendance { get; set; }
-
-        public string Status { get; set; }
+        public Subzone Zone { get; set; }
+        public string ID { get; set; }
     }
 }
