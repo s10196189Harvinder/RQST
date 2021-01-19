@@ -7,6 +7,13 @@ body {
     font-family: 'Roboto Mono', monospace;
 }
 
+table {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    overflow-wrap: break-word;
+}
+
 .content-table{
     border-collapse: collapse;
     margin: 25px 0;
