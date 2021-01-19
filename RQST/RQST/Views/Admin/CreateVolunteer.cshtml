@@ -29,25 +29,6 @@
             <span asp-validation-for="Contact" class="text-danger"></span>
         </div>
 
-
-        <div class="rightcontact">
-            @*Address, Postal Code, Special Needs*@
-            <div class="form-group" style="margin-bottom:0 !important">
-                <p>Address <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="Attendance" class="inputbox" placeholder="Address" required />
-            </div>
-            <span asp-validation-for="Attendance" class="text-danger">@*<i class="fa fa-building-o"></i>*@</span>
-
-            <div class="form-group" style="margin-bottom:0 !important">
-                <p>Postal Code <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="Status" class="inputbox" placeholder="Postal Code" required data-msg="Check your input on the fields: The 'Postal Code' field must be numerical." />
-            </div>
-            <span asp-validation-for="Status" class="text-danger">@*<i class="fa fa-map-marker"></i>*@</span>
-        </div>
-            <input type="submit" value="Create" class="createBtn" />
-        </div>
     </form>
 </body>
 

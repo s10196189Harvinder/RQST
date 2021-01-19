@@ -223,11 +223,11 @@ namespace RQST.Controllers
             List<Area> arealist = new List<Area>();
             foreach(UserRequests req in userreqlist)
             {
-                string areacode = req.User.Zone.REGION_C;
+                string areacode = req.User.Region_Code;
                 Area area = arealist.Find(x => x.AreaCode == areacode);
                 if (area!=null)
                 {
-                    SubArea subArea = area.SubArea.Find(x => x.Name == req.User.Zone.SUBZONE_N);
+                    SubArea subArea = area.SubArea.Find(x => x.Name == req.User.Zone_ID);
                     if (subArea != null)
                     {
                         subArea.reqlist.Add(req);
@@ -235,7 +235,7 @@ namespace RQST.Controllers
                     else
                     {
                         SubArea nSubArea = new SubArea();
-                        nSubArea.Name = req.User.Zone.SUBZONE_N;
+                        nSubArea.Name = req.User.Zone_ID;
                         nSubArea.reqlist.Add(req);
                         area.SubArea.Add(nSubArea);
                     }
@@ -244,7 +244,7 @@ namespace RQST.Controllers
                 {
                     Area nArea = new Area(areacode);
                     SubArea nSubArea = new SubArea();
-                    nSubArea.Name = req.User.Zone.SUBZONE_N;
+                    nSubArea.Name = req.User.Zone_ID;
                     nSubArea.reqlist.Add(req);
                     nArea.SubArea.Add(nSubArea);
                     arealist.Add(nArea);
@@ -252,5 +252,18 @@ namespace RQST.Controllers
             }
             return View(arealist);
         }
+        public async Task<IActionResult> AsgnVolunteerAsync()
+        {
+            string auth = (HttpContext.Session.GetString("auth"));
+            List<UserRequests> vollist = await DataDALContext.getuserrequests(auth);
+            return View(vollist);
+        }
+        //[HttpPost]
+        //public async Task<IActionResult> AsgnVolunteerAsync(Volunteer vol, string zoneList)
+        //{
+        //    string auth = (HttpContext.Session.GetString("auth"));
+        //    //List<UserRequests> vollist = await DataDALContext.assgnZone(auth, vol, zoneList);
+        //    return View(vollist);
+        //}
     }
 }

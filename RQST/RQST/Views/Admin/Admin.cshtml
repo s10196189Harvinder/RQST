@@ -122,7 +122,7 @@ itemamnt - styling for the item amnt
         }
         <script>
             var obj = {
-                name:@Html.Raw("\"" + request.User.Zone.Name + "\""),
+                name:@Html.Raw("\"" + request.User.Zone_ID + "\""),
                 requests:@Html.Raw(request.Requests.Count()),
                 itemliststring:"@Html.Raw(words)"
             };
@@ -132,7 +132,7 @@ itemamnt - styling for the item amnt
     <script>
         window.onload = function () {
             map.data.forEach(function (feature) {
-                var SD_NAME = feature.getProperty('Name');
+                var SD_NAME = feature.getProperty('SUBZONE_NO');
                 if (objlist.some(item => item.name === SD_NAME)) {
                     var req = objlist.filter(obj => { return obj.name === SD_NAME });
                     feature.setProperty("requests", req[0].requests);

@@ -30,9 +30,23 @@ namespace RQST.Models
         public string SpecialNeeds { get; set; }
 
         public string ID { get; set; }
-        public Subzone Zone { get; set; }
+        //public Subzone Zone { get; set; }
         
-        public Elderly(string name, char gender, string email, string address, string postalcode, string specialneeds, Subzone zone)
+        //public Elderly(string name, char gender, string email, string address, string postalcode, string specialneeds, Subzone zone)
+        //{
+        //    Name = name;
+        //    Gender = gender;
+        //    Email = email;
+        //    Address = address;
+        //    PostalCode = postalcode;
+        //    SpecialNeeds = specialneeds;
+        //    Zone = zone;
+        //}
+
+        public int Zone_ID { get; set; }
+        public string Region_Code { get; set; }
+
+        public Elderly(string name, char gender, string email, string address, string postalcode, string specialneeds, int zone, string regionCode)
         {
             Name = name;
             Gender = gender;
@@ -40,7 +54,8 @@ namespace RQST.Models
             Address = address;
             PostalCode = postalcode;
             SpecialNeeds = specialneeds;
-            Zone = zone;
+            Zone_ID = zone;
+            Region_Code = regionCode;
         }
     }
 }
