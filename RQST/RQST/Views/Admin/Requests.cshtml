@@ -2,56 +2,58 @@
 @{
     Layout = "~/Views/Shared/AdminMenu.cshtml";
 }
-<link href="~/css/tableDesign2.css" rel="stylesheet" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="~/css/request.css" rel="stylesheet" />
 <div>
     <div>
-        @{ 
+        @{
             List<string> arealist = new List<string>();
-            foreach(Area area in Model)
+            foreach (Area area in Model)
             {
                 <div class="main">
                     <h2 class="titleDisplay">@area.AreaCode</h2>            <!-- This shows the main area - Central Region, West Region, etc.-->
                     @foreach (SubArea subarea in area.SubArea)
                     {
-                        <div class="titleDisplay">                          <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
-                        <h3>@subarea.Name</h3>
-                        <table id="viewInfo" class="table titleDisplay">    <!-- Table for the user data -->
-                            <tr style="text-align: center">
-                                <th>UserID</th>
-                                <th>Items</th>
-                                <th>Item amnt</th>
-                                <th>Address</th>
-                                <th>Postal Code</th>
-                            </tr>
-                            <tbody>
-                            @foreach (UserRequests requests in subarea.reqlist)
-                            {
-                                for(int count=0;count<requests.itemlist.Count();count++)
-                                {
-                                    if (count == 0)
+                        <div>
+                            <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
+                            <h3>@subarea.Name</h3>
+                            <table id="viewInfo" class="content-table">
+                                <thead>
+                                    <!-- Table for the user data -->
+                                    <tr style="text-align: center">
+                                        <th>UserID</th>
+                                        <th>Items</th>
+                                        <th>Item amnt</th>
+                                        <th>Address</th>
+                                        <th>Postal Code</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (UserRequests requests in subarea.reqlist)
                                     {
-                                        <tr>
-                                            <td rowspan="@requests.itemlist.Count">@requests.User.Name</td>
-                                            <td>@requests.itemlist[0].Name</td>
-                                            <td>@requests.itemlist[0].Requested</td>
-                                            <td rowspan="@requests.itemlist.Count">@requests.User.Address</td>
-                                            <td rowspan="@requests.itemlist.Count">@requests.User.PostalCode</td>
-                                        </tr>
+                                        for (int count = 0; count < requests.itemlist.Count(); count++)
+                                        {
+                                            if (count == 0)
+                                            {
+                                                <tr>
+                                                    <td rowspan="@requests.itemlist.Count">@requests.User.Name</td>
+                                                    <td>@requests.itemlist[0].Name</td> @*Items*@
+                                                    <td>@requests.itemlist[0].Requested</td> @*Item Amt*@
+                                                    <td rowspan="@requests.itemlist.Count">@requests.User.Address</td>
+                                                    <td rowspan="@requests.itemlist.Count">@requests.User.PostalCode</td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td>@requests.itemlist[count].Name</td>
+                                                    <td>@requests.itemlist[count].Requested</td>
+                                                </tr>
+                                            }
+                                        }
                                     }
-                                    else
-                                    {
-                                        <tr>
-                                            <td>@requests.itemlist[count].Name</td>
-                                            <td>@requests.itemlist[count].Requested</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    }
-                                }
-                            }
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
                         </div>
                     }
                 </div>
