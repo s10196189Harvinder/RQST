@@ -21,69 +21,49 @@ namespace RQST.Controllers
     {
         private static readonly HttpClient client = new HttpClient();
         private DataDAL DataDALContext = new DataDAL();
-        public async Task<IActionResult> AdminAsync()
+        public async Task<IActionResult> MapAsync()
         {
             string auth = (HttpContext.Session.GetString("auth"));
             List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);
             return View(userreqlist);
         }
-        public IActionResult AddItem()
-        {
-            return View();
-        }
         [HttpPost]
-        public async Task<IActionResult> AddItemAsync(items items)
+        public async Task<IActionResult> MapAsync(string Name, string Deliverables, string SpecialRequest, string Address)
         {
             string auth = HttpContext.Session.GetString("auth");
-            await DataDALContext.AddItem(auth, items);
-            TempData["GMessage"] = "Created successfully !";
+            return RedirectToAction("RawRequests");
+        }
+
+
+        public async Task<IActionResult> CreateElderlyAsync()
+        {
             return View();
         }
 
-        public IActionResult AddCat()
-        {
-            return View();
-        }
         [HttpPost]
-        public async Task<IActionResult> AddCatAsync(string category,string icon)
-        {
-            string auth = HttpContext.Session.GetString("auth");
-            await DataDALContext.AddCat(auth,category,icon);
-            TempData["GMessage"] = "Created successfully !";
-            return View();
-        }
-
-        public async Task<IActionResult> CatViewAsync(string category, string icon)
-        {
-            string auth = HttpContext.Session.GetString("auth");
-            List<Categories> catlist = await DataDALContext.getCat(auth);
-            return View(catlist);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode, string SpecialNeeds)//not working as intended currently
+        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode, string SpecialNeeds)
         {
             if (ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
 
                 SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
-                string addr = "Singapore " + PostalCode;
-                var url = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}", addr, "AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk");
-                Geocoded res = await url
+                string addr = "Singapore " + PostalCode; //Set address as e.g. Singapore 468123
+                var url = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}", addr, "AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk");  //Set the URL for GeoCoding
+                Geocoded res = await url        //Make a request to the Google GeoCoding API, supplying the Singapore 468123 as the "search" field
                     .PostAsync()
                     .ReceiveJson<Geocoded>();
-                float lat = res.results[0].geometry.location.lat;
-                float lng = res.results[0].geometry.location.lng;
+                float lat = res.results[0].geometry.location.lat;       //Get the latitude from the request result
+                float lng = res.results[0].geometry.location.lng;       //Get the longitude from the request result - These are the exact locations of the postal code.
                 SubzoneRoot zone = null;
                 bool success = false;
-                PointF latlng = new PointF(lat, lng);       //Target point - Lat/Lng where request is
-                foreach (SubzoneRoot sz in SZList.features)
+                PointF latlng = new PointF(lat, lng);                   //Target point - Lat/Lng where request is
+                foreach (SubzoneRoot sz in SZList.features)             //Loop thru ALL subzones from the JSON file
                 {
                     foreach (var obj in sz.geometry.coordinates)        //Obtains Lat/Lng of subzones from the list.
                     {                                                   //Create polygon of pointF
                         List<PointF> subz = new List<PointF>();
-                        for (int i = 0; i < obj.Count(); i++)
+                        for (int i = 0; i < obj.Count(); i++)           //This part obtains the latitude & longitude - It's weird and complex because the GEOJSON file (from data.gov) has a lot of nesting
                         {
                             for (int y = 0; y < obj[i].Count(); y++)
                             {
@@ -114,10 +94,10 @@ namespace RQST.Controllers
                 }
                 if (success != true)
                 {
-                    TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad postal code. Sends error.
+                    TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad (incorrect) postal code. Sends error.
                     return View();
                 }
-                success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, SpecialNeeds, zone.properties,auth);
+                success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, SpecialNeeds, zone.properties,auth); //Posts the elderly to the FB
                 if (success != true)
                 {
                     TempData["Message"] = "Failed";
@@ -131,7 +111,7 @@ namespace RQST.Controllers
                 return View();
             }
         }
-        public static bool check(List<PointF> polygon, PointF testPoint)
+        public static bool check(List<PointF> polygon, PointF testPoint)      //This function checks if a point is in a polygon using the Ray Casting Algorithm
         {
             bool result = false;
             int j = polygon.Count() - 1;
@@ -148,16 +128,16 @@ namespace RQST.Controllers
             }
             return result;
         }
-        public async Task<IActionResult> CreateElderlyAsync()
-        {
-            return View();
-        }
 
         public async Task<IActionResult> _ViewElderlyAsync()
         {
             string auth = HttpContext.Session.GetString("auth");
             List<Elderly> elderlylist = await DataDALContext.getElderly(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
             return View(elderlylist);
+        }
+        public async Task<IActionResult> CreateVolunteerAsync()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -183,13 +163,49 @@ namespace RQST.Controllers
                 return View();
             }
         }
-
-        public async Task<IActionResult> CreateVolunteerAsync()
+        public async Task<IActionResult> RawRequestsAsync()
         {
-            return View();
+            string auth = HttpContext.Session.GetString("auth");
+            List<Request> reqlist = await DataDALContext.getrequests(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            return View(reqlist);                                               //Returns the list to the view
         }
-
-        public async Task<IActionResult> AddItoC(string catid)
+        public async Task<IActionResult> RequestsAsync()
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);    //Gets user request
+            List<Area> arealist = new List<Area>();
+            foreach (UserRequests req in userreqlist)                   //Further processing done to group user requests into Regions
+            {
+                string areacode = req.User.Region_Code;                 //An area will have the larger region & its SubArea.
+                Area area = arealist.Find(x => x.AreaCode == areacode); //Checks if any area in the arealist already has the same region in it
+                if (area != null)
+                {
+                    SubArea subArea = area.SubArea.Find(x => x.Name == req.User.Zone_ID);   //If there is a request in the area, checks if there is a request in the same subzone
+                    if (subArea != null)
+                    {
+                        subArea.reqlist.Add(req);                                           //If there is already a request in the subzone, it adds the request to the subzone request list
+                    }
+                    else
+                    {
+                        SubArea nSubArea = new SubArea();           //If there is no request in the specified subzone, it creates a subarea(named differently, but the same thing in principle as a subzone) item
+                        nSubArea.Name = req.User.Zone_ID;
+                        nSubArea.reqlist.Add(req);                  //Add request to the subzone request list
+                        area.SubArea.Add(nSubArea);                 //Add subzone to the area list
+                    }
+                }
+                else
+                {
+                    Area nArea = new Area(areacode);            //Create new area
+                    SubArea nSubArea = new SubArea();           //Create subarea and populate with details
+                    nSubArea.Name = req.User.Zone_ID;
+                    nSubArea.reqlist.Add(req);
+                    nArea.SubArea.Add(nSubArea);                //Add subarea to area
+                    arealist.Add(nArea);                        //Add area to arealist
+                }
+            }
+            return View(arealist);
+        }
+        public async Task<IActionResult> AddItoC(string catid)      //Add item to category page
         {
             string auth = HttpContext.Session.GetString("auth");
             Categories cat = await DataDALContext.getaCat(auth,catid);
@@ -199,7 +215,7 @@ namespace RQST.Controllers
         public async Task<IActionResult> AddItoC(string name, string catid)
         {
             string auth = HttpContext.Session.GetString("auth");
-            await DataDALContext.putIinC(auth, catid, name);
+            await DataDALContext.AddItemtoCat(auth, catid, name);
             return View();
             
         }
@@ -211,67 +227,50 @@ namespace RQST.Controllers
             List<Volunteer> volunteerlist = await DataDALContext.getVolunteer(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
             return View(volunteerlist);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> AdminAsync(string Name, string Deliverables, string SpecialRequest, string Address)
-        {
-            string auth = HttpContext.Session.GetString("auth");
-            return RedirectToAction("RawRequests");
-        }
-        public async Task<IActionResult> RawRequestsAsync()
-        {
-            string auth = HttpContext.Session.GetString("auth");
-            List<Request> reqlist = await DataDALContext.getrequests(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
-            return View(reqlist);                                           //Returns the list to the view
-        }
-        public async Task<IActionResult> RequestsAsync()
-        {
-            string auth = HttpContext.Session.GetString("auth");
-            List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);
-            List<Area> arealist = new List<Area>();
-            foreach(UserRequests req in userreqlist)
-            {
-                string areacode = req.User.Region_Code;
-                Area area = arealist.Find(x => x.AreaCode == areacode);
-                if (area!=null)
-                {
-                    SubArea subArea = area.SubArea.Find(x => x.Name == req.User.Zone_ID);
-                    if (subArea != null)
-                    {
-                        subArea.reqlist.Add(req);
-                    }
-                    else
-                    {
-                        SubArea nSubArea = new SubArea();
-                        nSubArea.Name = req.User.Zone_ID;
-                        nSubArea.reqlist.Add(req);
-                        area.SubArea.Add(nSubArea);
-                    }
-                }
-                else
-                {
-                    Area nArea = new Area(areacode);
-                    SubArea nSubArea = new SubArea();
-                    nSubArea.Name = req.User.Zone_ID;
-                    nSubArea.reqlist.Add(req);
-                    nArea.SubArea.Add(nSubArea);
-                    arealist.Add(nArea);
-                }
-            }
-            return View(arealist);
-        }
         public async Task<IActionResult> AsgnVolunteerAsync()
         {
             string auth = (HttpContext.Session.GetString("auth"));
             List<UserRequests> vollist = await DataDALContext.getuserrequests(auth);
             return View(vollist);
         }
-        //[HttpPost]
+        //[HttpPost]        //NOT IN USE CURRENTLY, COMMENTED OUT DUE TO ERRORS
         //public async Task<IActionResult> AsgnVolunteerAsync(Volunteer vol, string zoneList)
         //{
         //    string auth = (HttpContext.Session.GetString("auth"));
         //    //List<UserRequests> vollist = await DataDALContext.assgnZone(auth, vol, zoneList);
         //    return View(vollist);
         //}
+        [HttpPost]
+        public async Task<IActionResult> AddItemAsync(items items)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            await DataDALContext.AddItem(auth, items);
+            TempData["GMessage"] = "Created successfully !";
+            return View();
+        }
+
+        public IActionResult AddCat()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddCatAsync(string category, string icon)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            await DataDALContext.AddCat(auth, category, icon);
+            TempData["GMessage"] = "Created successfully !";
+            return View();
+        }
+
+        public async Task<IActionResult> CatViewAsync(string category, string icon)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            List<Categories> catlist = await DataDALContext.getCat(auth);
+            return View(catlist);
+        }
+        public IActionResult AddItem()
+        {
+            return View();
+        }
     }
 }

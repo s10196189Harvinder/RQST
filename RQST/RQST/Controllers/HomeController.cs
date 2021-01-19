@@ -45,7 +45,7 @@ namespace RQST.Controllers
             string auth = "";
             response.TryGetValue("Auth", out auth);                             //Obtains the authentication token (in JSON)
             HttpContext.Session.SetString("auth", auth);                       //Stores token in the session
-            return RedirectToAction("Admin", "Admin");                          //Admin home page
+            return RedirectToAction("Map", "Admin");                          //Admin home page
         }
 
         public IActionResult Privacy()
