@@ -4,22 +4,27 @@
     Layout = "AdminMenu";
 }
 <link href="~/css/tableDesign.css" rel="stylesheet" />
+
 <div class="main">
+    <h2>List of Elderly Details</h2>
+    @*<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search here" title="Type in to search...">*@
     <div class="tableDesign">
-        <table id="viewInfo" class="table">
-                <tr style="text-align: center">
+        <table id="table_id" class="content-table">
+            <thead>
+                <tr class="header">
                     <th>Name</th>
                     <th>Gender</th>
                     <th>Email</th>
                     <th>Address</th>
                     <th>Postal Code</th>
                     <th>Special Needs</th>
-                    <th></th>
+                    <th>Edit</th>
                 </tr>
+            </thead>
             <tbody>
                 @foreach (Elderly elderly in Model)
-                { 
-                    <tr class='table-primary' style="text-align: center">
+                {
+                    <tr>
                         <td>
                             @Html.DisplayFor(modelItem => elderly.Name)
                         </td>

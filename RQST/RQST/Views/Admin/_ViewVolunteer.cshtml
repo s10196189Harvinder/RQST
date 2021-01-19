@@ -5,30 +5,24 @@
 <link href="~/css/tableDesign.css" rel="stylesheet" />
 <div class="main">
     <div class="tableDesign">
-        <table id="viewInfo" class="table">
-            <tr style="text-align: center">
-                <th>Name</th>
-                <th>Contact</th>
-                <th>Attendance</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-
+        <table class="content-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Attendance</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
             <tbody>
                 @foreach (Volunteer volunteer in Model)
                 {
-                    <tr class='table-primary' style="text-align: center">
+                    <tr>
                         <td>
                             @Html.DisplayFor(modelItem => volunteer.Name)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => volunteer.Contact)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => volunteer.Attendance)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => volunteer.Status)
                         </td>
                         <td style="font-weight: bold;">
                             <a asp-controller="Admin" asp-action="" asp-route-id="">Edit Volunteer Info</a>

@@ -6,22 +6,53 @@
 }
 <link href="~/css/volunteerstyle.css" rel="stylesheet" />
 
-<div class="main">
-    <p class="create" align="center">Create New Volunteer</p>
-        <form asp-action="CreateVolunteer" class="form2">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required />
-            <span asp-validation-for="Name" class="text-danger"></span>
-            <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact Number" required />
-            <span asp-validation-for="Contact" class="text-danger"></span>
-            <input type="text" asp-for="Attendance" class="inputbox" placeholder="Attendance" required />
-            <span asp-validation-for="Attendance" class="text-danger"></span>
-            <input type="text" asp-for="Status" class="inputbox" placeholder="Status" required />
-            <span asp-validation-for="Status" class="text-danger"></span>
-            <div class="createBtnpos">
-                <input type="submit" value="Create" class="createBtn" />
+<body>
+    <h1>Register New Volunteer</h1>
+
+    <form asp-action="CreateVolunteer" class="form2">
+        <div class="contentform">
+            <div id="sendmessage"> The account has been created successfully! </div>
+            @*Name, Gender, Email, Password, Address, Postal Code, Special Needs, Create*@
+        <div class="leftcontact">
+            <div class="form-group" style="margin-bottom:0 !important">
+                <p>Name <span>*</span></p>
+                <span id="icon-case"></span>
+                <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
             </div>
-        </form>
-</div>
+            <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="form-group" style="margin-bottom:0 !important">
+                <p>Contact <span>*</span></p>
+                <span id="icon-case"></span>
+                <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required data-msg="Check your input on the fields: The 'Contact' field must be numerical." />
+            </div>
+            <span asp-validation-for="Contact" class="text-danger"></span>
+        </div>
+
+    </form>
+</body>
+
+
+
+
+    @*
+        <div class="main">
+            <p class="create" align="center">Create New Volunteer</p>
+                <form asp-action="CreateVolunteer" class="form2">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact Number" required />
+                    <span asp-validation-for="Contact" class="text-danger"></span>
+                    <input type="text" asp-for="Attendance" class="inputbox" placeholder="Attendance" required />
+                    <span asp-validation-for="Attendance" class="text-danger"></span>
+                    <input type="text" asp-for="Status" class="inputbox" placeholder="Status" required />
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                    <div class="createBtnpos">
+                        <input type="submit" value="Create" class="createBtn" />
+                    </div>
+                </form>
+        </div>
+    *@
 

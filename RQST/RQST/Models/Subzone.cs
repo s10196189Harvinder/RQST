@@ -10,7 +10,9 @@ namespace RQST.Models
     {
         public string name { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string SUBZONE_NO { get; set; }
+        public string SUBZONE_N { get; set; }
+        public string REGION_C { get; set; }
     }
 
     public class Geometry

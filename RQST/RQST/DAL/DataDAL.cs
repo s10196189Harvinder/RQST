@@ -27,7 +27,7 @@ namespace RQST.DAL
 
                 return false;
             }
-            Elderly elderly = new Elderly(name,gender,email,address,postalcode,specialneeds,zone);                                    //Creates a elderly 
+            Elderly elderly = new Elderly(name,gender,email,address,postalcode,specialneeds,zone.Name, zone.REGION_C);                                    //Creates a elderly 
             await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
                     .Child("elderly")
                     .Child(res.User.LocalId)
@@ -68,9 +68,7 @@ namespace RQST.DAL
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             Volunteer volunteer = new Volunteer();
             volunteer.Name = name;
-            volunteer.Contact = contact;
-            volunteer.Attendance = attendance;
-            volunteer.Status = status;
+            volunteer.Contact = Convert.ToInt32(contact);
             var volreq = await firebaseClient
                 .Child("volunteer")
                 .PostAsync(volunteer);
@@ -97,7 +95,6 @@ namespace RQST.DAL
             var userRequestsData = await firebaseClient                   //Gets all user requests under /userRequests    
                         .Child("userRequests")
                         .OnceAsync<IDictionary<string,string>>();
-            List<Subzone> zoneList = new List<Subzone>();
             List<UserRequests> usersReqList = new List<UserRequests>();
             var fbItemList = await firebaseClient
                                     .Child("items")
@@ -146,7 +143,6 @@ namespace RQST.DAL
                 requests.Requests = userReqList;
                 requests.itemlist = userItemList;
                 usersReqList.Add(requests);
-                zoneList.Add(user.Zone);
             }
             return usersReqList;
         }
@@ -249,6 +245,22 @@ namespace RQST.DAL
             }
             return firebaseClient;
         }
+        public async Task<Boolean> asgnZone(string auth, Volunteer vol, string zones)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var items = await firebaseClient
+                        .Child("volunteer")
+                        .Child(vol.ID)
+                        .OnceAsync<items>();
+            IDictionary<string, items> itemlist = new Dictionary<string, items>();                        //Turns all objects inside "requests" into Request objects
+            foreach (var item in items)
+            {
+                itemlist.Add(item.Key, item.Object);
+            }
+            return true;
+        }
+
+
         public async Task<string> refreshToken(FirebaseAuthLink auth)                         //Function returns the authentication token
         {
             
