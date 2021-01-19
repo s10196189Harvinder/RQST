@@ -63,12 +63,17 @@ namespace RQST.DAL
                 .PostAsync(item);
             return true;
         }
-        public async Task<bool> postVolunteer(string name, string contact, string attendance, string status, string auth)
+        public async Task<bool> postVolunteer(string name, string contact, string regioncode, Subzone subzone, int completedrequest, string assignedzones, string auth)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             Volunteer volunteer = new Volunteer();
             volunteer.Name = name;
             volunteer.Contact = Convert.ToInt32(contact);
+            volunteer.RegionCode = regioncode;
+            volunteer.Zone = subzone;
+            volunteer.CompletedRequests = completedrequest;
+            volunteer.AssignedZones = assignedzones; 
+            volunteer.CompletedRequests = Convert.ToInt32(completedrequest);
             var volreq = await firebaseClient
                 .Child("volunteer")
                 .PostAsync(volunteer);

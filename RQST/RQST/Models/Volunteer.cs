@@ -14,6 +14,9 @@ namespace RQST.Models
         [JsonPropertyName("Assigned-Zones")]
         public string AssignedZones { get; set; }
 
+        [JsonPropertyName("Region-Code")]
+        public string RegionCode { get; set; }
+
         [JsonPropertyName("CompletedRequests")]
         public int CompletedRequests { get; set; }
 

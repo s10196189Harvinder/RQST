@@ -161,15 +161,64 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Contact, string Attendance, string PostalCode, string Status)
+        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Contact, string RegionCode, Subzone subzone, int CompletedRequest, string AssignedZones)
         {
             if (ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
-                await DataDALContext.postVolunteer(Name, Contact, Attendance, Status, auth);
+
+                SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
+                var url = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}", "AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk");
+                Geocoded res = await url
+                    .PostAsync()
+                    .ReceiveJson<Geocoded>();
+                float lat = res.results[0].geometry.location.lat;
+                float lng = res.results[0].geometry.location.lng;
+                SubzoneRoot zone = null;
                 bool success = false;
+                PointF latlng = new PointF(lat, lng);       //Target point - Lat/Lng where request is
+                foreach (SubzoneRoot sz in SZList.features)
+                {
+                    foreach (var obj in sz.geometry.coordinates)        //Obtains Lat/Lng of subzones from the list.
+                    {                                                   //Create polygon of pointF
+                        List<PointF> subz = new List<PointF>();
+                        for (int i = 0; i < obj.Count(); i++)
+                        {
+                            for (int y = 0; y < obj[i].Count(); y++)
+                            {
+                                PointF point = new PointF();
+                                if (obj[i].Count() != 3)
+                                {
+                                    foreach (var coorpair in obj[i])
+                                    {
+                                        JArray pts = new JArray(coorpair);
+                                        point = new PointF((float)Convert.ToDouble(pts[0][1]), (float)Convert.ToDouble(pts[0][0]));
+                                    }
+                                }
+                                else
+                                {
+                                    point = new PointF((float)Convert.ToDouble(obj[i][1]), (float)Convert.ToDouble(obj[i][0]));
+                                }
+                                subz.Add(point);
+                            }
+                        }
+                        bool isIn = check(subz, latlng);        //Checks if target point is in subzone polygon
+                        if (isIn)
+                        {
+                            zone = sz;                          //Sets zone to subzone, and breaks from loop
+                            success = true;
+                            break;
+                        }
+                    }
+                }
+                if (success != true)
+                {
+                    TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad postal code. Sends error.
+                    return View();
+                }
+                await DataDALContext.postVolunteer(Name, Contact, RegionCode, subzone, CompletedRequest, AssignedZones, auth);
                 return RedirectToAction("_ViewVolunteer");
-                success = await DataDALContext.postVolunteer(Name, Contact, Attendance, Status, auth);
+                success = await DataDALContext.postVolunteer(Name, Contact, RegionCode, subzone, CompletedRequest, AssignedZones, auth);
                 if (success != true)
                 {
                     TempData["Message"] = "Failed";
@@ -177,7 +226,6 @@ namespace RQST.Controllers
                 }
                 return RedirectToAction("_ViewVolunteer");
             }
-
             else 
             {
                 return View();
