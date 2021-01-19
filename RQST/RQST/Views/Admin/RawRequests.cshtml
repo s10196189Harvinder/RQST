@@ -24,7 +24,7 @@
                         request.Contents.TryGetValue(key, out value);
                         if (count == 0)
                         {
-                            <tr style="text-align: center; background-color: #f1f1f1 !important;">
+                            <tr style="text-align: left; background-color: #f1f1f1 !important;">
                                 <td>@key</td>
                                 <td>@value</td>
                                 <td rowspan="@request.Contents.Count" style="vertical-align:middle">@request.DelSlotStart</td>
@@ -33,7 +33,7 @@
                         }
                         else
                         {
-                            <tr style="text-align: center; background-color: #f1f1f1 !important;">
+                            <tr style="text-align: left; background-color: #f1f1f1 !important;">
                                 <td>@key</td>
                                 <td>@value</td>
                             </tr>

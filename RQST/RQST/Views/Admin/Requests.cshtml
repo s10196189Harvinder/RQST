@@ -36,18 +36,18 @@
                                             if (count == 0)
                                             {
                                                 <tr>
-                                                    <td rowspan="@requests.itemlist.Count">@requests.User.Name</td>
+                                                    <td rowspan="@requests.itemlist.Count"><strong>@requests.User.Name</strong></td>
                                                     <td>@requests.itemlist[0].Icon  @requests.itemlist[0].Name</td> @*Items*@
-                                                    <td>@requests.itemlist[0].Requested</td> @*Item Amt*@
-                                                    <td rowspan="@requests.itemlist.Count">@requests.User.Address</td>
-                                                    <td rowspan="@requests.itemlist.Count">@requests.User.PostalCode</td>
+                                                    <td><strong>@requests.itemlist[0].Requested</strong></td> @*Item Amt*@
+                                                    <td rowspan="@requests.itemlist.Count"><strong>@requests.User.Address</strong></td>
+                                                    <td rowspan="@requests.itemlist.Count"><strong>@requests.User.PostalCode</strong></td>
                                                 </tr>
                                             }
                                             else
                                             {
                                                 <tr>
                                                     <td>@requests.itemlist[count].Icon  @requests.itemlist[count].Name</td>
-                                                    <td>@requests.itemlist[count].Requested</td>
+                                                    <td><strong>@requests.itemlist[count].Requested</strong></td>
                                                 </tr>
                                             }
                                         }
