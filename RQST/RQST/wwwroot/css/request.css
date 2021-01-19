@@ -53,3 +53,7 @@ table {
     border-bottom: 4px solid lightgray;
 }
 
+
+.titleDisplay {
+    text-align:center;
+}
