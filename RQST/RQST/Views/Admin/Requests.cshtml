@@ -16,7 +16,7 @@
                     {
                         <div>
                             <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
-                            <h3>@subarea.Name</h3>
+                            <h3 class="titleDisplay">@subarea.Name</h3>
                             <table class="content-table">
                                 <thead>
                                     <!-- Table for the user data -->
@@ -37,7 +37,7 @@
                                             {
                                                 <tr>
                                                     <td rowspan="@requests.itemlist.Count">@requests.User.Name</td>
-                                                    <td>@requests.itemlist[0].Name</td> @*Items*@
+                                                    <td>@requests.itemlist[0].Icon  @requests.itemlist[0].Name</td> @*Items*@
                                                     <td>@requests.itemlist[0].Requested</td> @*Item Amt*@
                                                     <td rowspan="@requests.itemlist.Count">@requests.User.Address</td>
                                                     <td rowspan="@requests.itemlist.Count">@requests.User.PostalCode</td>
@@ -46,7 +46,7 @@
                                             else
                                             {
                                                 <tr>
-                                                    <td>@requests.itemlist[count].Name</td>
+                                                    <td>@requests.itemlist[count].Icon  @requests.itemlist[count].Name</td>
                                                     <td>@requests.itemlist[count].Requested</td>
                                                 </tr>
                                             }
