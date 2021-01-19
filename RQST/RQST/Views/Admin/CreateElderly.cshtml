@@ -8,12 +8,13 @@
 
 
 <body>
-    <h2>Register New Elderly</h2>
-
-    <form asp-action="CreateElderly" class="form2">
+    <form asp-action="CreateElderly" class="content-form">
         <div class="contentform">
             <div id="sendmessage"> The account has been created successfully! </div>
             @*Name, Gender, Email, Password, Address, Postal Code, Special Needs, Create*@
+        <div class="top-form">
+            <h2>Register New Elderly</h2>
+        </div>
         <div class="leftcontact">
             <div class="form-group"  style="margin-bottom:0 !important">
                 <p>Name <span>*</span></p>
@@ -59,14 +60,6 @@
                 <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required data-msg="Check your input on the fields: The 'Postal Code' field must be numerical." />
             </div>
             <span asp-validation-for="PostalCode" class="text-danger">@*<i class="fa fa-map-marker"></i>*@</span>
-            @*
-        <div class="form-group">
-            <p>Phone number <span>*</span></p>
-            <span class="icon-case"><i class="fa fa-phone"></i></span>
-            <input type="text" name="phone" id="phone" data-rule="maxlen:10" data-msg="Vérifiez votre saisie sur les champs : Le champ 'Téléphone' doit être renseigné. Minimum 10 chiffres" />
-            <div class="validation"></div>
-        </div>
-            *@
 
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Special Needs <span>*</span></p>
