@@ -16,7 +16,7 @@ namespace RQST.Models
     }
     public class SubArea
     {
-        public int Name { get; set; }
+        public string Name { get; set; }
         public List<UserRequests> reqlist { get; set; } = new List<UserRequests>();
     }
 }

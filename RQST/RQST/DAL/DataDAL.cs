@@ -27,7 +27,7 @@ namespace RQST.DAL
 
                 return false;
             }
-            Elderly elderly = new Elderly(name,gender,email,address,postalcode,specialneeds,Convert.ToInt32(zone.SUBZONE_NO), zone.REGION_C);                                    //Creates a elderly 
+            Elderly elderly = new Elderly(name,gender,email,address,postalcode,specialneeds,zone.Name, zone.REGION_C);                                    //Creates a elderly 
             await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
                     .Child("elderly")
                     .Child(res.User.LocalId)

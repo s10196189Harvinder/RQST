@@ -43,10 +43,10 @@ namespace RQST.Models
         //    Zone = zone;
         //}
 
-        public int Zone_ID { get; set; }
+        public string Zone_ID { get; set; }
         public string Region_Code { get; set; }
 
-        public Elderly(string name, char gender, string email, string address, string postalcode, string specialneeds, int zone, string regionCode)
+        public Elderly(string name, char gender, string email, string address, string postalcode, string specialneeds, string zone, string regionCode)
         {
             Name = name;
             Gender = gender;
