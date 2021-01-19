@@ -53,11 +53,16 @@
 
 function myFunction() {
     const input = document.getElementById("myInput");
+    console.log("document get myInput");
+
     const inputStr = input.value.toUpperCase();
+    console.log("document value to uppercase");
+
     document.querySelectorAll('#myTable tr:not(.header)').forEach((tr) => {
         const anyMatch = [...tr.children]
             .some(td => td.textContent.toUpperCase().includes(inputStr));
-        if (anyMatch) tr.style.removeProperty('display');
-        else tr.style.display = 'none';
+        if (anyMatch) tr.style.removeProperty('display'),  console.log("if enters");
+
+        else tr.style.display = 'none', console.log("else enters");
     });
 }
