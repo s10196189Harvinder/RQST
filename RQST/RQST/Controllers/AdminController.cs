@@ -161,12 +161,20 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Contact, string Attendance, string Status)
+        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Contact, string Attendance, string PostalCode, string Status)
         {
             if (ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
                 await DataDALContext.postVolunteer(Name, Contact, Attendance, Status, auth);
+                bool success = false;
+                return RedirectToAction("_ViewVolunteer");
+                success = await DataDALContext.postVolunteer(Name, Contact, Attendance, Status, auth);
+                if (success != true)
+                {
+                    TempData["Message"] = "Failed";
+                    return View();
+                }
                 return RedirectToAction("_ViewVolunteer");
             }
 
