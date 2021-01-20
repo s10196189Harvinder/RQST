@@ -4,19 +4,22 @@
 }
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="~/css/request.css" rel="stylesheet" />
+@*
+    COMMENTED OUT TO PUSH COS IT DON'T WORK RIGHT NOW AND I JUST WANT TO PUSH OUT THE MAP'
+
+
 <div>
     <div>
         @{
-            List<string> arealist = new List<string>();
             foreach (Area area in Model)
             {
                 <div>
                     <h2 class="titleDisplay">@area.AreaCode</h2>            <!-- This shows the main area - Central Region, West Region, etc.-->
-                    @foreach (SubArea subarea in area.SubArea)
+                    @foreach (Request_NEW req in area.ReqList)
                     {
                         <div>
                             <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
-                            @*<h3 class="titleDisplay">@subarea.Name</h3>*@
+                            @*<h3 class="titleDisplay">@subarea.Name</h3>
                             <table class="content-table">
                                 <thead>
                                     <!-- Table for the user data -->
@@ -29,16 +32,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (UserRequests requests in subarea.reqlist)
+                                    @foreach (Request request in req.ReqList)
                                     {
-                                        for (int count = 0; count < requests.itemlist.Count(); count++)
+                                        for (int count = 0; count < request.; count++)
                                         {
                                             if (count == 0)
                                             {
                                                 <tr>
                                                     <td rowspan="@requests.itemlist.Count"><strong>@requests.User.Name</strong></td>
-                                                    <td>@requests.itemlist[0].Icon  @requests.itemlist[0].Name</td> @*Items*@
-                                                    <td><strong>@requests.itemlist[0].Requested</strong></td> @*Item Amt*@
+                                                    <td>@requests.itemlist[0].Icon  @requests.itemlist[0].Name</td> @*Items
+                                                    <td><strong>@requests.itemlist[0].Requested</strong></td> @*Item Amt
                                                     <td rowspan="@requests.itemlist.Count"><strong>@requests.User.Address</strong></td>
                                                     <td rowspan="@requests.itemlist.Count"><strong>@requests.User.PostalCode</strong></td>
                                                 </tr>
@@ -61,7 +64,7 @@
         }
     </div>
 </div>
-
+*@
 <script>
     //var acc = document.getElementsByClassName("display-table");
     //var i;

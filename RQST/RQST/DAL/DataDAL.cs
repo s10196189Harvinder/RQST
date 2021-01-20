@@ -94,6 +94,89 @@ namespace RQST.DAL
             return reqlist;                                                 //Returns the list of requests
         }
 
+        public async Task<List<Request_NEW>> getUserRequests(string auth)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var reqData = await firebaseClient
+                .Child("requests")
+                .OnceAsync<IDictionary<string,Object>>();
+            var itemData = await firebaseClient
+                .Child("requestCounter")
+                .OnceAsync<IDictionary<string, string>>();
+            List<items> itemList = new List<items>();
+            var fbItemList = await firebaseClient
+                                    .Child("items")
+                                    .OnceAsync<items>();
+            foreach (var item in fbItemList)
+            {
+                items itemActual = item.Object;
+                itemActual.ID = item.Key;
+                itemList.Add(itemActual);
+            }
+            List<Request_NEW> reqList = new List<Request_NEW>();
+            foreach(var area in reqData)
+            {
+                Request_NEW req = new Request_NEW();
+                req.ZoneID = area.Key;
+                foreach (var requestID in area.Object)
+                {
+                    Request currReq = JsonConvert.DeserializeObject<Request>(requestID.Value.ToString());
+                    currReq.ID = requestID.Key;
+                    req.ReqList.Add(currReq);
+                    //req.ItemList.Add(currReq.Contents.) //Add items here or do another request?
+                }
+                reqList.Add(req);
+            }
+            foreach(var area in itemData)
+            {
+                Request_NEW req = reqList.Find(x => x.ZoneID == area.Key);
+                foreach(var item in area.Object)
+                {
+                    items itemF = itemList.Find(x => x.ID == item.Key);
+                    itemF.Requested = Convert.ToInt32(item.Value);
+                    req.ItemList.Add(itemF);
+                }
+            }
+            return (reqList);
+        }
+
+
+        public async Task<List<Request_NEW>> getUserRequestsMIN(string auth)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            var reqData = await firebaseClient
+                .Child("requests")
+                .OnceAsync<IDictionary<string, Object>>();
+            List<items> itemList = new List<items>();
+            var fbItemList = await firebaseClient
+                                    .Child("items")
+                                    .OnceAsync<items>();
+            foreach (var item in fbItemList)
+            {
+                items itemActual = item.Object;
+                itemActual.ID = item.Key;
+                itemList.Add(itemActual);
+            }
+            List<Request_NEW> reqList = new List<Request_NEW>();
+            foreach (var area in reqData)
+            {
+                Request_NEW req = new Request_NEW();
+                req.ZoneID = area.Key;
+                foreach (var requestID in area.Object)
+                {
+                    Request currReq = JsonConvert.DeserializeObject<Request>(requestID.Value.ToString());
+                    currReq.ID = requestID.Key;
+                    req.ReqList.Add(currReq);
+                    //req.ItemList.Add(currReq.Contents.) //Add items here or do another request?
+                }
+                reqList.Add(req);
+            }
+            return (reqList);
+        }
+
+
+
+
         public async Task<List<UserRequests>> getuserrequests(string auth)//Method populates UserRequests, which shows Users' IDs, their requests,
         {                                                                 //Their adddress, popstalcode,itemlist.
             FirebaseClient firebaseClient = await InitClientAsync(auth);

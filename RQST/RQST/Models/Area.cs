@@ -8,15 +8,10 @@ namespace RQST.Models
     public class Area
     {
         public string AreaCode { get; set; }
-        public List<SubArea> SubArea { get; set; } = new List<SubArea>();
+        public List<Request_NEW> ReqList { get; set; } = new List<Request_NEW>();
         public Area(string areacode)
         {
             AreaCode = areacode;
         }
-    }
-    public class SubArea
-    {
-        public string Name { get; set; }
-        public List<UserRequests> reqlist { get; set; } = new List<UserRequests>();
     }
 }

@@ -1,6 +1,6 @@
 ﻿@using Newtonsoft.Json;
 @using GeoJSON.Net.Feature;
-@model List<UserRequests>;
+@model List<Request_NEW>;
 @{
     Layout = "AdminMenu";
 }
@@ -113,17 +113,17 @@ itemamnt - styling for the item amnt
         var objlist = [];
     </script>
 
-    foreach (UserRequests request in Model)
+    foreach (Request_NEW request in Model)
     {
-        string words = "<div class='infotitle'>Total Requests: " + @request.Requests.Count() + "</div></br>Item summary</br>";
-        foreach (items item in request.itemlist)
+        string words = "<div class='infotitle'>Total Requests: " + request.ReqList.Count() + "</div></br>Item summary</br>";
+        foreach (items item in request.ItemList)
         {
             words += "<span class='itemname'>" + item.Name + "</span> : <span class='itemamnt'>" + item.Requested + "</span></br>";
         }
         <script>
             var obj = {
-                name:@Html.Raw("\"" + request.User.ZoneID + "\""),
-                requests:@Html.Raw(request.Requests.Count()),
+                name:@Html.Raw("\"" + request.ZoneID + "\""),
+                requests:@Html.Raw(request.ReqList.Count()),
                 itemliststring:"@Html.Raw(words)"
             };
             objlist.push(obj);

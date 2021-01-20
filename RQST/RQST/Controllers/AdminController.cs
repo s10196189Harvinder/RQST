@@ -24,8 +24,9 @@ namespace RQST.Controllers
         public async Task<IActionResult> MapAsync()
         {
             string auth = (HttpContext.Session.GetString("auth"));
-            List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);
-            return View(userreqlist);
+            //List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);
+            List<Request_NEW> reqList = await DataDALContext.getUserRequests(auth);
+            return View(reqList);
         }
         [HttpPost]
         public async Task<IActionResult> MapAsync(string Name, string Deliverables, string SpecialRequest, string Address)
@@ -220,38 +221,65 @@ namespace RQST.Controllers
         public async Task<IActionResult> RequestsAsync()
         {
             string auth = HttpContext.Session.GetString("auth");
-            List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);    //Gets user request
-            List<Area> arealist = new List<Area>();
-            foreach (UserRequests req in userreqlist)                   //Further processing done to group user requests into Regions
+            SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
+            List<Request_NEW> reqList = await DataDALContext.getUserRequests(auth);
+            List<Area> areaList = new List<Area>();
+            List<Elderly> elderlyList = await DataDALContext.getElderly(auth);
+            foreach(Request_NEW req in reqList)
             {
-                string areacode = req.User.RegionCode;                 //An area will have the larger region & its SubArea.
-                Area area = arealist.Find(x => x.AreaCode == areacode); //Checks if any area in the arealist already has the same region in it
+                SubzoneRoot zone = SZList.features.Find(x => x.properties.Name == req.ZoneID);
+                req.RegionCode = zone.properties.REGION_C;
+                Area area = areaList.Find(x => x.AreaCode == req.RegionCode);
                 if (area != null)
                 {
-                    SubArea subArea = area.SubArea.Find(x => x.Name == req.User.ZoneID);   //If there is a request in the area, checks if there is a request in the same subzone
-                    if (subArea != null)
-                    {
-                        subArea.reqlist.Add(req);                                           //If there is already a request in the subzone, it adds the request to the subzone request list
-                    }
-                    else
-                    {
-                        SubArea nSubArea = new SubArea();           //If there is no request in the specified subzone, it creates a subarea(named differently, but the same thing in principle as a subzone) item
-                        nSubArea.Name = req.User.ZoneID;
-                        nSubArea.reqlist.Add(req);                  //Add request to the subzone request list
-                        area.SubArea.Add(nSubArea);                 //Add subzone to the area list
-                    }
+                    area.ReqList.Add(req);
                 }
                 else
                 {
-                    Area nArea = new Area(areacode);            //Create new area
-                    SubArea nSubArea = new SubArea();           //Create subarea and populate with details
-                    nSubArea.Name = req.User.ZoneID;
-                    nSubArea.reqlist.Add(req);
-                    nArea.SubArea.Add(nSubArea);                //Add subarea to area
-                    arealist.Add(nArea);                        //Add area to arealist
+                    Area nArea = new Area(req.RegionCode);
+                    nArea.ReqList.Add(req);
+                    areaList.Add(nArea);
+                }
+                foreach(Request request in req.ReqList)
+                {
+                    Elderly elder = elderlyList.Find(x => x.Name == request.SenderID);
+                    request.Sender = elder;
                 }
             }
-            return View(arealist);
+            return View(areaList);
+            //string auth = HttpContext.Session.GetString("auth");
+            //List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);    //Gets user request
+            //List<Area> arealist = new List<Area>();
+            //foreach (UserRequests req in userreqlist)                   //Further processing done to group user requests into Regions
+            //{
+            //    string areacode = req.User.RegionCode;                 //An area will have the larger region & its SubArea.
+            //    Area area = arealist.Find(x => x.AreaCode == areacode); //Checks if any area in the arealist already has the same region in it
+            //    if (area != null)
+            //    {
+            //        SubArea subArea = area.SubArea.Find(x => x.Name == req.User.ZoneID);   //If there is a request in the area, checks if there is a request in the same subzone
+            //        if (subArea != null)
+            //        {
+            //            subArea.reqlist.Add(req);                                           //If there is already a request in the subzone, it adds the request to the subzone request list
+            //        }
+            //        else
+            //        {
+            //            SubArea nSubArea = new SubArea();           //If there is no request in the specified subzone, it creates a subarea(named differently, but the same thing in principle as a subzone) item
+            //            nSubArea.Name = req.User.ZoneID;
+            //            nSubArea.reqlist.Add(req);                  //Add request to the subzone request list
+            //            area.SubArea.Add(nSubArea);                 //Add subzone to the area list
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Area nArea = new Area(areacode);            //Create new area
+            //        SubArea nSubArea = new SubArea();           //Create subarea and populate with details
+            //        nSubArea.Name = req.User.ZoneID;
+            //        nSubArea.reqlist.Add(req);
+            //        nArea.SubArea.Add(nSubArea);                //Add subarea to area
+            //        arealist.Add(nArea);                        //Add area to arealist
+            //    }
+            //}
+            //return View(arealist);
         }
         public async Task<IActionResult> AddItoC(string catid)      //Add item to category page
         {
@@ -291,9 +319,16 @@ namespace RQST.Controllers
         [HttpPost] 
         public async Task<IActionResult> AsgnVolunteer(Volunteer vol)
         {
-            string auth = (HttpContext.Session.GetString("auth"));
-            bool success = await DataDALContext.updateVolunteer(auth,vol);
-            return RedirectToAction("ViewVol");
+            if (ModelState.IsValid)
+            {
+                string auth = (HttpContext.Session.GetString("auth"));
+                bool success = await DataDALContext.updateVolunteer(auth, vol);
+                return RedirectToAction("ViewVol");
+            }
+            else
+            {
+                return View();
+            }
         }
         [HttpPost]
         public async Task<IActionResult> AddItemAsync(items items)
