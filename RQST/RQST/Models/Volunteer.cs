@@ -8,7 +8,6 @@ using System.Text.Json.Serialization;
 
 namespace RQST.Models
 {
-    //Not final
     public class Volunteer
     {
         public string AssignedZones { get; set; }
@@ -27,7 +26,7 @@ namespace RQST.Models
         public string ZoneID { get; set; }
         public string PostalCode { get; set; }
 
-        [System.Text.Json.Serialization.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public string ID { get; set; }
     }
 }
