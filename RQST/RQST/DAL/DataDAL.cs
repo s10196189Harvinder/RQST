@@ -303,6 +303,7 @@ namespace RQST.DAL
                         .Child("volunteer")
                         .Child(id)
                         .OnceSingleAsync<Volunteer>();
+            volunteer.ID = id;
             return volunteer;
         }
         public async Task<Boolean> updateVolunteer(string auth, Volunteer vol)
@@ -312,6 +313,15 @@ namespace RQST.DAL
                         .Child("volunteer")
                         .Child(vol.ID)
                         .PutAsync(vol);     //Need to prevent it from posting ID, but otherwise works
+            return true;
+        }
+        public async Task<Boolean> updateVolunteerID(string auth, string vol, string zones)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            await firebaseClient
+                        .Child("volunteer")
+                        .Child(vol)
+                        .PatchAsync("{\"AssignedZones\":\""+zones+"\"}");     //Need to prevent it from posting ID, but otherwise works
             return true;
         }
 

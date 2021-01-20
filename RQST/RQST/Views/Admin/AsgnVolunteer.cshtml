@@ -1,39 +1,108 @@
 ﻿@model Volunteer
 @{ Layout = null; }
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<style>
+    #map {
+        height: 100%;
+    }
 
-<form asp-action="AsgnVolunteer">
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<h1>Yo, click on the zones to assign user to zone</h1>
+<div id="map">
+
+</div>
+@{
+    var text = (System.IO.File.ReadAllText(@"wwwroot\subzones.geojson"));
+    <script>
+    let map;
+    function initMap() {
+        var json = @Html.Raw(text);
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 1.3562033, lng: 103.8281415 },
+            zoom: 11,
+        })
+        map.data.addGeoJson(json);
+        map.data.setStyle(function (feature) {
+            var requests = feature.getProperty('requests');
+            var color = 'grey';
+            var weight = 0.3;
+            var opacity = 0.3
+            if (feature.getProperty('isColorful')) {
+                color = 'red';
+                weight = 2;
+                opacity = 0.7
+            }
+            return {
+                fillColor: color,
+                strokeWeight: weight,
+                fillOpacity: opacity
+            };
+        });
+        map.data.addListener('click', function (event) {
+            event.feature.setProperty('isColorful', true);
+        });
+        }
+    </script>
+}
+<script>
+    var id = "@ViewBag.id";
+    function getZones() {
+        var namelist = [];
+        map.data.forEach(function (feature) {
+            if (feature.getProperty('isColorful')) {
+                namelist.push(feature.getProperty("Name"));
+            }
+        });
+        var string = namelist.join();
+        $.ajax({
+            url: "/Admin/AsgnVolunteer?vol=" + id + "&zones=" + string,
+            type: "POST",
+            async: true,
+        }).done(function () {
+            window.location.pathname = "/Admin/ViewVol";
+        })
+
+    }
+</script>
+<form>
     <div class="form-group row">
-        <label asp-for="ID"></label>
-        <input asp-for="ID" class="form-control-plaintext" readonly />
-    </div>
-    <div class="form-group row">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control-plaintext" readonly />
-    </div>
-    <div class="form-group row">
-        <label asp-for="Contact"></label>
-        <input asp-for="Contact" class="form-control-plaintext" readonly />
-    </div>
-    <div class="form-group row">
-        <label asp-for="AssignedZones"></label>
-        <input asp-for="AssignedZones" class="form-control-plaintext" />
-    </div>
-    <div class="form-group row">
-        <label asp-for="PostalCode"></label>
-        <input asp-for="PostalCode" class="form-control-plaintext" readonly />
-    </div>
-    <div class="form-group row">
-        <label asp-for="ZoneID"></label>
-        <input asp-for="ZoneID" class="form-control-plaintext" readonly />
-    </div>
-    <div class="form-group row">
-        <label asp-for="RegionCode"></label>
-        <input asp-for="RegionCode" class="form-control-plaintext" readonly />
-    </div>
-    <div class="form-group row">
-        <div class="col-6 offset-5">
-            <input type="submit" value="Save"
-                   class="btn-lg btn-primary" />
+            <label asp-for="ID"></label>
+            <input asp-for="ID" class="form-control-plaintext" readonly />
         </div>
-    </div>
+        <div class="form-group row">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control-plaintext" readonly />
+        </div>
+        <div class="form-group row">
+            <label asp-for="Contact"></label>
+            <input asp-for="Contact" class="form-control-plaintext" readonly />
+        </div>
+        <div class="form-group row">
+            <label asp-for="AssignedZones"></label>
+            <input asp-for="AssignedZones" class="form-control-plaintext" readonly/>
+        </div>
+        <div class="form-group row">
+            <label asp-for="PostalCode"></label>
+            <input asp-for="PostalCode" class="form-control-plaintext" readonly />
+        </div>
+        <div class="form-group row">
+            <label asp-for="ZoneID"></label>
+            <input asp-for="ZoneID" class="form-control-plaintext" readonly />
+        </div>
+        <div class="form-group row">
+            <label asp-for="RegionCode"></label>
+            <input asp-for="RegionCode" class="form-control-plaintext" readonly />
+        </div>
 </form>
+<div class="col-6 offset-5">
+    <button onclick="getZones()" type="button">Oegh</button>
+</div>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk&callback=initMap"></script>
