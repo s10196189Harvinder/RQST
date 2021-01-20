@@ -7,6 +7,7 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RQST.Models;
 
 namespace RQST.DAL
@@ -96,7 +97,7 @@ namespace RQST.DAL
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             var reqData = await firebaseClient
                 .Child("requests")
-                .OnceAsync<IDictionary<string,Object>>();
+                .OnceAsync<IDictionary<string, Object>>();
             var itemData = await firebaseClient
                 .Child("requestCounter")
                 .OnceAsync<IDictionary<string, string>>();
@@ -111,7 +112,7 @@ namespace RQST.DAL
                 itemList.Add(itemActual);
             }
             List<Request_NEW> reqList = new List<Request_NEW>();
-            foreach(var area in reqData)
+            foreach (var area in reqData)
             {
                 Request_NEW req = new Request_NEW();
                 req.ZoneID = area.Key;
@@ -124,10 +125,10 @@ namespace RQST.DAL
                 }
                 reqList.Add(req);
             }
-            foreach(var area in itemData)
+            foreach (var area in itemData)
             {
                 Request_NEW req = reqList.Find(x => x.ZoneID == area.Key);
-                foreach(var item in area.Object)
+                foreach (var item in area.Object)
                 {
                     items itemF = itemList.Find(x => x.ID == item.Key);
                     itemF.Requested = Convert.ToInt32(item.Value);
@@ -159,10 +160,19 @@ namespace RQST.DAL
             {
                 Request_NEW req = new Request_NEW();
                 req.ZoneID = area.Key;
-                foreach (var requestID in area.Object)
+                foreach (KeyValuePair<string, object> requestID in area.Object)
                 {
                     Request currReq = JsonConvert.DeserializeObject<Request>(requestID.Value.ToString());
                     currReq.ID = requestID.Key;
+                    JObject bruh = (JObject)requestID.Value;
+                    JObject bruh2 = (JObject)bruh["content"];
+                    foreach(KeyValuePair<string,JToken> kvp in bruh2)
+                    {
+                        items newItem = itemList.Find(x => x.ID == kvp.Key);
+                        newItem.Requested = (int)kvp.Value;
+                        newItem.ID = kvp.Key;
+                        currReq.itemList.Add(newItem);
+                    }
                     req.ReqList.Add(currReq);
                     //req.ItemList.Add(currReq.Contents.) //Add items here or do another request?
                 }
@@ -240,6 +250,7 @@ namespace RQST.DAL
             List<Elderly> elderlylist = new List<Elderly>();                  
             foreach (var elderly in elderlies)
             {
+                elderly.Object.ID = elderly.Key;
                 elderlylist.Add(elderly.Object);
             }
             return elderlylist;                                               

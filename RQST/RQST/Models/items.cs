@@ -8,6 +8,10 @@ namespace RQST.Models
 {
     public class items
     {
+        public items()
+        {
+        }
+
         public items(string name, int requested, string icon, int remaining, string bgCol)
         {
             Name = name;

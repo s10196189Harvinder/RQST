@@ -223,7 +223,7 @@ namespace RQST.Controllers
         {
             string auth = HttpContext.Session.GetString("auth");
             SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
-            List<Request_NEW> reqList = await DataDALContext.getUserRequests(auth);
+            List<Request_NEW> reqList = await DataDALContext.getUserRequestsMIN(auth);
             List<Area> areaList = new List<Area>();
             List<Elderly> elderlyList = await DataDALContext.getElderly(auth);
             foreach(Request_NEW req in reqList)
@@ -243,7 +243,7 @@ namespace RQST.Controllers
                 }
                 foreach(Request request in req.ReqList)
                 {
-                    Elderly elder = elderlyList.Find(x => x.Name == request.SenderID);
+                    Elderly elder = elderlyList.Find(x => x.ID == request.SenderID);
                     request.Sender = elder;
                 }
             }

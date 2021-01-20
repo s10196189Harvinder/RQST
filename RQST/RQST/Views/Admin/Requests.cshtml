@@ -4,10 +4,6 @@
 }
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="~/css/request.css" rel="stylesheet" />
-@*
-    COMMENTED OUT TO PUSH COS IT DON'T WORK RIGHT NOW AND I JUST WANT TO PUSH OUT THE MAP'
-
-
 <div>
     <div>
         @{
@@ -19,7 +15,7 @@
                     {
                         <div>
                             <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
-                            @*<h3 class="titleDisplay">@subarea.Name</h3>
+                            <br/><h3 class="titleDisplay">@req.ZoneID</h3>
                             <table class="content-table">
                                 <thead>
                                     <!-- Table for the user data -->
@@ -34,23 +30,24 @@
                                 <tbody>
                                     @foreach (Request request in req.ReqList)
                                     {
-                                        for (int count = 0; count < request.; count++)
+                                        for (int count = 0; count < request.itemList.Count; count++)
                                         {
                                             if (count == 0)
                                             {
                                                 <tr>
-                                                    <td rowspan="@requests.itemlist.Count"><strong>@requests.User.Name</strong></td>
-                                                    <td>@requests.itemlist[0].Icon  @requests.itemlist[0].Name</td> @*Items
-                                                    <td><strong>@requests.itemlist[0].Requested</strong></td> @*Item Amt
-                                                    <td rowspan="@requests.itemlist.Count"><strong>@requests.User.Address</strong></td>
-                                                    <td rowspan="@requests.itemlist.Count"><strong>@requests.User.PostalCode</strong></td>
+                                                    <td rowspan="@request.itemList"><strong>@request.Sender.Name</strong></td>
+                                                    <td>@request.itemList[0].Icon  @request.itemList[0].ID</td> @*Items*@
+                                                    <td><strong>@request.itemList[0].Requested</strong></td> @*Item Amt*@
+                                                    <td rowspan="@request.itemList.Count"><strong>@request.Sender.Address</strong></td>
+                                                    <td rowspan="@request.itemList.Count"><strong>@request.Sender.PostalCode</strong></td>
                                                 </tr>
                                             }
                                             else
                                             {
                                                 <tr>
-                                                    <td>@requests.itemlist[count].Icon  @requests.itemlist[count].Name</td>
-                                                    <td><strong>@requests.itemlist[count].Requested</strong></td>
+                                                    <td></td>
+                                                    <td>@request.itemList[count].Icon  @request.itemList[count].ID</td>
+                                                    <td><strong>@request.itemList[count].Requested</strong></td>
                                                 </tr>
                                             }
                                         }
@@ -64,7 +61,6 @@
         }
     </div>
 </div>
-*@
 <script>
     //var acc = document.getElementsByClassName("display-table");
     //var i;
