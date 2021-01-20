@@ -20,46 +20,46 @@ namespace RQST.DAL
             FirebaseAuthLink res;
             try
             {
-                res = await ap.CreateUserWithEmailAndPasswordAsync(email, password);      //Attemps to create user with given email & password
+                res = await ap.CreateUserWithEmailAndPasswordAsync(email, password);      //Attemps to create user
             }
             catch
             {
 
                 return false;
             }
-            Elderly elderly = new Elderly(name,gender,email,address,postalcode,specialneeds,zone.Name, zone.REGION_C); //Puts elderly in firebase
-            await firebaseClient                //Posts the elderly object to under (DATABASE)/Requests/UserID
+            Elderly elderly = new Elderly(name,gender,email,address,postalcode,specialneeds,zone.Name, zone.REGION_C);                                    //Creates a elderly 
+            await firebaseClient                                    //Posts the request object to under (DATABASE)/Requests
                     .Child("elderly")
-                    .Child(res.User.LocalId)    //Sets the location of the data to be posted to the ID of the user
-                    .PutAsync(elderly);         //PUTs location at /Eldelry/UserID/...  (Not POST beacuase POST generates random ID - it would become /Eldelry/UID/ID/...)
+                    .Child(res.User.LocalId)
+                    .PutAsync(elderly);
             await firebaseClient
-                .Child("authroles")             // Places UserID in the authroles section
-                .PatchAsync("{\"" + res.User.LocalId + "\":\"elderly\"}");  //Patching in JSON format - "USERID:elderly"
+                .Child("authroles")
+                .PatchAsync("{\"" + res.User.LocalId + "\":\"elderly\"}");
             return true;
         }
-        public async Task<bool> AddCat(string auth, string category, string icon)   //Add Category to database - NOT IN USE CURRENTLY
+        public async Task<bool> AddCat(string auth, string category, string icon)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             var volreq = await firebaseClient
-                .Child("categories")                                                    //Posted to /Categories/random ID/...
-                .PostAsync("{\"category\":\""+category+"\",\"icon\":\""+icon+"\"}");    //POST in JSON format - { "category" : "CATEGORYNAME", "icon": "ICON" }
+                .Child("categories")
+                .PostAsync("{\"category\":\""+category+"\",\"icon\":\""+icon+"\"}");
             return true;
         }
-        public async Task<bool> AddItemtoCat(string auth, string id, string categoryid)   //Adds items to categories in the DB
+        public async Task<bool> AddItemtoCat(string auth, string id, string categoryid)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
-            var item = await firebaseClient     //POSTS to /categories/CATEGORYID/items/ITEMID/...
+            var item = await firebaseClient
                 .Child("categories")
                 .Child(categoryid)
                 .Child("items")
-                .PostAsync(id);                 //POST to RANDOMID:ITEMID
+                .PostAsync("{'"+categoryid + "':'" + categoryid+ "'}");
             return true;
         }
-        public async Task<bool> AddItem(string auth, items item)    //Adds item to DB
+        public async Task<bool> AddItem(string auth, items item)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             var itemp = await firebaseClient
-                .Child("items")             //Posts to /items/RANDOMID/...
+                .Child("items")
                 .PostAsync(item);
             return true;
         }
@@ -70,7 +70,7 @@ namespace RQST.DAL
             volunteer.Name = name;
             volunteer.Contact = Convert.ToInt32(contact);
             volunteer.RegionCode = regioncode;
-            volunteer.Zone = subzone;
+            volunteer.ZoneID = subzone.Name;
             volunteer.CompletedRequests = completedrequest;
             volunteer.AssignedZones = assignedzones; 
             volunteer.CompletedRequests = Convert.ToInt32(completedrequest);
@@ -91,7 +91,7 @@ namespace RQST.DAL
             {
                 reqlist.Add(request.Object);
             }
-            return reqlist;                                                    //Returns the list of requests
+            return reqlist;                                                 //Returns the list of requests
         }
 
         public async Task<List<UserRequests>> getuserrequests(string auth)//Method populates UserRequests, which shows Users' IDs, their requests,
@@ -101,57 +101,58 @@ namespace RQST.DAL
                         .Child("userRequests")
                         .OnceAsync<IDictionary<string,string>>();
             List<UserRequests> usersReqList = new List<UserRequests>();
-            var fbItemList = await firebaseClient                       //Obtains ALL possible items orderable from the FB
+            var fbItemList = await firebaseClient
                                     .Child("items")
                                     .OnceAsync<items>();
-            List<items> itemList = new List<items>();                   //Populate an Itemlist
+            List<items> itemList = new List<items>();
             foreach (var item in fbItemList)
             {
                 items itemActual = item.Object;
                 itemActual.ID = item.Key;
                 itemList.Add(itemActual);
             }
-            foreach (var userID in userRequestsData)                //Loop through all user requests to populate it with useful data
+            foreach (var userID in userRequestsData)
             {
                 List<items> userItemList = new List<items>();
-                UserRequests requests = new UserRequests();         //Get the details of the elderly who posted the request
-                Elderly user = await firebaseClient                 //This is so that we can get useful details such as Zone_ID, etc.
+                UserRequests requests = new UserRequests();
+
+                Elderly user = await firebaseClient
                                 .Child("elderly")
                                 .Child(userID.Key)
                                 .OnceSingleAsync<Elderly>();
-                requests.User = user;                               //Sets the owner of the request to the owner object
+                requests.User = user;
 
-                List<Request> userReqList = new List<Request>();    //A user may have multiple requests in one time - We create a list of requests for the user
-                foreach (var reqid in userID.Object)                //Foreach request in UserRequest (If you're confused about this refer to the firebase - under /userRequests/ users can have a lot of requests)
+                List<Request> userReqList = new List<Request>();
+                foreach (var reqid in userID.Object)
                 {
-                    Request req = await firebaseClient              //Obtains the full request data based on the request ID - We do this so we can access the content of the request
-                        .Child("requests")                          //NOTE - USING THIS IN A FOR LOOP MAY BE A BAD IDEA
-                        .Child(reqid.Value)                         //MIGHT BE BANDWIDTH INTENSIVE - IT'S SENDING LIKE 5 GETS FROM THE FIREBASE - ALSO MIGHT BE WHY THE MAP PAGE & REQUEST PAGE TAKE LONG TO LOAD
+                    Request req = await firebaseClient
+                        .Child("requests")
+                        .Child(reqid.Value)
                         .OnceSingleAsync<Request>();
-                    foreach (var item in req.Contents)              //Foreach item in the content of the request
+                    foreach (var item in req.Contents)
                     {
-                        items itemF = userItemList.Find(x => x.ID == item.Key);     //Looks for the item in the user item list
+                        items itemF = userItemList.Find(x => x.ID == item.Key);
                         if (itemF != null)
                         {
-                            itemF.Requested += item.Value;                         //If it's found, it increases the "Requested" value of the item
+                            itemF.Requested += item.Value;
                         }
                         else
                         {
-                            items itemActual = itemList.Find(x => x.ID == item.Key);    //If it isn't, it looks for the item in the pre-populated general item list
-                            itemActual.Requested = item.Value;                          //The items' requested count is set to the value
-                            userItemList.Add(itemActual);                               //The item is added to the user item list
+                            items itemActual = itemList.Find(x => x.ID == item.Key);
+                            itemActual.Requested = item.Value;
+                            userItemList.Add(itemActual);
                         }
                     }
-                    userReqList.Add(req);                         //Adds the request to the User Request list - This is just to have a count of the requests
+                    userReqList.Add(req);
                 }
-                requests.Requests = userReqList;                  //The specific request will have a request list because users may make more than one request at once
-                requests.itemlist = userItemList;                 //The request item list is set - This will show the consolidated amount of items required
-                usersReqList.Add(requests);                       //Adds the request to the overall request list
+                requests.Requests = userReqList;
+                requests.itemlist = userItemList;
+                usersReqList.Add(requests);
             }
-            return usersReqList;                                //Return the request list
+            return usersReqList;
         }
 
-        public async Task<List<Elderly>> getElderly(string auth)  //Obtains the elderly data
+        public async Task<List<Elderly>> getElderly(string auth)              
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);      
             var elderlies = await firebaseClient                              
@@ -165,7 +166,7 @@ namespace RQST.DAL
             return elderlylist;                                               
         }
 
-        public async Task<List<Categories>> getCat(string auth) //Gets all the categories
+        public async Task<List<Categories>> getCat(string auth)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             var elderlies = await firebaseClient
@@ -180,7 +181,7 @@ namespace RQST.DAL
             return catlist;
         }
 
-        public async Task<Categories> getaCat(string auth,string id)    //Gets a specific category - based on ID supplied
+        public async Task<Categories> getaCat(string auth,string id)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             var cat = await firebaseClient
@@ -190,7 +191,19 @@ namespace RQST.DAL
             return cat;
         }
 
-        public async Task<List<Volunteer>> getVolunteer(string auth)  //Obtains list of volunteers
+        public async Task<bool> putIinC(string auth, string cat, string id)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            await firebaseClient
+                        .Child("categories")
+                        .Child(cat)
+                        .Child("items")
+                        .PatchAsync("{\"" + id + "\":\"" + id + "\"}");
+            return true;
+        }
+
+
+        public async Task<List<Volunteer>> getVolunteer(string auth)            
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        
             var volunteers = await firebaseClient                               
@@ -199,18 +212,38 @@ namespace RQST.DAL
             List<Volunteer> volunteerlist = new List<Volunteer>();              
             foreach (var volunteer in volunteers)
             {
+                volunteer.Object.ID = volunteer.Key;
                 volunteerlist.Add(volunteer.Object);
             }
             return volunteerlist;                                               
         }
 
-        public async Task<IDictionary<string, items>> getitems(string auth) //NOT IN USE
+        public async Task<Volunteer> getAVolunteer(string auth,string id)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            Volunteer volunteer = await firebaseClient
+                        .Child("volunteer")
+                        .Child(id)
+                        .OnceSingleAsync<Volunteer>();
+            return volunteer;
+        }
+        public async Task<Boolean> updateVolunteer(string auth, Volunteer vol)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            await firebaseClient
+                        .Child("volunteer")
+                        .Child(vol.ID)
+                        .PutAsync(vol);     //Need to prevent it from posting ID, but otherwise works
+            return true;
+        }
+
+        public async Task<IDictionary<string, items>> getitems(string auth) 
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);    
             var items = await firebaseClient                                
                         .Child("items")
                         .OnceAsync<items>();
-            IDictionary<string, items> itemlist = new Dictionary<string, items>(); //Turns all objects inside "requests" into Request objects
+            IDictionary<string, items> itemlist = new Dictionary<string, items>();                        //Turns all objects inside "requests" into Request objects
             foreach (var item in items)
             {
                 itemlist.Add(item.Key, item.Object);

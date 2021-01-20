@@ -1,1 +1,39 @@
-﻿
+﻿@model Volunteer
+@{ Layout = null; }
+
+<form asp-action="AsgnVolunteer">
+    <div class="form-group row">
+        <label asp-for="ID"></label>
+        <input asp-for="ID" class="form-control-plaintext" readonly />
+    </div>
+    <div class="form-group row">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control-plaintext" readonly />
+    </div>
+    <div class="form-group row">
+        <label asp-for="Contact"></label>
+        <input asp-for="Contact" class="form-control-plaintext" readonly />
+    </div>
+    <div class="form-group row">
+        <label asp-for="AssignedZones"></label>
+        <input asp-for="AssignedZones" class="form-control-plaintext" />
+    </div>
+    <div class="form-group row">
+        <label asp-for="PostalCode"></label>
+        <input asp-for="PostalCode" class="form-control-plaintext" readonly />
+    </div>
+    <div class="form-group row">
+        <label asp-for="ZoneID"></label>
+        <input asp-for="ZoneID" class="form-control-plaintext" readonly />
+    </div>
+    <div class="form-group row">
+        <label asp-for="RegionCode"></label>
+        <input asp-for="RegionCode" class="form-control-plaintext" readonly />
+    </div>
+    <div class="form-group row">
+        <div class="col-6 offset-5">
+            <input type="submit" value="Save"
+                   class="btn-lg btn-primary" />
+        </div>
+    </div>
+</form>

@@ -17,24 +17,14 @@
     color: #F6AA93;
 }
 
-.main {
-    background-color: lightgray;
-    width: 600px;
-    height: 490px;
-    margin: 7em auto;
-    border-radius: 1.5em;
-    box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
-}
-
-form h1 {
-    font-size: 18px;
-    background: #F6AA93 none repeat scroll 0% 0%;
-    color: rgb(255, 255, 255);
-    padding: 22px 25px;
+form h2 {
+    font-size: 30px;
+    color: white;
+    padding-bottom: 26px;
     border-radius: 5px 5px 0px 0px;
     margin: auto;
     text-shadow: none;
-    text-align: left
+    text-align: center;
 }
 
 form {
@@ -42,8 +32,9 @@ form {
     max-width: 700px;
     width: 100%;
     margin: 5% auto;
-    background-color: #eaeaea;
+    background-color: #353535;
     overflow: hidden;
+    border-bottom: 4px solid #353535;
 }
 
 p span {
@@ -54,10 +45,10 @@ p {
     margin: 0px;
     font-weight: 500;
     line-height: 2;
-    color: #333;
+    color: #FFFFFF;
 }
 
-h1 {
+h2 {
     text-align: center;
     color: #666;
     text-shadow: 1px 1px 0px #FFF;
@@ -91,6 +82,7 @@ textarea {
 .form-group {
     overflow: hidden;
     clear: both;
+    margin-bottom: 0 !important;
 }
 
 #icon-case {
@@ -113,8 +105,8 @@ i {
 }
 
 .createBtn {
-    background-color: #000000;
-    color: #FFF;
+    background-color: #FFFFFF;
+    color: #353535;
     text-align: center;
     width: 100%;
     border: 0;
@@ -123,6 +115,9 @@ i {
     margin-top: 40px;
     margin-bottom: 30px;
     font-size: 18px;
+}
+
+.top-form {
 }
 
 .leftcontact {

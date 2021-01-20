@@ -8,13 +8,10 @@ using System.Text.Json.Serialization;
 
 namespace RQST.Models
 {
-    //Not final
     public class Volunteer
     {
-        [JsonPropertyName("Assigned-Zones")]
         public string AssignedZones { get; set; }
 
-        [JsonPropertyName("Region-Code")]
         public string RegionCode { get; set; }
 
         [JsonPropertyName("CompletedRequests")]
@@ -26,7 +23,10 @@ namespace RQST.Models
         [JsonPropertyName("Name")]
         public string Name { get; set; }
 
-        public Subzone Zone { get; set; }
+        public string ZoneID { get; set; }
+        public string PostalCode { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
         public string ID { get; set; }
     }
 }

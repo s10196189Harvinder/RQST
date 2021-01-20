@@ -43,8 +43,8 @@ namespace RQST.Models
         //    Zone = zone;
         //}
 
-        public string Zone_ID { get; set; }
-        public string Region_Code { get; set; }
+        public string ZoneID { get; set; }
+        public string RegionCode { get; set; }
 
         public Elderly(string name, char gender, string email, string address, string postalcode, string specialneeds, string zone, string regionCode)
         {
@@ -54,8 +54,8 @@ namespace RQST.Models
             Address = address;
             PostalCode = postalcode;
             SpecialNeeds = specialneeds;
-            Zone_ID = zone;
-            Region_Code = regionCode;
+            ZoneID = zone;
+            RegionCode = regionCode;
         }
     }
 }
