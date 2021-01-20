@@ -26,29 +26,17 @@
             </div>
             <span asp-validation-for="Contact" class="text-danger"></span>
             <div class="form-group" style="margin-bottom:0 !important">
-                <p>Region Code <span>*</span></p>
+                <p>Postal Code <span>*</span></p>
                 <span id="icon-case"></span>
-                <input type="text" asp-for="RegionCode" class="inputbox" placeholder="Region Code" required data-msg="Check your input on the fields: The 'Region Code' field must be completed." />
+                <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required data-msg="Check your input on the fields: The 'Postal Code' field must be completed." />
             </div>
-            <span asp-validation-for="RegionCode" class="text-danger"></span>
-            <div class="form-group" style="margin-bottom:0 !important">
-                <p>Zone ID <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="Zone" class="inputbox" placeholder="Zone ID" required data-msg="Check your input on the fields: The 'Zone' field must be completed." />
-            </div>
-            <span asp-validation-for="Zone" class="text-danger"></span>
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
             <div class="form-group" style="margin-bottom:0">
-                <p>Completed Request <span>*</span></p>
+                <p>Completed Request</p>
                 <span id="icon-case"></span>
                 <input type="text" asp-for="CompletedRequests" class="inputbox" placeholder="No. of Completed Request" data-msg="Check your input on the fields: The 'Complated Request' field must be numerical." />
             </div>
             <span asp-validation-for="CompletedRequests" class="text-danger"></span>
-            <div class="form-group" style="margin-bottom:0">
-                <p>Assigned Zones <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="AssignedZones" class="inputbox" placeholder="Assigned Zones" data-msg="Check your input on the fields: The 'Assigned Zones' field must be completed." />
-            </div>
-            <span asp-validation-for="AssignedZones" class="text-danger"></span>
         </div>
             </div>
             <input type="submit" value="Create" class="createBtn" />
