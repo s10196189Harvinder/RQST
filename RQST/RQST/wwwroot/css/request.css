@@ -2,9 +2,10 @@
     box-sizing: border-box
 }
 
-.main{
+.main {
     max-width: 1600px !important;
 }
+
 body {
     background-color: white;
     font-family: 'Roboto Mono', monospace;
@@ -23,14 +24,14 @@ table {
     font-size: 0.9em;
     border-radius: 10px 10px 0 0;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0 , 0 , 0 , 0.15);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-.content-table thead{
+.content-table thead {
     border: 1px solid #dddddd;
 }
 
-.content-table thead tr{
+.content-table thead tr {
     background-color: #353535;
     color: white;
     text-align: left;
@@ -38,22 +39,26 @@ table {
 }
 
 .content-table th,
-.content-table td{
+.content-table td {
     padding: 12px 15px;
 }
-.content-table tbody{
-    border: 1px solid #dddddd;
-}
-.content-table tbody tr{
-    border-bottom: 1px solid #dddddd;
-}
-.content-table tbody tr td{
+
+.content-table tbody {
     border: 1px solid #dddddd;
 }
 
-.content-table tbody tr:nth-of-type(even){
-     background-color: #f3f3f3;
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
 }
+
+.content-table tbody tr td {
+    border: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
 .content-table tbody {
     border-bottom: 4px solid #353535;
     border-radius: 0 0 5px 5px;
@@ -61,6 +66,12 @@ table {
 
 
 .titleDisplay {
-    float: left;
     margin-bottom: 1%;
+    text-align: left !important;
+    display: block;
+    width: 100%;
+}
+
+.subarea-display {
+    font-style: italic;
 }

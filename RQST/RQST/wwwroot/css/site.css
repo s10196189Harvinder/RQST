@@ -6,6 +6,7 @@ body {
 }
 
 
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -26,7 +27,7 @@ a.navbar-brand {
     padding-right: 10px;
 }
 
-.navbar{
+.navbar {
     border-radius: 0px !important;
 }
 
@@ -39,9 +40,9 @@ a.navbar-brand {
     padding: 15px 0 !important;
 }
 
-    .navbar > .container, .navbar > .container-fluid {
-        justify-content: right !important;
-    }
+.navbar > .container, .navbar > .container-fluid {
+    justify-content: right !important;
+}
 
 /* Provide sufficient contrast against white background */
 a {
@@ -96,7 +97,7 @@ body {
 }
 
 .footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     background-color: black;
@@ -119,7 +120,7 @@ body {
 
 .dropdown-menu {
     display: none;
-    position: absolute;
+    position: fixed;
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);

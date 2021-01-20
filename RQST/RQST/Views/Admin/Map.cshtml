@@ -4,45 +4,12 @@
 @{
     Layout = "AdminMenu";
 }
-<!--
-CSS doers
-infotitle, itemname, itemamnt are css for the windows that pop up when you click on the circle
 
-infotitle - The request count at the top
-itemname - styling for the item name
-itemamnt - styling for the item amnt
--->
-<style>
-    #map {
-        height: 500px;
-    }
-
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    .infotitle {
-        font-size: 12px;
-        font-weight: bold;
-        justify-content: center;
-    }
-
-    .itemname {
-        font-size: 11px;
-        font-weight: 500;
-    }
-
-    .itemamnt {
-        font-size: 11px;
-    }
-</style>
 <link href="~/css/tableDesign.css" rel="stylesheet" />
 <link href="~/css/adminpage.css" rel="stylesheet" />
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-<h2 style="text-align:center">Order Request</h2>
+<h2>Order Request</h2>
 <div id="map">
 
 </div>
@@ -133,9 +100,9 @@ itemamnt - styling for the item amnt
         window.onload = function () {
             map.data.forEach(function (feature) {
                 var SD_NAME = feature.getProperty('Name');
-                console.log("SD : "+SD_NAME);
+                console.log("SD : " + SD_NAME);
                 if (objlist.some(item => item.name == SD_NAME)) {
-                    console.log("item : "  + obj.name);
+                    console.log("item : " + obj.name);
                     var req = objlist.filter(obj => { return obj.name === SD_NAME });
                     feature.setProperty("requests", req[0].requests);
                     feature.setProperty("itemliststring", req[0].itemliststring);

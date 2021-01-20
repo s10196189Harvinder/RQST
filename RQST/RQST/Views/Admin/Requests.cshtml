@@ -10,12 +10,19 @@
             foreach (Area area in Model)
             {
                 <div>
-                    <h2 class="titleDisplay">@area.AreaCode</h2>            <!-- This shows the main area - Central Region, West Region, etc.-->
+                    <div class="titleDisplay">
+                        <!-- This shows the main area - Central Region, West Region, etc.-->
+                        <h2>@area.AreaCode</h2>
+                    </div>
+
                     @foreach (Request_NEW req in area.ReqList)
                     {
+                        <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
+                        <div class="subarea-display">
+                            <h5>@req.ZoneID</h5>
+                        </div>
+
                         <div>
-                            <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
-                            <br/><h3 class="titleDisplay">@req.ZoneID</h3>
                             <table class="content-table">
                                 <thead>
                                     <!-- Table for the user data -->
