@@ -142,28 +142,29 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Contact, string RegionCode, Subzone subzone, int CompletedRequest, string AssignedZones)
+        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Contact, string PostalCode, int CompletedRequest)
         {
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 string auth = HttpContext.Session.GetString("auth");
 
                 SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
-                var url = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}", "AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk");
-                Geocoded res = await url
+                string addr = "Singapore " + PostalCode; //Set address as e.g. Singapore 468123
+                var url = string.Format("https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}", addr, "AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk");  //Set the URL for GeoCoding
+                Geocoded res = await url        //Make a request to the Google GeoCoding API, supplying the Singapore 468123 as the "search" field
                     .PostAsync()
                     .ReceiveJson<Geocoded>();
-                float lat = res.results[0].geometry.location.lat;
-                float lng = res.results[0].geometry.location.lng;
+                float lat = res.results[0].geometry.location.lat;       //Get the latitude from the request result
+                float lng = res.results[0].geometry.location.lng;       //Get the longitude from the request result - These are the exact locations of the postal code.
                 SubzoneRoot zone = null;
                 bool success = false;
-                PointF latlng = new PointF(lat, lng);       //Target point - Lat/Lng where request is
-                foreach (SubzoneRoot sz in SZList.features)
+                PointF latlng = new PointF(lat, lng);                   //Target point - Lat/Lng where request is
+                foreach (SubzoneRoot sz in SZList.features)             //Loop thru ALL subzones from the JSON file
                 {
                     foreach (var obj in sz.geometry.coordinates)        //Obtains Lat/Lng of subzones from the list.
                     {                                                   //Create polygon of pointF
                         List<PointF> subz = new List<PointF>();
-                        for (int i = 0; i < obj.Count(); i++)
+                        for (int i = 0; i < obj.Count(); i++)           //This part obtains the latitude & longitude - It's weird and complex because the GEOJSON file (from data.gov) has a lot of nesting
                         {
                             for (int y = 0; y < obj[i].Count(); y++)
                             {
@@ -197,9 +198,9 @@ namespace RQST.Controllers
                     TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad postal code. Sends error.
                     return View();
                 }
-                await DataDALContext.postVolunteer(Name, Contact, RegionCode, subzone, CompletedRequest, AssignedZones, auth);
+                await DataDALContext.postVolunteer(Name, Contact, PostalCode, CompletedRequest, auth);
                 return RedirectToAction("_ViewVolunteer");
-                success = await DataDALContext.postVolunteer(Name, Contact, RegionCode, subzone, CompletedRequest, AssignedZones, auth);
+                success = await DataDALContext.postVolunteer(Name, Contact, PostalCode, CompletedRequest, auth);
                 if (success != true)
                 {
                     TempData["Message"] = "Failed";
