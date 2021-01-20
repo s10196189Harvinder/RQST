@@ -26,9 +26,17 @@ a.navbar-brand {
     padding-right: 10px;
 }
 
+.navbar{
+    border-radius: 0px !important;
+}
+
 .navbar, .navbar-brand {
     background-color: black;
     color: white;
+}
+
+.navbar-brand {
+    padding: 15px 0 !important;
 }
 
     .navbar > .container, .navbar > .container-fluid {
