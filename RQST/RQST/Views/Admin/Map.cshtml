@@ -122,7 +122,7 @@ itemamnt - styling for the item amnt
         }
         <script>
             var obj = {
-                name:@Html.Raw("\"" + request.User.Zone_ID + "\""),
+                name:@Html.Raw("\"" + request.User.ZoneID + "\""),
                 requests:@Html.Raw(request.Requests.Count()),
                 itemliststring:"@Html.Raw(words)"
             };

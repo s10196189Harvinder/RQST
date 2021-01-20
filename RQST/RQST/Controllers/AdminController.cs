@@ -224,11 +224,11 @@ namespace RQST.Controllers
             List<Area> arealist = new List<Area>();
             foreach (UserRequests req in userreqlist)                   //Further processing done to group user requests into Regions
             {
-                string areacode = req.User.Region_Code;                 //An area will have the larger region & its SubArea.
+                string areacode = req.User.RegionCode;                 //An area will have the larger region & its SubArea.
                 Area area = arealist.Find(x => x.AreaCode == areacode); //Checks if any area in the arealist already has the same region in it
                 if (area != null)
                 {
-                    SubArea subArea = area.SubArea.Find(x => x.Name == req.User.Zone_ID);   //If there is a request in the area, checks if there is a request in the same subzone
+                    SubArea subArea = area.SubArea.Find(x => x.Name == req.User.ZoneID);   //If there is a request in the area, checks if there is a request in the same subzone
                     if (subArea != null)
                     {
                         subArea.reqlist.Add(req);                                           //If there is already a request in the subzone, it adds the request to the subzone request list
@@ -236,7 +236,7 @@ namespace RQST.Controllers
                     else
                     {
                         SubArea nSubArea = new SubArea();           //If there is no request in the specified subzone, it creates a subarea(named differently, but the same thing in principle as a subzone) item
-                        nSubArea.Name = req.User.Zone_ID;
+                        nSubArea.Name = req.User.ZoneID;
                         nSubArea.reqlist.Add(req);                  //Add request to the subzone request list
                         area.SubArea.Add(nSubArea);                 //Add subzone to the area list
                     }
@@ -245,7 +245,7 @@ namespace RQST.Controllers
                 {
                     Area nArea = new Area(areacode);            //Create new area
                     SubArea nSubArea = new SubArea();           //Create subarea and populate with details
-                    nSubArea.Name = req.User.Zone_ID;
+                    nSubArea.Name = req.User.ZoneID;
                     nSubArea.reqlist.Add(req);
                     nArea.SubArea.Add(nSubArea);                //Add subarea to area
                     arealist.Add(nArea);                        //Add area to arealist
@@ -275,19 +275,26 @@ namespace RQST.Controllers
             List<Volunteer> volunteerlist = await DataDALContext.getVolunteer(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
             return View(volunteerlist);
         }
-        public async Task<IActionResult> AsgnVolunteerAsync()
+        public async Task<IActionResult> ViewVolAsync()
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            List<Volunteer> volunteerlist = await DataDALContext.getVolunteer(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            return View(volunteerlist);
+        }
+
+        public async Task<IActionResult> AsgnVolunteer(string? id)
         {
             string auth = (HttpContext.Session.GetString("auth"));
-            List<UserRequests> vollist = await DataDALContext.getuserrequests(auth);
-            return View(vollist);
+            Volunteer vol = await DataDALContext.getAVolunteer(auth,id);
+            return View(vol);
         }
-        //[HttpPost]        //NOT IN USE CURRENTLY, COMMENTED OUT DUE TO ERRORS
-        //public async Task<IActionResult> AsgnVolunteerAsync(Volunteer vol, string zoneList)
-        //{
-        //    string auth = (HttpContext.Session.GetString("auth"));
-        //    //List<UserRequests> vollist = await DataDALContext.assgnZone(auth, vol, zoneList);
-        //    return View(vollist);
-        //}
+        [HttpPost] 
+        public async Task<IActionResult> AsgnVolunteer(Volunteer vol)
+        {
+            string auth = (HttpContext.Session.GetString("auth"));
+            bool success = await DataDALContext.updateVolunteer(auth,vol);
+            return RedirectToAction("ViewVol");
+        }
         [HttpPost]
         public async Task<IActionResult> AddItemAsync(items items)
         {

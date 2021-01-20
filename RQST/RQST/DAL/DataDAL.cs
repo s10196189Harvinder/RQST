@@ -70,7 +70,7 @@ namespace RQST.DAL
             volunteer.Name = name;
             volunteer.Contact = Convert.ToInt32(contact);
             volunteer.RegionCode = regioncode;
-            volunteer.Zone = subzone;
+            volunteer.ZoneID = subzone.Name;
             volunteer.CompletedRequests = completedrequest;
             volunteer.AssignedZones = assignedzones; 
             volunteer.CompletedRequests = Convert.ToInt32(completedrequest);
@@ -212,9 +212,29 @@ namespace RQST.DAL
             List<Volunteer> volunteerlist = new List<Volunteer>();              
             foreach (var volunteer in volunteers)
             {
+                volunteer.Object.ID = volunteer.Key;
                 volunteerlist.Add(volunteer.Object);
             }
             return volunteerlist;                                               
+        }
+
+        public async Task<Volunteer> getAVolunteer(string auth,string id)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            Volunteer volunteer = await firebaseClient
+                        .Child("volunteer")
+                        .Child(id)
+                        .OnceSingleAsync<Volunteer>();
+            return volunteer;
+        }
+        public async Task<Boolean> updateVolunteer(string auth, Volunteer vol)
+        {
+            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            await firebaseClient
+                        .Child("volunteer")
+                        .Child(vol.ID)
+                        .PutAsync(vol);     //Need to prevent it from posting ID, but otherwise works
+            return true;
         }
 
         public async Task<IDictionary<string, items>> getitems(string auth) 
