@@ -5,6 +5,11 @@ using System.Threading.Tasks;
 
 namespace RQST.Models
 {
+    public class AreaRoot
+    {
+        public List<Area> arealist { get; set; } = new List<Area>();
+        public List<items> tItemsList { get; set; } = new List<items>();
+    }
     public class Area
     {
         public string AreaCode { get; set; }

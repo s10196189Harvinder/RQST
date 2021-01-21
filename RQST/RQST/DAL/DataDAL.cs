@@ -64,7 +64,7 @@ namespace RQST.DAL
                 .PostAsync(item);
             return true;
         }
-        public async Task<bool> postVolunteer(string name, string email, string password, string contact, string postalcode, Subzone zone, string auth)
+        public async Task<bool> postVolunteer(string name, string email, string password, string contact, string postalcode, Subzone zone, string assignedzone, string auth)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
             var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
@@ -86,6 +86,7 @@ namespace RQST.DAL
             volunteer.PostalCode = postalcode;
             volunteer.ZoneID = zone.Name;
             volunteer.RegionCode = zone.REGION_C;
+            volunteer.AssignedZones = assignedzone;
             await firebaseClient
                 .Child("volunteer")
                 .Child(res.User.LocalId)
@@ -136,7 +137,6 @@ namespace RQST.DAL
                     Request currReq = JsonConvert.DeserializeObject<Request>(requestID.Value.ToString());
                     currReq.ID = requestID.Key;
                     req.ReqList.Add(currReq);
-                    //req.ItemList.Add(currReq.Contents.) //Add items here or do another request?
                 }
                 reqList.Add(req);
             }
@@ -179,17 +179,15 @@ namespace RQST.DAL
                 {
                     Request currReq = JsonConvert.DeserializeObject<Request>(requestID.Value.ToString());
                     currReq.ID = requestID.Key;
-                    JObject bruh = (JObject)requestID.Value;
-                    JObject bruh2 = (JObject)bruh["content"];
-                    foreach (KeyValuePair<string, JToken> kvp in bruh2)
+                    foreach (KeyValuePair<string, int> kvp in currReq.Contents)
                     {
                         items newItem = itemList.Find(x => x.ID == kvp.Key);
-                        newItem.Requested = (int)kvp.Value;
-                        newItem.ID = kvp.Key;
-                        currReq.itemList.Add(newItem);
+                        items newerItem = new items(newItem.Name, kvp.Value, newItem.Icon, newItem.stock, newItem.BgCol);
+                        newerItem.ID = kvp.Key;
+                        currReq.addItem(newerItem);
                     }
                     req.ReqList.Add(currReq);
-                    //req.ItemList.Add(currReq.Contents.) //Add items here or do another request?
+                    
                 }
                 reqList.Add(req);
             }
@@ -199,62 +197,6 @@ namespace RQST.DAL
 
 
 
-        public async Task<List<UserRequests>> getuserrequests(string auth)//Method populates UserRequests, which shows Users' IDs, their requests,
-        {                                                                 //Their adddress, popstalcode,itemlist.
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
-            var userRequestsData = await firebaseClient                   //Gets all user requests under /userRequests    
-                        .Child("userRequests")
-                        .OnceAsync<IDictionary<string, string>>();
-            List<UserRequests> usersReqList = new List<UserRequests>();
-            var fbItemList = await firebaseClient                       //Obtains ALL possible items orderable from the FB
-                                    .Child("items")
-                                    .OnceAsync<items>();
-            List<items> itemList = new List<items>();                   //Populate an Itemlist
-            foreach (var item in fbItemList)
-            {
-                items itemActual = item.Object;
-                itemActual.ID = item.Key;
-                itemList.Add(itemActual);
-            }
-            foreach (var userID in userRequestsData)                //Loop through all user requests to populate it with useful data
-            {
-                List<items> userItemList = new List<items>();
-                UserRequests requests = new UserRequests();         //Get the details of the elderly who posted the request
-                Elderly user = await firebaseClient                 //This is so that we can get useful details such as Zone_ID, etc.
-                                .Child("elderly")
-                                .Child(userID.Key)
-                                .OnceSingleAsync<Elderly>();
-                requests.User = user;                               //Sets the owner of the request to the owner object
-
-                List<Request> userReqList = new List<Request>();    //A user may have multiple requests in one time - We create a list of requests for the user
-                foreach (var reqid in userID.Object)                //Foreach request in UserRequest (If you're confused about this refer to the firebase - under /userRequests/ users can have a lot of requests)
-                {
-                    Request req = await firebaseClient              //Obtains the full request data based on the request ID - We do this so we can access the content of the request
-                        .Child("requests")                          //NOTE - USING THIS IN A FOR LOOP MAY BE A BAD IDEA
-                        .Child(reqid.Value)                         //MIGHT BE BANDWIDTH INTENSIVE - IT'S SENDING LIKE 5 GETS FROM THE FIREBASE - ALSO MIGHT BE WHY THE MAP PAGE & REQUEST PAGE TAKE LONG TO LOAD
-                        .OnceSingleAsync<Request>();
-                    foreach (var item in req.Contents)              //Foreach item in the content of the request
-                    {
-                        items itemF = userItemList.Find(x => x.ID == item.Key);     //Looks for the item in the user item list
-                        if (itemF != null)
-                        {
-                            itemF.Requested += item.Value;                         //If it's found, it increases the "Requested" value of the item
-                        }
-                        else
-                        {
-                            items itemActual = itemList.Find(x => x.ID == item.Key);    //If it isn't, it looks for the item in the pre-populated general item list
-                            itemActual.Requested = item.Value;                          //The items' requested count is set to the value
-                            userItemList.Add(itemActual);                               //The item is added to the user item list
-                        }
-                    }
-                    userReqList.Add(req);                         //Adds the request to the User Request list - This is just to have a count of the requests
-                }
-                requests.Requests = userReqList;                  //The specific request will have a request list because users may make more than one request at once
-                requests.itemlist = userItemList;                 //The request item list is set - This will show the consolidated amount of items required
-                usersReqList.Add(requests);                       //Adds the request to the overall request list
-            }
-            return usersReqList;                                //Return the request list
-        }
 
         public async Task<List<Elderly>> getElderly(string auth)  //Obtains the elderly data
         {
@@ -340,16 +282,17 @@ namespace RQST.DAL
             return true;
         }
 
-        public async Task<IDictionary<string, items>> getitems(string auth)
+        public async Task<List<items>> getItems(string auth)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);
             var items = await firebaseClient
                         .Child("items")
                         .OnceAsync<items>();
-            IDictionary<string, items> itemlist = new Dictionary<string, items>(); //Turns all objects inside "requests" into Request objects
+            List<items> itemlist = new List<items>(); //Turns all objects inside "requests" into Request objects
             foreach (var item in items)
             {
-                itemlist.Add(item.Key, item.Object);
+                item.Object.ID = item.Key;
+                itemlist.Add(item.Object);
             }
             return itemlist;                                         //Returns the list of requests
         }

@@ -17,7 +17,7 @@ namespace RQST.Models
             Name = name;
             Requested = requested;
             Icon = icon;
-            Remaining = remaining;
+            stock = remaining;
             BgCol = bgCol;
         }
 
@@ -28,11 +28,12 @@ namespace RQST.Models
         public int Requested { get; set; }
         [JsonProperty("icon")]
         public string Icon { get; set; }
-        [JsonProperty("remaining")]
-        public int Remaining { get; set; }
+        [JsonProperty("stock")]
+        public int stock { get; set; }
         [JsonProperty("bgCol")]
         public string BgCol { get; set; }
         public string ID { get; set; }
+        
 
     }
 }

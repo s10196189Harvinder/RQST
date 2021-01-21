@@ -15,55 +15,69 @@
 @{
     var text = (System.IO.File.ReadAllText(@"wwwroot\subzones.geojson"));
     <script>
-let map;
-function initMap() {
-    var json = @Html.Raw(text);
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 1.3562033, lng: 103.8281415 },
-        zoom: 11,
-    })
-    map.data.addGeoJson(json);
-    map.data.setStyle(function (feature) {
-        var requests = feature.getProperty('requests');
-        var color = 'grey';
-        var weight = 0.3;
-        var opacity = 0.3
-        if (feature.getProperty('isColorful')) {
-            color = 'red';
-            weight = 2;
-            opacity = 0.7
-        }
-        return {
-            fillColor: color,
-            strokeWeight: weight,
-            fillOpacity: opacity
-        };
-    });
-    map.data.addListener('click', function (event) {
-        event.feature.setProperty('isColorful', true);
-    });
-    }
+        let map;
+        function initMap() {
+            var json = @Html.Raw(text);
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 1.3562033, lng: 103.8281415 },
+                zoom: 11,
+            })
+            map.data.addGeoJson(json);
+            map.data.setStyle(function (feature) {
+                var requests = feature.getProperty('requests');
+                var color = 'grey';
+                var weight = 0.3;
+                var opacity = 0.3
+                if (feature.getProperty('isColorful')) {
+                    color = 'red';
+                    weight = 2;
+                    opacity = 0.7
+                }
+                return {
+                    fillColor: color,
+                    strokeWeight: weight,
+                    fillOpacity: opacity
+                };
+            });
+            map.data.addListener('mouseover', function (event) {
+                map.data.overrideStyle(event.feature, {opacity:1, strokeWeight:2})
+            })
+            map.data.addListener('mouseout', function (event) {
+                map.data.revertStyle();
+            })
+            map.data.addListener('click', function (event) {
+                if (event.feature.getProperty('isColorful')) {
+                    event.feature.setProperty('isColorful', false);
+                }
+                else {
+                    event.feature.setProperty('isColorful', true);
+                }
+            });
+            }
     </script>
 }
 <script>
-var id = "@ViewBag.id";
-function getZones() {
-    var namelist = [];
-    map.data.forEach(function (feature) {
-        if (feature.getProperty('isColorful')) {
-            namelist.push(feature.getProperty("Name"));
-        }
-    });
-    var string = namelist.join();
-    $.ajax({
-        url: "/Admin/AsgnVolunteer?vol=" + id + "&zones=" + string,
-        type: "POST",
-        async: true,
-    }).done(function () {
-        window.location.pathname = "/Admin/ViewVol";
-    })
+    function updateText() {
 
-}
+    }
+    var id = "@ViewBag.id";
+    function getZones() {
+        var namelist = [];
+        map.data.forEach(function (feature) {
+            if (feature.getProperty('isColorful')) {
+                namelist.push(feature.getProperty("Name"));
+            }
+        });
+        var string = namelist.join();
+        $.ajax({
+            url: "/Admin/AsgnVolunteer?vol=" + id + "&zones=" + string,
+            type: "POST",
+            async: true,
+        }).done(function () {
+            window.location.pathname = "/Admin/ViewVol";
+        })
+    
+    }
 </script>
 <link href="~/css/asgnVolunteer.css" rel="stylesheet" />
 <div class="rightcontact">
