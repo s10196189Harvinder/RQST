@@ -142,7 +142,7 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Contact, string PostalCode, int CompletedRequest)
+        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Email, string Password, string Contact, string PostalCode, string AssignedZone)
         {
             if(ModelState.IsValid)
             {
@@ -198,14 +198,7 @@ namespace RQST.Controllers
                     TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad postal code. Sends error.
                     return View();
                 }
-                await DataDALContext.postVolunteer(Name, Contact, PostalCode, CompletedRequest, auth);
-                return RedirectToAction("_ViewVolunteer");
-                success = await DataDALContext.postVolunteer(Name, Contact, PostalCode, CompletedRequest, auth);
-                if (success != true)
-                {
-                    TempData["Message"] = "Failed";
-                    return View();
-                }
+                await DataDALContext.postVolunteer(Name, Email, Password, Contact, PostalCode, zone.properties, AssignedZone, auth);
                 return RedirectToAction("_ViewVolunteer");
             }
             else 
@@ -331,6 +324,52 @@ namespace RQST.Controllers
         public IActionResult AddItem()
         {
             return View();
+        }
+
+        public async Task<IActionResult> _EditElderlyAsync(string? id)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            Elderly eld = await DataDALContext.getAElderly(auth, id);
+            return View(eld);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> _EditElderlyAsync(Elderly eld)
+        {
+            if (ModelState.IsValid)
+            {
+                string auth = HttpContext.Session.GetString("auth");
+                bool success = await DataDALContext.updateElderly(auth, eld);
+                return RedirectToAction("_ViewElderly");
+            }
+
+            else
+            {
+                return View();
+            }
+        }
+
+        public async Task<IActionResult> _EditVolunteerAsync(string? id)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            Volunteer vol = await DataDALContext.getAVolunteer(auth, id);
+            return View(vol);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> _EditVolunteerAsync(Volunteer vol)
+        {
+            if (ModelState.IsValid)
+            {
+                string auth = HttpContext.Session.GetString("auth");
+                bool success = await DataDALContext.updateVolunteer(auth, vol);
+                return RedirectToAction("_ViewVolunteer");
+            }
+
+            else
+            {
+                return View();
+            }
         }
     }
 }

@@ -1,0 +1,52 @@
+﻿@model Volunteer
+@{
+    Layout = "AdminMenu";
+}
+
+<link href="~/css/editStyle.css" rel="stylesheet" />
+
+<body>
+    <form asp-action="_EditVolunteer" class="content-form">
+        <div class="contentform">
+            @*Name, Gender, Email, Password, Address, Postal Code, Special Needs, Create*@
+            <div class="top-form">
+                <h2>Edit Volunteer Information</h2>
+            </div>
+            <div class="leftcontact">
+                <div class="form-group">
+                    <p>Assigned Zones <span>*</span></p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="AssignedZones" class="form-control-plaintext" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Completed Requests <span>*</span></p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="CompletedRequests" class="form-control-plaintext" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Contact <span>*</span></p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="Contact" class="form-control-plaintext" />
+                </div>
+            </div>
+            <div class="rightcontact">
+                <div class="form-group">
+                    <p>Name <span>*</span></p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="Name" class="form-control-plaintext" />
+                </div>
+                <div class="form-group">
+                    <p>Postal Code <span>*</span></p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="PostalCode" class="form-control-plaintext" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Zone ID <span>*</span></p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="ZoneID" class="form-control-plaintext" readonly />
+                </div>
+            </div>
+            <input type="submit" value="Save" class="editBtn" />
+        </div>
+    </form>
+</body>

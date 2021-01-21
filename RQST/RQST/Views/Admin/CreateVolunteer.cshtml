@@ -23,11 +23,18 @@
                 </div>
                 <span asp-validation-for="Name" class="text-danger"></span>
                 <div class="form-group" style="margin-bottom:0 !important">
-                    <p>Contact <span>*</span></p>
+                    <p>E-mail <span>*</span></p>
                     <span id="icon-case"></span>
-                    <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required data-msg="Check your input on the fields: The 'Contact' field must be numerical." />
+                    <input type="email" asp-for="Email" class="inputbox" placeholder="Email" required data-msg="Check your input on the fields: The 'Email' field must be completed." />
                 </div>
-                <span asp-validation-for="Contact" class="text-danger"></span>
+                <span asp-validation-for="Email" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
+
+                <div class="form-group" style="margin-bottom:0 !important">
+                    <p>Password <span>*</span></p>
+                    <span id="icon-case"></span>
+                    <input type="password" asp-for="Password" class="inputbox" placeholder="********" required />
+                </div>
+                <span asp-validation-for="Password" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
             </div>
             <div class="rightcontact">
                 <div class="form-group" style="margin-bottom:0 !important">
@@ -36,12 +43,12 @@
                     <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required data-msg="Check your input on the fields: The 'Postal Code' field must be completed." />
                 </div>
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
-                <div class="form-group" style="margin-bottom:0">
-                    <p>Completed Request<span>*</span></p>
+                <div class="form-group" style="margin-bottom:0 !important">
+                    <p>Contact <span>*</span></p>
                     <span id="icon-case"></span>
-                    <input type="text" asp-for="CompletedRequests" class="inputbox" placeholder="No. of Completed Request" data-msg="Check your input on the fields: The 'Complated Request' field must be numerical." />
+                    <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required data-msg="Check your input on the fields: The 'Contact' field must be numerical." />
                 </div>
-                <span asp-validation-for="CompletedRequests" class="text-danger"></span>
+                <span asp-validation-for="Contact" class="text-danger"></span>
             </div>
             <input type="submit" value="Create" class="createBtn" />
         </div>

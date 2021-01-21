@@ -10,24 +10,35 @@
                 <tr>
                     <th>Name</th>
                     <th>Contact</th>
-                    <th>Attendance</th>
-                    <th>Status</th>
+                    <th>Zone ID</th>
+                    <th>Assigned Zone</th>
+                    <th>Completed Request</th>
+                    <th>Edit Information</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (Volunteer volunteer in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => volunteer.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => volunteer.Contact)
-                        </td>
-                        <td style="font-weight: bold;">
-                            <a asp-controller="Admin" asp-action="" asp-route-id="">Edit Volunteer Info</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => volunteer.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => volunteer.Contact)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => volunteer.ZoneID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => volunteer.AssignedZones)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => volunteer.CompletedRequests)
+                    </td>
+                    <td style="font-weight: bold;">
+                        <a asp-controller="Admin" asp-action="_EditVolunteer" asp-route-id="@volunteer.ID">Edit Volunteer Info</a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
