@@ -142,7 +142,7 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Contact, string PostalCode, int CompletedRequest)
+        public async Task<ActionResult> CreateVolunteerAsync(string Name, string Email, string Password, string Contact, string PostalCode)
         {
             if(ModelState.IsValid)
             {
@@ -198,14 +198,7 @@ namespace RQST.Controllers
                     TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad postal code. Sends error.
                     return View();
                 }
-                await DataDALContext.postVolunteer(Name, Contact, PostalCode, CompletedRequest, auth);
-                return RedirectToAction("_ViewVolunteer");
-                success = await DataDALContext.postVolunteer(Name, Contact, PostalCode, CompletedRequest, auth);
-                if (success != true)
-                {
-                    TempData["Message"] = "Failed";
-                    return View();
-                }
+                await DataDALContext.postVolunteer(Name, Email, Password, Contact, PostalCode, zone.properties, auth);
                 return RedirectToAction("_ViewVolunteer");
             }
             else 

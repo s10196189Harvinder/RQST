@@ -13,6 +13,12 @@ namespace RQST.Models
         public Volunteer() { }
         public string AssignedZones { get; set; }
 
+        [EmailAddress]
+        [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")]
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+
         public string RegionCode { get; set; }
 
         [JsonPropertyName("CompletedRequests")]

@@ -64,17 +64,32 @@ namespace RQST.DAL
                 .PostAsync(item);
             return true;
         }
-        public async Task<bool> postVolunteer(string name, string contact, string postalcode, int completedrequest, string auth)
+        public async Task<bool> postVolunteer(string name, string email, string password, string contact, string postalcode, Subzone zone, string auth)
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
+            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
+            var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
+            FirebaseAuthLink res;
+            try
+            {
+                res = await ap.CreateUserWithEmailAndPasswordAsync(email, password);      //Attemps to create user with given email & password
+            }
+            catch
+            {
+
+                return false;
+            }
             Volunteer volunteer = new Volunteer();
             volunteer.Name = name;
+            volunteer.Email = email;
+            volunteer.Password = password;
             volunteer.Contact = Convert.ToInt32(contact);
             volunteer.PostalCode = postalcode;
-            volunteer.CompletedRequests = Convert.ToInt32(completedrequest);
-            var volreq = await firebaseClient
+            volunteer.ZoneID = zone.Name;
+            volunteer.RegionCode = zone.REGION_C;
+            await firebaseClient
                 .Child("volunteer")
-                .PostAsync(volunteer);
+                .Child(res.User.LocalId)
+                .PutAsync(volunteer);
             return true;
         }
 
