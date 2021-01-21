@@ -64,7 +64,7 @@ namespace RQST.DAL
                 .PostAsync(item);
             return true;
         }
-        public async Task<bool> postVolunteer(string name, string email, string password, string contact, string postalcode, Subzone zone, string auth)
+        public async Task<bool> postVolunteer(string name, string email, string password, string contact, string postalcode, Subzone zone, string assignedzone, string auth)
         {
             FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
             var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
@@ -86,6 +86,7 @@ namespace RQST.DAL
             volunteer.PostalCode = postalcode;
             volunteer.ZoneID = zone.Name;
             volunteer.RegionCode = zone.REGION_C;
+            volunteer.AssignedZones = assignedzone;
             await firebaseClient
                 .Child("volunteer")
                 .Child(res.User.LocalId)
