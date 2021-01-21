@@ -7,8 +7,10 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <h2>Assign Volunteer</h2>
-<div id="map">
+<div class="leftcontact">
+    <div id="map">
 
+    </div>
 </div>
 @{
     var text = (System.IO.File.ReadAllText(@"wwwroot\subzones.geojson"));
@@ -84,50 +86,52 @@
     }
 </script>
 <link href="~/css/asgnVolunteer.css" rel="stylesheet" />
-<form class="content-form">
-    <div class="contentform">
-        <div class="leftcontact">
-            <div class="form-group" style="margin-bottom:0 !important">
-                <p>ID <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="ID" class="inputbox" readonly />
+<div class="rightcontact">
+    <form class="content-form">
+        <div class="contentform">
+            <div class="leftcontact">
+                <div class="form-group" style="margin-bottom:0 !important">
+                    <p>ID</p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="ID" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Name</p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="Name" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Contact</p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="Contact" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Assigned Zones</p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="AssignedZones" class="inputbox readonly" readonly />
+                </div>
             </div>
-            <div class="form-group">
-                <p>Name <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="Name" class="inputbox" readonly />
+            <div class="rightcontact">
+                <div class="form-group">
+                    <p>Postal Code</p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="PostalCode" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Zone ID</p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="ZoneID" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Region Code</p>
+                    <span id="icon-case"></span>
+                    <input type="text" asp-for="RegionCode" class="inputbox readonly" readonly />
+                </div>
             </div>
-            <div class="form-group">
-                <p>Contact <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="Contact" class="inputbox" readonly />
-            </div>
-            <div class="form-group">
-                <p>Assigned Zones <span>*</span></p>
-                <span id="icon-case"></span>
-                <input id="asgnzone"type="text" asp-for="AssignedZones" class="inputbox" readonly />
-            </div>
+            <button onclick="getZones()" type="button" class="getZone">Assign Zone</button>
         </div>
-        <div class="rightcontact">
-            <div class="form-group">
-                <p>Postal Code <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="PostalCode" class="inputbox" readonly />
-            </div>
-            <div class="form-group">
-                <p>Zone ID <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="ZoneID" class="inputbox" readonly />
-            </div>
-            <div class="form-group">
-                <p>Region Code <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="RegionCode" class="inputbox" readonly />
-            </div>
-        </div>
-        <button onclick="getZones()" type="button" class="getZone">Assign Zone</button>
-    </div>
-</form>
+    </form>
+</div>
 
 <script>
     zones = "@Model.AssignedZones";

@@ -41,7 +41,6 @@ form {
     border-radius: 5px;
     max-width: 700px;
     width: 100%;
-    margin: 5% auto;
     background-color: #353535;
     overflow: hidden;
     border-bottom: 4px solid #353535;
@@ -49,6 +48,10 @@ form {
 
 p span {
     color: #F00;
+}
+
+.readonly{
+    background: lightgray;
 }
 
 p {
