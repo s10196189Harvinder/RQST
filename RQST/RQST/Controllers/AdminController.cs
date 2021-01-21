@@ -224,13 +224,13 @@ namespace RQST.Controllers
             string auth = HttpContext.Session.GetString("auth");
             SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
             List<Request_NEW> reqList = await DataDALContext.getUserRequestsMIN(auth);
-            List<Area> areaList = new List<Area>();
+            AreaRoot areaList = new AreaRoot();
             List<Elderly> elderlyList = await DataDALContext.getElderly(auth);
             foreach(Request_NEW req in reqList)
             {
                 SubzoneRoot zone = SZList.features.Find(x => x.properties.Name == req.ZoneID);
                 req.RegionCode = zone.properties.REGION_C;
-                Area area = areaList.Find(x => x.AreaCode == req.RegionCode);
+                Area area = areaList.arealist.Find(x => x.AreaCode == req.RegionCode);
                 if (area != null)
                 {
                     area.ReqList.Add(req);
@@ -239,7 +239,7 @@ namespace RQST.Controllers
                 {
                     Area nArea = new Area(req.RegionCode);
                     nArea.ReqList.Add(req);
-                    areaList.Add(nArea);
+                    areaList.arealist.Add(nArea);
                 }
                 foreach(Request request in req.ReqList)
                 {
@@ -247,6 +247,7 @@ namespace RQST.Controllers
                     request.Sender = elder;
                 }
             }
+            areaList.tItemsList = await DataDALContext.getItems(auth);
             return View(areaList);
         }
         public async Task<IActionResult> AddItoC(string catid)      //Add item to category page

@@ -28,5 +28,6 @@ namespace RQST.Models
 
         [Newtonsoft.Json.JsonIgnore]
         public string ID { get; set; }
+
     }
 }

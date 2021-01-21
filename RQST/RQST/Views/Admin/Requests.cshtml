@@ -1,4 +1,4 @@
-﻿@model List<Area>
+﻿@model AreaRoot
 @{
     Layout = "~/Views/Shared/AdminMenu.cshtml";
 }
@@ -6,8 +6,33 @@
 <link href="~/css/request.css" rel="stylesheet" />
 <div>
     <div>
+        <h2>Total Item List</h2>
+        <table class="content-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Requested</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (items item in Model.tItemsList)
+                {
+                    <tr>
+                        <td><strong>@item.ID</strong></td> @*Items*@
+                        <td><strong>@item.Icon  @item.Name</strong></td> @*Item Amt*@
+                        <td><strong>@item.Requested</strong></td>
+                        <td><strong>@item.stock</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
         @{
-            foreach (Area area in Model)
+            List<items> itemsList = new List<items>();
+            foreach (Area area in Model.arealist)
             {
                 <div>
                     <div class="titleDisplay">
@@ -17,6 +42,18 @@
 
                     @foreach (Request_NEW req in area.ReqList)
                     {
+                        foreach (items item in req.ItemList)
+                        {
+                            items itemf = itemsList.Find(x => x.ID == item.ID);
+                            if (itemf != null)
+                            {
+                                itemf.Requested += item.Requested;
+                            }
+                            else
+                            {
+                                itemsList.Add(item);
+                            }
+                        }
                         <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
                         <div class="subarea-display">
                             <h5>@req.ZoneID</h5>
@@ -67,6 +104,7 @@
             }
         }
     </div>
+
 </div>
 <script>
     //var acc = document.getElementsByClassName("display-table");

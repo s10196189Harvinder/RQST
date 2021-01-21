@@ -23,6 +23,18 @@ namespace RQST.Models
 
         public float dateCreated { get; set; }
         public List<items> itemList { get; set; } = new List<items>();
+        public void addItem(items item)
+        {
+            items itemF = itemList.Find(x => x.ID == item.ID);
+            if (itemF != null)
+            {
+                itemF.Requested += item.Requested;
+            }
+            else
+            {
+                itemList.Add(item);
+            }
+        }
     }
 
 }
