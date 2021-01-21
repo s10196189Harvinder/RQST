@@ -14,7 +14,7 @@
                     <th>Name</th>
                     <th>Requested</th>
                     <th>Stock</th>
-                    <th>Stock Percentage</th>
+                    <th>Percentage</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,8 +25,12 @@
                         <td><strong>@item.Icon  @item.Name</strong></td> @*Item Amt*@
                         <td><strong>@item.Requested</strong></td>
                         <td><strong>@item.stock</strong></td>
-                        <td>@item.Requested/@item.stock</td>
-                    </tr>
+                        @{ 
+                            var num = Convert.ToDouble(item.Requested) / Convert.ToDouble(item.stock);
+                        }
+                        <td><strong>@num</strong></td>
+
+              </tr>
                 }
             </tbody>
         </table>
@@ -109,7 +113,6 @@
 
 </div>
 <script>
-
     //var acc = document.getElementsByClassName("display-table");
     //var i;
     //function myFunction() {
