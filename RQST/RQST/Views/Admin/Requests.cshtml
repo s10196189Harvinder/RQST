@@ -20,17 +20,17 @@
             <tbody>
                 @foreach (items item in Model.tItemsList)
                 {
-                    <tr>
-                        <td><strong>@item.ID</strong></td> @*Items*@
-                        <td><strong>@item.Icon  @item.Name</strong></td> @*Item Amt*@
-                        <td><strong>@item.Requested</strong></td>
-                        <td><strong>@item.stock</strong></td>
-                        @{ 
-                            var num = Convert.ToDouble(item.Requested) / Convert.ToDouble(item.stock);
-                        }
-                        <td><strong>@num</strong></td>
+                <tr>
+                    <td><strong>@item.ID</strong></td> @*Items*@
+                    <td><strong>@item.Icon  @item.Name</strong></td> @*Item Amt*@
+                    <td><strong>@item.Requested</strong></td>
+                    <td><strong>@item.stock</strong></td>
+                    @{
+                        var num = (Convert.ToDouble(item.Requested) / Convert.ToDouble(item.stock)).ToString("0%");
+                    }
+                    <td class="progress-bar" role="progressbar" aria-valuenow="@num" aria-valuemin="0" aria-valuemax="100"></td>
 
-              </tr>
+                </tr>
                 }
             </tbody>
         </table>
