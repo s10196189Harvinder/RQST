@@ -324,5 +324,51 @@ namespace RQST.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> _EditElderlyAsync(string? id)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            Elderly eld = await DataDALContext.getAElderly(auth, id);
+            return View(eld);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> _EditElderlyAsync(Elderly eld)
+        {
+            if (ModelState.IsValid)
+            {
+                string auth = HttpContext.Session.GetString("auth");
+                bool success = await DataDALContext.updateElderly(auth, eld);
+                return RedirectToAction("_ViewElderly");
+            }
+
+            else
+            {
+                return View();
+            }
+        }
+
+        public async Task<IActionResult> _EditVolunteerAsync(string? id)
+        {
+            string auth = HttpContext.Session.GetString("auth");
+            Volunteer vol = await DataDALContext.getAVolunteer(auth, id);
+            return View(vol);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> _EditVolunteerAsync(Volunteer vol)
+        {
+            if (ModelState.IsValid)
+            {
+                string auth = HttpContext.Session.GetString("auth");
+                bool success = await DataDALContext.updateVolunteer(auth, vol);
+                return RedirectToAction("_ViewVolunteer");
+            }
+
+            else
+            {
+                return View();
+            }
+        }
     }
 }

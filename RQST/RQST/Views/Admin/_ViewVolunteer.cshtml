@@ -25,7 +25,7 @@
                             @Html.DisplayFor(modelItem => volunteer.Contact)
                         </td>
                         <td style="font-weight: bold;">
-                            <a asp-controller="Admin" asp-action="" asp-route-id="">Edit Volunteer Info</a>
+                            <a asp-controller="Admin" asp-action="_EditVolunteer" asp-route-id="@volunteer.ID">Edit Volunteer Info</a>
                         </td>
                     </tr>
                 }
