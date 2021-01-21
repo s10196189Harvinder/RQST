@@ -14,6 +14,7 @@
                     <th>Name</th>
                     <th>Requested</th>
                     <th>Stock</th>
+                    <th>Percentage</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +25,12 @@
                         <td><strong>@item.Icon  @item.Name</strong></td> @*Item Amt*@
                         <td><strong>@item.Requested</strong></td>
                         <td><strong>@item.stock</strong></td>
-                    </tr>
+                        @{ 
+                            var num = Convert.ToDouble(item.Requested) / Convert.ToDouble(item.stock);
+                        }
+                        <td><strong>@num</strong></td>
+
+              </tr>
                 }
             </tbody>
         </table>

@@ -15,14 +15,15 @@
     <script>
         let map;
         function initMap() {
+            var infowindow = new google.maps.InfoWindow();
             var json = @Html.Raw(text);
             map = new google.maps.Map(document.getElementById("map"), {
                 center: { lat: 1.3562033, lng: 103.8281415 },
                 zoom: 11,
             })
+            map.setOptions({ streetViewControl: false });
             map.data.addGeoJson(json);
             map.data.setStyle(function (feature) {
-                var requests = feature.getProperty('requests');
                 var color = 'grey';
                 var weight = 0.3;
                 var opacity = 0.3
@@ -38,7 +39,10 @@
                 };
             });
             map.data.addListener('mouseover', function (event) {
-                map.data.overrideStyle(event.feature, {opacity:1, strokeWeight:2})
+                map.data.overrideStyle(event.feature, { opacity: 1, strokeWeight: 2 })
+                infowindow.setContent(event.feature.getProperty("Name") + ": " + event.feature.getProperty("SUBZONE_N"));
+                infowindow.setPosition(event.latLng);
+                infowindow.open(map);
             })
             map.data.addListener('mouseout', function (event) {
                 map.data.revertStyle();
@@ -46,9 +50,11 @@
             map.data.addListener('click', function (event) {
                 if (event.feature.getProperty('isColorful')) {
                     event.feature.setProperty('isColorful', false);
+                    removeVal(event.feature.getProperty("Name"));
                 }
                 else {
                     event.feature.setProperty('isColorful', true);
+                    addVal(event.feature.getProperty("Name"));
                 }
             });
             }
@@ -99,7 +105,7 @@
             <div class="form-group">
                 <p>Assigned Zones <span>*</span></p>
                 <span id="icon-case"></span>
-                <input type="text" asp-for="AssignedZones" class="inputbox" readonly />
+                <input id="asgnzone"type="text" asp-for="AssignedZones" class="inputbox" readonly />
             </div>
         </div>
         <div class="rightcontact">
@@ -122,5 +128,45 @@
         <button onclick="getZones()" type="button" class="getZone">Assign Zone</button>
     </div>
 </form>
+
+<script>
+    zones = "@Model.AssignedZones";
+    zonelist = zones.split(",");
+    window.onload = function () {
+        map.data.forEach(function (feature) {
+            var SD_NAME = feature.getProperty('Name');
+            var contains = (zonelist.indexOf(SD_NAME) > -1);
+            console.log(contains);
+            if (contains) {
+                feature.setProperty("isColorful", true);
+            }
+        });
+    };
+    function addVal(text) {
+        var value = document.getElementById("asgnzone").value;
+        if (value == "") {
+            document.getElementById("asgnzone").value = text;
+        }
+        else {
+            document.getElementById("asgnzone").value = (document.getElementById("asgnzone").value + ","+text);
+        }
+    }
+    function removeVal(text) {
+        var value = document.getElementById("asgnzone").value;
+        if (value == text) {
+            document.getElementById("asgnzone").value = "";
+        }
+        else {
+            namelist = value.split(",");
+            var index = namelist.indexOf(text);
+            namelist.splice(index, 1);
+            document.getElementById("asgnzone").value = namelist.toString();
+        }
+    }
+</script>
+
+
+
+
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk&callback=initMap"></script>
