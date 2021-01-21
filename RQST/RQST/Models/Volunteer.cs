@@ -10,6 +10,7 @@ namespace RQST.Models
 {
     public class Volunteer
     {
+        public Volunteer() { }
         public string AssignedZones { get; set; }
 
         public string RegionCode { get; set; }
