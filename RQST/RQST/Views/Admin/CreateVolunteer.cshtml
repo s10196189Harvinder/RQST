@@ -5,7 +5,7 @@
     Layout = "AdminMenu";
 }
 <link href="~/css/volunteerstyle.css" rel="stylesheet" />
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <body>
     <form asp-action="CreateVolunteer" class="content-form">
@@ -18,20 +18,20 @@
             <div class="leftcontact">
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Name <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">person</span>
                     <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
                 </div>
                 <span asp-validation-for="Name" class="text-danger"></span>
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>E-mail <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">email</span>
                     <input type="email" asp-for="Email" class="inputbox" placeholder="Email" required data-msg="Check your input on the fields: The 'Email' field must be completed." />
                 </div>
                 <span asp-validation-for="Email" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
 
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Password <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">vpn_key</span>
                     <input type="password" asp-for="Password" class="inputbox" placeholder="********" required />
                 </div>
                 <span asp-validation-for="Password" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
@@ -39,13 +39,13 @@
             <div class="rightcontact">
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Postal Code <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons"id="icon-case">add_location_alt</span>
                     <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required data-msg="Check your input on the fields: The 'Postal Code' field must be completed." />
                 </div>
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Contact <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons"id="icon-case">phone</span>
                     <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required data-msg="Check your input on the fields: The 'Contact' field must be numerical." />
                 </div>
                 <span asp-validation-for="Contact" class="text-danger"></span>

@@ -117,6 +117,10 @@ i {
     font-size: 18px;
 }
 
+.createBtn:hover {
+    opacity: 0.8;
+}
+
 .top-form {
 }
 

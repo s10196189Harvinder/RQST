@@ -21,6 +21,9 @@ namespace RQST.Models
         [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")]
         public string Email { get; set; }
 
+        public string Contact { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
         public string Password { get; set; }
 
         public string Address { get; set; }
@@ -49,11 +52,12 @@ namespace RQST.Models
         public string ZoneID { get; set; }
         public string RegionCode { get; set; }
 
-        public Elderly(string name, char gender, string email, string address, string postalcode, string specialneeds, string zone, string regionCode)
+        public Elderly(string name, char gender, string email, string contact, string address, string postalcode, string specialneeds, string zone, string regionCode)
         {
             Name = name;
             Gender = gender;
             Email = email;
+            Contact = contact;
             Address = address;
             PostalCode = postalcode;
             SpecialNeeds = specialneeds;
