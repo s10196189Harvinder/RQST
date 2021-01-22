@@ -6,107 +6,266 @@
 <meta charset="UTF-8">
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<h2>Assign Volunteer</h2>
-<div id="map">
+<link href="~/css/asgnVolunteer.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+    /* The popup bubble styling. */
+    .popup-bubble {
+        /* Position the bubble centred-above its parent. */
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -100%);
+        /* Style the bubble. */
+        background-color: white;
+        padding: 5px;
+        border-radius: 5px;
+        font-family: sans-serif;
+        overflow-y: auto;
+        max-height: 60px;
+        box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.5);
+    }
 
+    /* The parent of the bubble. A zero-height div at the top of the tip. */
+    .popup-bubble-anchor {
+        /* Position the div a fixed distance above the tip. */
+        position: absolute;
+        width: 100%;
+        bottom: 8px;
+        left: 0;
+    }
+    /* JavaScript will position this div at the bottom of the popup tip. */
+    .popup-container {
+        cursor: auto;
+        height: 10px;
+        position: absolute;
+        /* The max width of the info window. */
+        width: 200px;
+    }
+
+</style>
+<h2>Assign Volunteer</h2>
+<div class="leftcontact">
+    <div id="map">
+
+    </div>
+    <div id="content"></div>
 </div>
 @{
     var text = (System.IO.File.ReadAllText(@"wwwroot\subzones.geojson"));
     <script>
-let map;
-function initMap() {
-    var json = @Html.Raw(text);
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 1.3562033, lng: 103.8281415 },
-        zoom: 11,
-    })
-    map.data.addGeoJson(json);
-    map.data.setStyle(function (feature) {
-        var requests = feature.getProperty('requests');
-        var color = 'grey';
-        var weight = 0.3;
-        var opacity = 0.3
-        if (feature.getProperty('isColorful')) {
-            color = 'red';
-            weight = 2;
-            opacity = 0.7
-        }
-        return {
-            fillColor: color,
-            strokeWeight: weight,
-            fillOpacity: opacity
-        };
-    });
-    map.data.addListener('click', function (event) {
-        event.feature.setProperty('isColorful', true);
-    });
-    }
+        let map, popup, Popup, infowindow, bruh;
+        function initMap() {
+            class Popup extends google.maps.OverlayView {
+                constructor(position,content) {
+                    super();
+                    this.position = position;
+                    content.classList.add("popup-bubble");
+                    // This zero-height div is positioned at the bottom of the bubble.
+                    const bubbleAnchor = document.createElement("div");
+                    bubbleAnchor.classList.add("popup-bubble-anchor");
+                    bubbleAnchor.appendChild(content);
+                    // This zero-height div is positioned at the bottom of the tip.
+                    this.containerDiv = document.createElement("div");
+                    this.containerDiv.classList.add("popup-container");
+                    this.containerDiv.appendChild(bubbleAnchor);
+                    // Optionally stop clicks, etc., from bubbling up to the map.
+                    Popup.preventMapHitsAndGesturesFrom(this.containerDiv);
+                }
+                /** Called when the popup is added to the map. */
+                onAdd() {
+                    this.getPanes().floatPane.appendChild(this.containerDiv);
+                }
+                /** Called when the popup is removed from the map. */
+                onRemove() {
+                    if (this.containerDiv.parentElement) {
+                        bruh = this.containerDiv;
+                        console.log(bruh);
+                        var cnt = this.containerDiv.children[0].children[0];
+                        cnt.classList.remove("popup-bubble")
+                        cnt.innerHTML = "";
+                        $(this.containerDiv).replaceWith(cnt);
+                        //this.containerDiv.parentElement.parentElement.removeChild(this.containerDiv.parentElement);
+                    }
+                }
+                /** Called each frame when the popup needs to draw itself. */
+                draw() {
+                    const divPosition = this.getProjection().fromLatLngToDivPixel(
+                        this.position
+                    );
+                    // Hide the popup when it is far out of view.
+                    const display =
+                        Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000
+                            ? "block"
+                            : "none";
+
+                    if (display === "block") {
+                        this.containerDiv.style.left = divPosition.x + "px";
+                        this.containerDiv.style.top = divPosition.y + "px";
+                    }
+
+                    if (this.containerDiv.style.display !== display) {
+                        this.containerDiv.style.display = display;
+                    }
+                }
+            }
+            var json = @Html.Raw(text);
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 1.3562033, lng: 103.8281415 },
+                zoom: 11,
+            })
+            map.setOptions({ streetViewControl: false });
+            map.data.addGeoJson(json);
+            map.data.setStyle(function (feature) {
+                var color = 'grey';
+                var weight = 0.3;
+                var opacity = 0.3
+                if (feature.getProperty('isColorful')) {
+                    color = 'red';
+                    weight = 2;
+                    opacity = 0.7
+                }
+                return {
+                    fillColor: color,
+                    strokeWeight: weight,
+                    fillOpacity: opacity
+                };
+            });
+            var overlay = new google.maps.OverlayView();
+            overlay.draw = function () { };
+            overlay.setMap(map);
+            map.data.addListener('mouseover', function (event) {
+                map.data.overrideStyle(event.feature, { opacity: 1, strokeWeight: 2 })
+                var point = overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(316.8, 50));
+                document.getElementById("content").innerHTML = (event.feature.getProperty("Name") + ": " + event.feature.getProperty("SUBZONE_N"));
+                infowindow = new Popup(point, document.getElementById("content"));
+                infowindow.setMap(map);
+            })
+            map.data.addListener('mouseout', function (event) {
+                map.data.revertStyle();
+                infowindow.setMap(null);
+            })
+            map.data.addListener('click', function (event) {
+                if (event.feature.getProperty('isColorful')) {
+                    event.feature.setProperty('isColorful', false);
+                    removeVal(event.feature.getProperty("Name"));
+                }
+                else {
+                    event.feature.setProperty('isColorful', true);
+                    addVal(event.feature.getProperty("Name"));
+                }
+            });
+            }
     </script>
 }
 <script>
-var id = "@ViewBag.id";
-function getZones() {
-    var namelist = [];
-    map.data.forEach(function (feature) {
-        if (feature.getProperty('isColorful')) {
-            namelist.push(feature.getProperty("Name"));
-        }
-    });
-    var string = namelist.join();
-    $.ajax({
-        url: "/Admin/AsgnVolunteer?vol=" + id + "&zones=" + string,
-        type: "POST",
-        async: true,
-    }).done(function () {
-        window.location.pathname = "/Admin/ViewVol";
-    })
+    function updateText() {
 
-}
+    }
+    var id = "@ViewBag.id";
+    function getZones() {
+        var namelist = [];
+        map.data.forEach(function (feature) {
+            if (feature.getProperty('isColorful')) {
+                namelist.push(feature.getProperty("Name"));
+            }
+        });
+        var string = namelist.join();
+        $.ajax({
+            url: "/Admin/AsgnVolunteer?vol=" + id + "&zones=" + string,
+            type: "POST",
+            async: true,
+        }).done(function () {
+            window.location.pathname = "/Admin/ViewVol";
+        })
+    
+    }
 </script>
-<link href="~/css/asgnVolunteer.css" rel="stylesheet" />
-<form class="content-form">
-    <div class="contentform">
-        <div class="leftcontact">
-            <div class="form-group" style="margin-bottom:0 !important">
-                <p>ID <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="ID" class="inputbox" readonly />
+
+<div class="rightcontact">
+    <form class="content-form">
+        <div class="contentform">
+            <div class="leftcontact">
+                <div class="form-group" style="margin-bottom:0 !important">
+                    <p>ID</p>
+                    <span class="material-icons" id="icon-case">assignment_ind</span>
+                    <input type="text" asp-for="ID" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Name</p>
+                    <span class="material-icons" id="icon-case">person</span>
+                    <input type="text" asp-for="Name" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Contact</p>
+                    <span class="material-icons" id="icon-case">phone</span>>
+                    <input type="text" asp-for="Contact" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Assigned Zones</p>
+                    <span class="material-icons" id="icon-case">map</span>
+                    <input type="text" asp-for="AssignedZones" class="inputbox readonly" id="asgnzone" readonly />
+                </div>
             </div>
-            <div class="form-group">
-                <p>Name <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="Name" class="inputbox" readonly />
+            <div class="rightcontact">
+                <div class="form-group">
+                    <p>Postal Code</p>
+                    <span class="material-icons" id="icon-case">add_location_alt</span>
+                    <input type="text" asp-for="PostalCode" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Zone ID</p>
+                    <span class="material-icons" id="icon-case">pin_drop</span>
+                    <input type="text" asp-for="ZoneID" class="inputbox readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Region Code</p>
+                    <span class="material-icons" id="icon-case">place</span>
+                    <input type="text" asp-for="RegionCode" class="inputbox readonly" readonly />
+                </div>
             </div>
-            <div class="form-group">
-                <p>Contact <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="Contact" class="inputbox" readonly />
-            </div>
-            <div class="form-group">
-                <p>Assigned Zones <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="AssignedZones" class="inputbox" readonly />
-            </div>
+            <button onclick="getZones()" type="button" class="getZone">Assign Zone</button>
         </div>
-        <div class="rightcontact">
-            <div class="form-group">
-                <p>Postal Code <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="PostalCode" class="inputbox" readonly />
-            </div>
-            <div class="form-group">
-                <p>Zone ID <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="ZoneID" class="inputbox" readonly />
-            </div>
-            <div class="form-group">
-                <p>Region Code <span>*</span></p>
-                <span id="icon-case"></span>
-                <input type="text" asp-for="RegionCode" class="inputbox" readonly />
-            </div>
-        </div>
-        <button onclick="getZones()" type="button" class="getZone">Assign Zone</button>
-    </div>
-</form>
+    </form>
+</div>
+
+<script>
+    zones = "@Model.AssignedZones";
+    zonelist = zones.split(",");
+    window.onload = function () {
+        map.data.forEach(function (feature) {
+            var SD_NAME = feature.getProperty('Name');
+            var contains = (zonelist.indexOf(SD_NAME) > -1);
+            if (contains) {
+                feature.setProperty("isColorful", true);
+            }
+        });
+    };
+    function addVal(text) {
+        var value = document.getElementById("asgnzone").value;
+        if (value == "") {
+            document.getElementById("asgnzone").value = text;
+        }
+        else {
+            document.getElementById("asgnzone").value = (document.getElementById("asgnzone").value + ","+text);
+        }
+    }
+    function removeVal(text) {
+        var value = document.getElementById("asgnzone").value;
+        if (value == text) {
+            document.getElementById("asgnzone").value = "";
+        }
+        else {
+            namelist = value.split(",");
+            var index = namelist.indexOf(text);
+            namelist.splice(index, 1);
+            document.getElementById("asgnzone").value = namelist.toString();
+        }
+    }
+</script>
+
+
+
+
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA3QoucpamS6ylPkzBSJBXmbt5ZH7Np6Jk&callback=initMap"></script>

@@ -37,6 +37,10 @@ form {
     border-bottom: 4px solid #353535;
 }
 
+.readonly {
+    background: lightgray !important;
+}
+
 p span {
     color: #F00;
 }

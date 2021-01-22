@@ -4,6 +4,8 @@
     }
 
 <link href="~/css/editStyle.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
 <body>
     <form asp-action="_EditElderly" class="content-form">
         <div class="contentform">
@@ -15,41 +17,55 @@
             <div class="leftcontact">
                 <div class="form-group">
                     <p>Name <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">person</span>
                     <input type="text" asp-for="Name" class="form-control-plaintext" />
                 </div>
                 <div class="form-group">
                     <p>Gender <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">wc</span>
                     <input type="text" asp-for="Gender" class="form-control-plaintext" />
                 </div>
                 <div class="form-group">
                     <p>E-mail <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">email</span>
                     <input type="text" asp-for="Email" class="form-control-plaintext" />
                 </div>
                 <div class="form-group">
+                    <p>Contact Number <span>*</span></p>
+                    <span class="material-icons" id="icon-case">phone</span>
+                    <input type="text" asp-for="Contact" class="form-control-plaintext" />
+                </div>
+                <div class="form-group">
                     <p>Password <span>*</span></p>
-                    <span id="icon-case"></span>
-                    <input type="text" asp-for="Password" class="form-control-plaintext" />
+                    <span class="material-icons" id="icon-case">vpn_key</span>
+                    <input type="password" asp-for="Password" class="form-control-plaintext" />
                 </div>
             </div>
-
             <div class="rightcontact">
                 <div class="form-group">
                     <p>Address <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">map</span>
                     <input type="text" asp-for="Address" class="form-control-plaintext" />
                 </div>
                 <div class="form-group">
                     <p>Postal Code <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">add_location_alt</span>
                     <input type="text" asp-for="PostalCode" class="form-control-plaintext" />
                 </div>
                 <div class="form-group">
                     <p>Special Needs <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span class="material-icons" id="icon-case">wheelchair_pickup</span>
                     <input type="text" asp-for="SpecialNeeds" class="form-control-plaintext" />
+                </div>
+                <div class="form-group">
+                    <p>Zone ID <span>*</span></p>
+                    <span class="material-icons" id="icon-case">pin_drop</span>
+                    <input type="text" asp-for="ZoneID" class="form-control-plaintext" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Region Code <span>*</span></p>
+                    <span class="material-icons" id="icon-case">place</span>
+                    <input type="text" asp-for="RegionCode" class="form-control-plaintext" readonly />
                 </div>
             </div>
             <input type="submit" value="Save" class="editBtn" />
