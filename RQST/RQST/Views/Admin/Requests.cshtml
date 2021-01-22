@@ -4,6 +4,7 @@
 }
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="~/css/request.css" rel="stylesheet" />
+
 <div>
     <div>
         <h2>Total Item List</h2>
@@ -26,9 +27,36 @@
                     <td><strong>@item.Requested</strong></td>
                     <td><strong>@item.stock</strong></td>
                     @{
-                        var num = (Convert.ToDouble(item.Requested) / Convert.ToDouble(item.stock)).ToString("0%");
+                        var percentage = ((Convert.ToDouble(item.stock) - Convert.ToDouble(item.Requested))
+                            / Convert.ToDouble(item.stock) * 100);
+                        var num = ((Convert.ToDouble(item.stock) - Convert.ToDouble(item.Requested))
+                            / Convert.ToDouble(item.stock)).ToString("0%");
+
+                        if (percentage > 80)
+                        {
+                            <td class="progress-bar progress-bar-green" role="progressbar"
+                                aria-valuenow="@num" aria-valuemin="0" aria-valuemax="100" width="@num">
+                                @num
+                            </td>
+                        }
+
+                        else if (percentage < 20)
+                        {
+                            <td class="progress-bar progress-bar-red" role="progressbar"
+                                aria-valuenow="@num" aria-valuemin="0" aria-valuemax="100" width="@num">
+                                @num
+                            </td>
+                        }
+
+                        else
+                        {
+                            <td class="progress-bar progress-bar-yellow" role="progressbar"
+                                aria-valuenow="@num" aria-valuemin="0" aria-valuemax="100" width="@num">
+                                @num
+                            </td>
+                        }
                     }
-                    <td class="progress-bar" role="progressbar" aria-valuenow="@num" aria-valuemin="0" aria-valuemax="100"></td>
+
 
                 </tr>
                 }

@@ -75,3 +75,18 @@ table {
 .subarea-display {
     font-style: italic;
 }
+
+.progress-bar-green {
+    background-color: #9EE493;
+    color: black;
+}
+
+.progress-bar-yellow {
+    background-color: #FDC835;
+    color: black;
+}
+
+.progress-bar-red {
+    background-color: #CB0104;
+    color: white;
+}
