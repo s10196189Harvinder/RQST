@@ -4,6 +4,7 @@
 }
 
 <link href="~/css/editStyle.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <body>
     <form asp-action="_EditVolunteer" class="content-form">
@@ -14,48 +15,36 @@
             </div>
             <div class="leftcontact">
                 <div class="form-group">
-                    <p>Assigned Zones <span>*</span></p>
-                    <span id="icon-case">
-                        <img src="~/img/assignedzone.png" style="width:25px; height:25px;" />
-                    </span>
-                    <input type="text" asp-for="AssignedZones" class="form-control-plaintext readonly" readonly />
-                </div>
-                <div class="form-group">
-                    <p>Completed Requests <span>*</span></p>
-                    <span id="icon-case">
-                        <img src="~/img/completed.png" style="width:25px; height:25px;" />
-                    </span>
-                    <input type="text" asp-for="CompletedRequests" class="form-control-plaintext readonly" readonly />
+                    <p>Name <span>*</span></p>
+                    <span class="material-icons" id="icon-case">person</span>
+                    <input type="text" asp-for="Name" class="form-control-plaintext" />
                 </div>
                 <div class="form-group">
                     <p>Contact <span>*</span></p>
-                    <span id="icon-case">
-                        <img src="~/img/contact number.png" style="width:28px; height:28px;" />
-                    </span>
+                    <span class="material-icons" id="icon-case">phone</span>
                     <input type="text" asp-for="Contact" class="form-control-plaintext" />
+                </div>
+                <div class="form-group">
+                    <p>Postal Code <span>*</span></p>
+                    <span class="material-icons" id="icon-case">add_location_alt</span>
+                    <input type="text" asp-for="PostalCode" class="form-control-plaintext readonly" readonly />
                 </div>
             </div>
             <div class="rightcontact">
                 <div class="form-group">
-                    <p>Name <span>*</span></p>
-                    <span id="icon-case">
-                        <img src="~/img/name.png" style="width:25px; height:25px;" />
-                    </span>
-                    <input type="text" asp-for="Name" class="form-control-plaintext" />
-                </div>
-                <div class="form-group">
-                    <p>Postal Code <span>*</span></p>
-                    <span id="icon-case">
-                        <img src="~/img/postalcode.png" style="width:28px; height:28px;" />
-                    </span>
-                    <input type="text" asp-for="PostalCode" class="form-control-plaintext readonly" readonly />
+                    <p>Assigned Zones <span>*</span></p>
+                    <span class="material-icons" id="icon-case">map</span>
+                    <input type="text" asp-for="AssignedZones" class="form-control-plaintext readonly" readonly />
                 </div>
                 <div class="form-group">
                     <p>Zone ID <span>*</span></p>
-                    <span id="icon-case">
-                        <img src="~/img/zoneid.png" style="width:25px; height:25px;" />
-                    </span>
+                    <span class="material-icons" id="icon-case">pin_drop</span>
                     <input type="text" asp-for="ZoneID" class="form-control-plaintext readonly" readonly />
+                </div>
+                <div class="form-group">
+                    <p>Completed Requests <span>*</span></p>
+                    <span class="material-icons" id="icon-case">list_alt</span>
+                    <input type="text" asp-for="CompletedRequests" class="form-control-plaintext readonly" readonly />
                 </div>
             </div>
             <input type="submit" value="Save" class="editBtn" />
