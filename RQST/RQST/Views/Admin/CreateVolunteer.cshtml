@@ -18,20 +18,26 @@
             <div class="leftcontact">
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Name <span>*</span></p>
-                    <span id="icon-case"></span>
-                    <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
+                    <span id="icon-case">
+                        <img src="~/img/name.png" style="width:25px; height:25px;" />
+                    </span>
+                    <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required />
                 </div>
                 <span asp-validation-for="Name" class="text-danger"></span>
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>E-mail <span>*</span></p>
-                    <span id="icon-case"></span>
-                    <input type="email" asp-for="Email" class="inputbox" placeholder="Email" required data-msg="Check your input on the fields: The 'Email' field must be completed." />
+                    <span id="icon-case">
+                        <img src="~/img/email.png" style="width:25px; height:25px;" />
+                    </span>
+                    <input type="email" asp-for="Email" class="inputbox" placeholder="Email" required />
                 </div>
                 <span asp-validation-for="Email" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
 
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Password <span>*</span></p>
-                    <span id="icon-case"></span>
+                    <span id="icon-case">
+                        <img src="~/img/password.png" style="width:28px; height:28px;" />
+                    </span>
                     <input type="password" asp-for="Password" class="inputbox" placeholder="********" required />
                 </div>
                 <span asp-validation-for="Password" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
@@ -39,14 +45,18 @@
             <div class="rightcontact">
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Postal Code <span>*</span></p>
-                    <span id="icon-case"></span>
-                    <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required data-msg="Check your input on the fields: The 'Postal Code' field must be completed." />
+                    <span id="icon-case">
+                        <img src="~/img/postalcode.png" style="width:28px; height:28px;" />
+                    </span>
+                    <input type="text" asp-for="PostalCode" class="inputbox" placeholder="Postal Code" required/>
                 </div>
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
                 <div class="form-group" style="margin-bottom:0 !important">
-                    <p>Contact <span>*</span></p>
-                    <span id="icon-case"></span>
-                    <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required data-msg="Check your input on the fields: The 'Contact' field must be numerical." />
+                    <p>Contact Number <span>*</span></p>
+                    <span id="icon-case">
+                        <img src="~/img/contact number.png" style="width:28px; height:28px;"/>
+                    </span>
+                    <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required />
                 </div>
                 <span asp-validation-for="Contact" class="text-danger"></span>
             </div>
