@@ -16,7 +16,7 @@
             <h2>Register New Elderly</h2>
         </div>
         <div class="leftcontact">
-            <div class="form-group"  style="margin-bottom:0 !important">
+            <div class="form-group" style="margin-bottom:0 !important">
                 <p>Name <span>*</span></p>
                 <span id="icon-case"></span>
                 <input type="text" asp-for="Name" class="inputbox" placeholder="Name" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
@@ -26,7 +26,7 @@
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Gender <span>*</span></p>
                 <span id="icon-case"></span>
-                <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required />
+                <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required data-msg="Check your input on the fields: The 'Gender' field must be completed." />
             </div>
             <span asp-validation-for="Gender" class="text-danger"></span>
 
@@ -37,22 +37,29 @@
             </div>
             <span asp-validation-for="Email" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
 
-            <div class="form-group"  style="margin-bottom:0 !important">
+            <div class="form-group" style="margin-bottom:0 !important">
+                <p>Contact Number <span>*</span></p>
+                <span id="icon-case"></span>
+                <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required data-msg="Check your input on the fields: The 'Contact' field must be completed." />
+            </div>
+            <span asp-validation-for="Contact" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
+        </div>  
+
+        <div class="rightcontact">
+            @*Password, Address, Postal Code, Special Needs*@
+            <div class="form-group" style="margin-bottom:0 !important">
                 <p>Password <span>*</span></p>
                 <span id="icon-case"></span>
                 <input type="password" asp-for="Password" class="inputbox" placeholder="********" required />
             </div>
             <span asp-validation-for="Password" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
-        </div>  
 
-        <div class="rightcontact">
-            @*Address, Postal Code, Special Needs*@
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Address <span>*</span></p>
                 <span id="icon-case"></span>
                 <input type="text" asp-for="Address" class="inputbox" placeholder="Address" required />
             </div>
-            <span asp-validation-for="PostalCode" class="text-danger">@*<i class="fa fa-building-o"></i>*@</span>
+            <span asp-validation-for="Address" class="text-danger">@*<i class="fa fa-building-o"></i>*@</span>
 
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Postal Code <span>*</span></p>

@@ -42,7 +42,7 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Password, string Address, string PostalCode, string SpecialNeeds)
+        public async Task<IActionResult> CreateElderlyAsync(string Name, char Gender, string Email, string Contact, string Password, string Address, string PostalCode, string SpecialNeeds)
         {
             if (ModelState.IsValid)
             {
@@ -54,7 +54,7 @@ namespace RQST.Controllers
                     TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad (incorrect) postal code. Sends error.
                     return View();
                 }
-                bool success = await DataDALContext.postElderly(Name, Gender, Email, Password, Address, PostalCode, SpecialNeeds, zone.properties,auth); //Posts the elderly to the FB
+                bool success = await DataDALContext.postElderly(Name, Gender, Email, Contact, Password, Address, PostalCode, SpecialNeeds, zone.properties,auth); //Posts the elderly to the FB
                 if (success != true)
                 {
                     TempData["Message"] = "Failed";
