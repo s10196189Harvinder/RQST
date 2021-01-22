@@ -6,8 +6,9 @@
 <meta charset="UTF-8">
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link href="~/css/asgnVolunteer.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <style>
-
     /* The popup bubble styling. */
     .popup-bubble {
         /* Position the bubble centred-above its parent. */
@@ -33,24 +34,6 @@
         bottom: 8px;
         left: 0;
     }
-
-        /* This element draws the tip. */
-        .popup-bubble-anchor::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            /* Center the tip horizontally. */
-            transform: translate(-50%, 0);
-            /* The tip is a https://css-tricks.com/snippets/css/css-triangle/ */
-            width: 0;
-            height: 0;
-            /* The tip is 8px high, and 12px wide. */
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 8px solid white;
-        }
-
     /* JavaScript will position this div at the bottom of the popup tip. */
     .popup-container {
         cursor: auto;
@@ -71,7 +54,7 @@
 @{
     var text = (System.IO.File.ReadAllText(@"wwwroot\subzones.geojson"));
     <script>
-        let map, popup, Popup;
+        let map, popup, Popup, infowindow, bruh;
         function initMap() {
             class Popup extends google.maps.OverlayView {
                 constructor(position,content) {
@@ -91,13 +74,18 @@
                 }
                 /** Called when the popup is added to the map. */
                 onAdd() {
-                    console.log(this.containerDiv);
                     this.getPanes().floatPane.appendChild(this.containerDiv);
                 }
                 /** Called when the popup is removed from the map. */
                 onRemove() {
                     if (this.containerDiv.parentElement) {
-                        this.containerDiv.parentElement.removeChild(this.containerDiv);
+                        bruh = this.containerDiv;
+                        console.log(bruh);
+                        var cnt = this.containerDiv.children[0].children[0];
+                        cnt.classList.remove("popup-bubble")
+                        cnt.innerHTML = "";
+                        $(this.containerDiv).replaceWith(cnt);
+                        //this.containerDiv.parentElement.parentElement.removeChild(this.containerDiv.parentElement);
                     }
                 }
                 /** Called each frame when the popup needs to draw itself. */
@@ -148,13 +136,14 @@
             overlay.setMap(map);
             map.data.addListener('mouseover', function (event) {
                 map.data.overrideStyle(event.feature, { opacity: 1, strokeWeight: 2 })
-                var point = overlay.getProjection().fromDivPixelToLatLng(new google.maps.Point(10, 10));
+                var point = overlay.getProjection().fromContainerPixelToLatLng(new google.maps.Point(316.8, 50));
                 document.getElementById("content").innerHTML = (event.feature.getProperty("Name") + ": " + event.feature.getProperty("SUBZONE_N"));
-                var infowindow = new Popup(point, document.getElementById("content"));
+                infowindow = new Popup(point, document.getElementById("content"));
                 infowindow.setMap(map);
             })
             map.data.addListener('mouseout', function (event) {
                 map.data.revertStyle();
+                infowindow.setMap(null);
             })
             map.data.addListener('click', function (event) {
                 if (event.feature.getProperty('isColorful')) {
@@ -192,8 +181,6 @@
     
     }
 </script>
-<link href="~/css/asgnVolunteer.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 <div class="rightcontact">
     <form class="content-form">
@@ -249,7 +236,6 @@
         map.data.forEach(function (feature) {
             var SD_NAME = feature.getProperty('Name');
             var contains = (zonelist.indexOf(SD_NAME) > -1);
-            console.log(contains);
             if (contains) {
                 feature.setProperty("isColorful", true);
             }
