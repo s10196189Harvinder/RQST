@@ -91,6 +91,9 @@ namespace RQST.DAL
                 .Child("volunteer")
                 .Child(res.User.LocalId)
                 .PutAsync(volunteer);
+            await firebaseClient
+                .Child("authroles")             // Places UserID in the authroles section
+                .PatchAsync("{\"" + res.User.LocalId + "\":\"volunteer\"}");  //Patching in JSON format - "USERID:elderly"
             return true;
         }
 
