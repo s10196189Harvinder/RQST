@@ -103,6 +103,7 @@
                                         <th>Item amnt</th>
                                         <th>Address</th>
                                         <th>Postal Code</th>
+                                        <th>Time Posted</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -118,6 +119,7 @@
                                                     <td><strong>@request.itemList[0].Requested</strong></td> @*Item Amt*@
                                                     <td rowspan="@request.itemList.Count"><strong>@request.Sender.Address</strong></td>
                                                     <td rowspan="@request.itemList.Count"><strong>@request.Sender.PostalCode</strong></td>
+                                                    <td rowspan="@request.itemList.Count"><strong>@request.dateCreatedD.ToString("g")</strong></td>
                                                 </tr>
                                             }
                                             else

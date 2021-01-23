@@ -21,7 +21,8 @@ namespace RQST.Models
         public string SenderID { get; set; }
         public Elderly Sender { get; set; }
 
-        public float dateCreated { get; set; }
+        public long dateCreated { get; set; }
+        public DateTime dateCreatedD { get; set; }
         public List<items> itemList { get; set; } = new List<items>();
         public void addItem(items item)
         {

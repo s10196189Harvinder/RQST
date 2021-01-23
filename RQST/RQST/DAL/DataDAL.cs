@@ -189,6 +189,7 @@ namespace RQST.DAL
                         newerItem.ID = kvp.Key;
                         currReq.addItem(newerItem);
                     }
+                    currReq.dateCreatedD  = DateTimeOffset.FromUnixTimeSeconds(currReq.dateCreated).DateTime.ToLocalTime();
                     req.ReqList.Add(currReq);
                     
                 }
