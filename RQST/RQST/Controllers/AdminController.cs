@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
-using System.Dynamic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Flurl.Http;
 using Microsoft.AspNetCore.Http;
@@ -20,18 +18,18 @@ namespace RQST.Controllers
     public class AdminController : Controller
     {
         private static readonly HttpClient client = new HttpClient();
-        private DataDAL DataDALContext = new DataDAL();
+        public static DataDAL DataDALContext = new DataDAL();
         public async Task<IActionResult> MapAsync()
         {
             string auth = (HttpContext.Session.GetString("auth"));
-            //List<UserRequests> userreqlist = await DataDALContext.getuserrequests(auth);
-            List<Request_NEW> reqList = await DataDALContext.getUserRequests(auth);
+            await DataDALContext.InitClientAsync(auth);
+            List<Request_NEW> reqList = await DataDALContext.getUserRequests();
             return View(reqList);
         }
         [HttpPost]
         public async Task<IActionResult> MapAsync(string Name, string Deliverables, string SpecialRequest, string Address)
         {
-            string auth = HttpContext.Session.GetString("auth");
+            
             return RedirectToAction("RawRequests");
         }
 
@@ -46,7 +44,7 @@ namespace RQST.Controllers
         {
             if (ModelState.IsValid)
             {
-                string auth = HttpContext.Session.GetString("auth");
+                
 
                 SubzoneRoot zone = await getZoneAsync(PostalCode);
                 if (zone == null)
@@ -54,7 +52,7 @@ namespace RQST.Controllers
                     TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad (incorrect) postal code. Sends error.
                     return View();
                 }
-                bool success = await DataDALContext.postElderly(Name, Gender, Email, Contact, Password, Address, PostalCode, SpecialNeeds, zone.properties,auth); //Posts the elderly to the FB
+                bool success = await DataDALContext.postElderly(Name, Gender, Email, Contact, Password, Address, PostalCode, SpecialNeeds, zone.properties); //Posts the elderly to the FB
                 if (success != true)
                 {
                     TempData["Message"] = "Failed";
@@ -71,8 +69,8 @@ namespace RQST.Controllers
 
         public async Task<IActionResult> _ViewElderlyAsync()
         {
-            string auth = HttpContext.Session.GetString("auth");
-            List<Elderly> elderlylist = await DataDALContext.getElderly(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            
+            List<Elderly> elderlylist = await DataDALContext.getElderly();     //Gets authentication token (in JSON) and passes it to the DAL function getdata
             return View(elderlylist);
         }
         public async Task<IActionResult> CreateVolunteerAsync()
@@ -83,37 +81,43 @@ namespace RQST.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateVolunteerAsync(string Name, string Email, string Password, string Contact, string PostalCode, string AssignedZone)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                string auth = HttpContext.Session.GetString("auth");
+                
                 SubzoneRoot zone = await getZoneAsync(PostalCode);
-                if (zone!=null)
+                if (zone != null)
                 {
                     TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad postal code. Sends error.
                     return View();
                 }
-                await DataDALContext.postVolunteer(Name, Email, Password, Contact, PostalCode, zone.properties, AssignedZone, auth);
+                await DataDALContext.postVolunteer(Name, Email, Password, Contact, PostalCode, zone.properties, AssignedZone);
                 return RedirectToAction("_ViewVolunteer");
             }
-            else 
+            else
             {
                 return View();
             }
         }
         public async Task<IActionResult> RawRequestsAsync()
         {
-            string auth = HttpContext.Session.GetString("auth");
-            List<Request> reqlist = await DataDALContext.getrequests(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            
+            List<Request> reqlist = await DataDALContext.getrequests();     //Gets authentication token (in JSON) and passes it to the DAL function getdata
             return View(reqlist);                                               //Returns the list to the view
         }
         public async Task<IActionResult> RequestsAsync()
         {
-            string auth = HttpContext.Session.GetString("auth");
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
-            List<Request_NEW> reqList = await DataDALContext.getUserRequestsMIN(auth);
+            timer.Stop();
+            Debug.WriteLine(timer.Elapsed);
+            timer.Start();
+            List<Request_NEW> reqList = await DataDALContext.getUserRequestsMIN();
+            timer.Stop();
+            Debug.WriteLine(timer.Elapsed);
             AreaRoot areaList = new AreaRoot();
-            List<Elderly> elderlyList = await DataDALContext.getElderly(auth);
-            foreach(Request_NEW req in reqList)
+            List<Elderly> elderlyList = await DataDALContext.getElderly();
+            foreach (Request_NEW req in reqList)
             {
                 SubzoneRoot zone = SZList.features.Find(x => x.properties.Name == req.ZoneID);
                 req.RegionCode = zone.properties.REGION_C;
@@ -128,58 +132,57 @@ namespace RQST.Controllers
                     nArea.ReqList.Add(req);
                     areaList.arealist.Add(nArea);
                 }
-                foreach(Request request in req.ReqList)
+                foreach (Request request in req.ReqList)
                 {
                     Elderly elder = elderlyList.Find(x => x.ID == request.SenderID);
                     request.Sender = elder;
                 }
             }
-            areaList.tItemsList = await DataDALContext.getItems(auth);
+            areaList.tItemsList = await DataDALContext.getItems();
             return View(areaList);
         }
         public async Task<IActionResult> AddItoC(string catid)      //Add item to category page
         {
-            string auth = HttpContext.Session.GetString("auth");
-            Categories cat = await DataDALContext.getaCat(auth,catid);
+            
+            Categories cat = await DataDALContext.getaCat(catid);
             return View(cat);
         }
         [HttpPost]
         public async Task<IActionResult> AddItoC(string name, string catid)
         {
-            string auth = HttpContext.Session.GetString("auth");
-            await DataDALContext.AddItemtoCat(auth, catid, name);
-            return View();
             
+            await DataDALContext.AddItemtoCat(catid, name);
+            return View();
+
         }
 
 
         public async Task<IActionResult> _ViewVolunteerAsync()
         {
-            string auth = HttpContext.Session.GetString("auth");
-            List<Volunteer> volunteerlist = await DataDALContext.getVolunteer(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            
+            List<Volunteer> volunteerlist = await DataDALContext.getVolunteer();     //Gets authentication token (in JSON) and passes it to the DAL function getdata
             return View(volunteerlist);
         }
         public async Task<IActionResult> ViewVolAsync()
         {
-            string auth = HttpContext.Session.GetString("auth");
-            List<Volunteer> volunteerlist = await DataDALContext.getVolunteer(auth);     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            
+            List<Volunteer> volunteerlist = await DataDALContext.getVolunteer();     //Gets authentication token (in JSON) and passes it to the DAL function getdata
             return View(volunteerlist);
         }
 
         public async Task<IActionResult> AsgnVolunteer(string? id)
         {
             string auth = (HttpContext.Session.GetString("auth"));
-            Volunteer vol = await DataDALContext.getAVolunteer(auth,id);
+            Volunteer vol = await DataDALContext.getAVolunteer(id);
             ViewBag.id = vol.ID;
             return View(vol);
         }
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> AsgnVolunteer(string vol, string zones)
         {
             if (ModelState.IsValid)
             {
-                string auth = (HttpContext.Session.GetString("auth"));
-                bool success = await DataDALContext.updateVolunteerID(auth, vol,zones);
+                bool success = await DataDALContext.updateVolunteerID(vol, zones);
                 return RedirectToAction("ViewVol");
             }
             else
@@ -190,8 +193,8 @@ namespace RQST.Controllers
         [HttpPost]
         public async Task<IActionResult> AddItemAsync(items items)
         {
-            string auth = HttpContext.Session.GetString("auth");
-            await DataDALContext.AddItem(auth, items);
+            
+            await DataDALContext.AddItem(items);
             TempData["GMessage"] = "Created successfully !";
             return View();
         }
@@ -203,16 +206,16 @@ namespace RQST.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCatAsync(string category, string icon)
         {
-            string auth = HttpContext.Session.GetString("auth");
-            await DataDALContext.AddCat(auth, category, icon);
+            
+            await DataDALContext.AddCat(category, icon);
             TempData["GMessage"] = "Created successfully !";
             return View();
         }
 
         public async Task<IActionResult> CatViewAsync(string category, string icon)
         {
-            string auth = HttpContext.Session.GetString("auth");
-            List<Categories> catlist = await DataDALContext.getCat(auth);
+            
+            List<Categories> catlist = await DataDALContext.getCat();
             return View(catlist);
         }
         public IActionResult AddItem()
@@ -222,8 +225,8 @@ namespace RQST.Controllers
 
         public async Task<IActionResult> _EditElderlyAsync(string? id)
         {
-            string auth = HttpContext.Session.GetString("auth");
-            Elderly eld = await DataDALContext.getAElderly(auth, id);
+            
+            Elderly eld = await DataDALContext.getAElderly(id);
             return View(eld);
         }
 
@@ -232,8 +235,8 @@ namespace RQST.Controllers
         {
             if (ModelState.IsValid)
             {
-                string auth = HttpContext.Session.GetString("auth");
-                bool success = await DataDALContext.updateElderly(auth, eld);
+                
+                bool success = await DataDALContext.updateElderly(eld);
                 return RedirectToAction("_ViewElderly");
             }
 
@@ -245,8 +248,8 @@ namespace RQST.Controllers
 
         public async Task<IActionResult> _EditVolunteerAsync(string? id)
         {
-            string auth = HttpContext.Session.GetString("auth");
-            Volunteer vol = await DataDALContext.getAVolunteer(auth, id);
+            
+            Volunteer vol = await DataDALContext.getAVolunteer(id);
             return View(vol);
         }
 
@@ -255,8 +258,8 @@ namespace RQST.Controllers
         {
             if (ModelState.IsValid)
             {
-                string auth = HttpContext.Session.GetString("auth");
-                bool success = await DataDALContext.updateVolunteer(auth, vol);
+                
+                bool success = await DataDALContext.updateVolunteer(vol);
                 return RedirectToAction("_ViewVolunteer");
             }
 
@@ -265,6 +268,13 @@ namespace RQST.Controllers
                 return View();
             }
         }
+        public async Task<IActionResult> ViewLogAsync()
+        {
+            
+            List<LogDay> logDays = await DataDALContext.getLog();
+            return View(logDays);
+        }
+
 
 
 

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Database.Query;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RQST.Models;
@@ -14,9 +16,10 @@ namespace RQST.DAL
 {
     public class DataDAL
     {
-        public async Task<bool> postElderly(string name, char gender, string email, string contact, string password, string address, string postalcode, string specialneeds, Subzone zone, string auth)     //This method POSTS data to the firebase
+        public FirebaseClient firebaseClient { get; set; }
+        public string AdminID { get; set; }
+        public async Task<bool> postElderly(string name, char gender, string email, string contact, string password, string address, string postalcode, string specialneeds, Subzone zone)     //This method POSTS data to the firebase
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
             var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
             FirebaseAuthLink res;
             try
@@ -36,19 +39,19 @@ namespace RQST.DAL
             await firebaseClient
                 .Child("authroles")             // Places UserID in the authroles section
                 .PatchAsync("{\"" + res.User.LocalId + "\":\"elderly\"}");  //Patching in JSON format - "USERID:elderly"
+            await PostLog("Created Elderly");
             return true;
         }
-        public async Task<bool> AddCat(string auth, string category, string icon)   //Add Category to database - NOT IN USE CURRENTLY
+        public async Task<bool> AddCat(string category, string icon)   //Add Category to database - NOT IN USE CURRENTLY
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var volreq = await firebaseClient
                 .Child("categories")                                                    //Posted to /Categories/random ID/...
                 .PostAsync("{\"category\":\"" + category + "\",\"icon\":\"" + icon + "\"}");    //POST in JSON format - { "category" : "CATEGORYNAME", "icon": "ICON" }
+            await PostLog("Created Category");
             return true;
         }
-        public async Task<bool> AddItemtoCat(string auth, string id, string categoryid)   //Adds items to categories in the DB
+        public async Task<bool> AddItemtoCat(string id, string categoryid)   //Adds items to categories in the DB
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var item = await firebaseClient     //POSTS to /categories/CATEGORYID/items/ITEMID/...
                 .Child("categories")
                 .Child(categoryid)
@@ -56,17 +59,16 @@ namespace RQST.DAL
                 .PostAsync(id);                 //POST to RANDOMID:ITEMID
             return true;
         }
-        public async Task<bool> AddItem(string auth, items item)    //Adds item to DB
+        public async Task<bool> AddItem(items item)    //Adds item to DB
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var itemp = await firebaseClient
                 .Child("items")             //Posts to /items/RANDOMID/...
                 .PostAsync(item);
+            await PostLog("Added Item");
             return true;
         }
-        public async Task<bool> postVolunteer(string name, string email, string password, string contact, string postalcode, Subzone zone, string assignedzone, string auth)
+        public async Task<bool> postVolunteer(string name, string email, string password, string contact, string postalcode, Subzone zone, string assignedzone)
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client for posting
             var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
             FirebaseAuthLink res;
             try
@@ -94,12 +96,12 @@ namespace RQST.DAL
             await firebaseClient
                 .Child("authroles")             // Places UserID in the authroles section
                 .PatchAsync("{\"" + res.User.LocalId + "\":\"volunteer\"}");  //Patching in JSON format - "USERID:elderly"
+            await PostLog("Created Volunteer");
             return true;
         }
 
-        public async Task<List<Request>> getrequests(string auth)               //This method obtains data from the firebase
+        public async Task<List<Request>> getrequests()               //This method obtains data from the firebase
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);        //Initialize firebase client
             var requests = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
                         .Child("requests")
                         .OnceAsync<Request>();
@@ -111,9 +113,8 @@ namespace RQST.DAL
             return reqlist;                                                    //Returns the list of requests
         }
 
-        public async Task<List<Request_NEW>> getUserRequests(string auth)
+        public async Task<List<Request_NEW>> getUserRequests()
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var reqData = await firebaseClient
                 .Child("requests")
                 .OnceAsync<IDictionary<string, Object>>();
@@ -157,9 +158,8 @@ namespace RQST.DAL
         }
 
 
-        public async Task<List<Request_NEW>> getUserRequestsMIN(string auth)
+        public async Task<List<Request_NEW>> getUserRequestsMIN()
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var reqData = await firebaseClient
                 .Child("requests")
                 .OnceAsync<IDictionary<string, Object>>();
@@ -197,13 +197,8 @@ namespace RQST.DAL
             return (reqList);
         }
 
-
-
-
-
-        public async Task<List<Elderly>> getElderly(string auth)  //Obtains the elderly data
+        public async Task<List<Elderly>> getElderly()  //Obtains the elderly data
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var elderlies = await firebaseClient
                         .Child("elderly")
                         .OnceAsync<Elderly>();
@@ -216,9 +211,8 @@ namespace RQST.DAL
             return elderlylist;
         }
 
-        public async Task<List<Categories>> getCat(string auth) //Gets all the categories
+        public async Task<List<Categories>> getCat() //Gets all the categories
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var elderlies = await firebaseClient
                         .Child("categories")
                         .OnceAsync<Categories>();
@@ -231,9 +225,8 @@ namespace RQST.DAL
             return catlist;
         }
 
-        public async Task<Categories> getaCat(string auth, string id)    //Gets a specific category - based on ID supplied
+        public async Task<Categories> getaCat(string id)    //Gets a specific category - based on ID supplied
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var cat = await firebaseClient
                         .Child("categories")
                         .Child(id)
@@ -241,9 +234,8 @@ namespace RQST.DAL
             return cat;
         }
 
-        public async Task<List<Volunteer>> getVolunteer(string auth)  //Obtains list of volunteers
+        public async Task<List<Volunteer>> getVolunteer()  //Obtains list of volunteers
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var volunteers = await firebaseClient
                         .Child("volunteer")
                         .OnceAsync<Volunteer>();
@@ -256,9 +248,8 @@ namespace RQST.DAL
             return volunteerlist;
         }
 
-        public async Task<Volunteer> getAVolunteer(string auth, string id)
+        public async Task<Volunteer> getAVolunteer(string id)
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             Volunteer volunteer = await firebaseClient
                         .Child("volunteer")
                         .Child(id)
@@ -266,28 +257,27 @@ namespace RQST.DAL
             volunteer.ID = id;
             return volunteer;
         }
-        public async Task<Boolean> updateVolunteer(string auth, Volunteer vol)
+        public async Task<Boolean> updateVolunteer(Volunteer vol)
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             await firebaseClient
                         .Child("volunteer")
                         .Child(vol.ID)
-                        .PutAsync(vol);     //Need to prevent it from posting ID, but otherwise works
+                        .PutAsync(vol);
+            await PostLog("Updated Volunteer");
             return true;
         }
-        public async Task<Boolean> updateVolunteerID(string auth, string vol, string zones)
+        public async Task<Boolean> updateVolunteerID(string vol, string zones) //Updates volunteer's assigned zones
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             await firebaseClient
                         .Child("volunteer")
                         .Child(vol)
-                        .PatchAsync("{\"AssignedZones\":\"" + zones + "\"}");     //Need to prevent it from posting ID, but otherwise works
+                        .PatchAsync("{\"AssignedZones\":\"" + zones + "\"}");
+            await PostLog("Updated Assigned zones for volunteer");
             return true;
         }
 
-        public async Task<List<items>> getItems(string auth)
+        public async Task<List<items>> getItems()
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var items = await firebaseClient
                         .Child("items")
                         .OnceAsync<items>();
@@ -299,29 +289,8 @@ namespace RQST.DAL
             }
             return itemlist;                                         //Returns the list of requests
         }
-
-        public async Task<FirebaseClient> InitClientAsync(string auth)
+        public async Task<Boolean> asgnZone(Volunteer vol, string zones)
         {
-            var deserializedAuth = JsonConvert.DeserializeObject<FirebaseAuthLink>(auth);       //Deserializes the JSON into the token OBJECT
-            var firebaseClient = new FirebaseClient(
-                                "https://kasei-bb0e0.firebaseio.com/",              //Sets the firebase project to use
-                                new FirebaseOptions
-                                {
-                                    AuthTokenAsyncFactory = () => refreshToken(deserializedAuth)    //Sets the authentication token for the client.
-                                });
-            var role = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
-                        .Child("authroles")
-                        .Child(deserializedAuth.User.LocalId)
-                        .OnceSingleAsync<string>();
-            if (role != "admin")
-            {
-                throw new Exception("Not an admin");
-            }
-            return firebaseClient;
-        }
-        public async Task<Boolean> asgnZone(string auth, Volunteer vol, string zones)
-        {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             var items = await firebaseClient
                         .Child("volunteer")
                         .Child(vol.ID)
@@ -344,9 +313,8 @@ namespace RQST.DAL
             return auth.FirebaseToken;
         }
 
-        public async Task<Elderly> getAElderly(string auth, string id)
+        public async Task<Elderly> getAElderly(string id)
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             Elderly elderly = await firebaseClient
                         .Child("elderly")
                         .Child(id)
@@ -355,14 +323,74 @@ namespace RQST.DAL
             return elderly;
         }
 
-        public async Task<bool> updateElderly(string auth, Elderly eld)     //This method POSTS data to the firebase
+        public async Task<bool> updateElderly(Elderly eld)     //This method POSTS data to the firebase
         {
-            FirebaseClient firebaseClient = await InitClientAsync(auth);
             await firebaseClient
                 .Child("elderly")
                 .Child(eld.ID)
                 .PutAsync(eld);
+            await PostLog("Updated Elderly details");
             return true;
+        }
+
+        public async Task<Boolean> PostLog(string action)
+        {
+            long time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();  //Get current time in epochs
+            TimeSpan span = DateTime.UtcNow.Date - new DateTime(1970, 1, 1);
+            int dateE = (int)span.TotalSeconds;                     //Get current date in epochs
+            await firebaseClient
+                .Child("logs")
+                .Child(dateE.ToString())
+                .Child(time.ToString())
+                .PutAsync("{\"adminID\":\""+AdminID+"\",\"action\":\""+action+"\"}");
+            return true;
+        }
+
+        public async Task<List<LogDay>> getLog()
+        {
+            var Obj = await firebaseClient
+                        .Child("logs")
+                        .OnceAsync<IDictionary<string,IDictionary<string,object>>>();
+            List<LogDay> dayList = new List<LogDay>();
+            foreach (var date in Obj)
+            {
+                LogDay day = new LogDay();
+                int dateE = Convert.ToInt32(date.Key);
+                DateTime dateD = DateTimeOffset.FromUnixTimeSeconds(dateE).Date.ToLocalTime();
+                day.Date = dateD;
+                foreach (var time in date.Object)
+                {
+                    long timeE = Convert.ToInt32(time.Key); //Epoch time
+                    DateTime timeD = DateTimeOffset.FromUnixTimeSeconds(timeE).DateTime.ToLocalTime();
+                    string action = (string)time.Value["action"];
+                    string ID = (string)time.Value["adminID"];
+                    Log log = new Log(ID, action, timeD);
+                    day.LogList.Add(log);                    
+                }
+                dayList.Add(day);
+            }
+            dayList = dayList.OrderByDescending(i => i.Date).ToList();
+            return dayList;
+        }
+        public async Task<FirebaseClient> InitClientAsync(string auth)
+        {
+            var deserializedAuth = JsonConvert.DeserializeObject<FirebaseAuthLink>(auth);       //Deserializes the JSON into the token OBJECT
+            AdminID = deserializedAuth.User.LocalId;
+            firebaseClient = new FirebaseClient(
+                                "https://kasei-bb0e0.firebaseio.com/",              //Sets the firebase project to use
+                                new FirebaseOptions
+                                {
+                                    AuthTokenAsyncFactory = () => refreshToken(deserializedAuth)    //Sets the authentication token for the client.
+                                });
+            var role = await firebaseClient                                 //Obtains all data from (DATABASE)/Requests
+                        .Child("authroles")
+                        .Child(deserializedAuth.User.LocalId)
+                        .OnceSingleAsync<string>();
+            if (role != "admin")
+            {
+                throw new Exception("Not an admin");
+            }
+            return firebaseClient;
         }
     }
 }

@@ -1,0 +1,29 @@
+﻿@model List<LogDay>
+@{
+    ViewData["Title"] = "ViewLog";
+    Layout = "AdminMenu";
+}
+<link href="~/css/tableDesign.css" rel="stylesheet" />
+@foreach (LogDay day in Model)
+{
+    <h1>@day.Date.ToString("dd-MM-yyyy")</h1>
+    <table class="content-table">
+        <thead>
+            <tr>
+                <th>AdminID</th>
+                <th>Action</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Log log in day.LogList)
+            {
+                <tr>
+                    <td>@log.adminID</td>
+                    <td>@log.Action</td>
+                    <td>@log.Time.ToString("t")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
