@@ -5,54 +5,75 @@
 }
 
 <link href="~/css/tableDesign.css" rel="stylesheet" />
+<style>
+    .loginBtn {
+        cursor: pointer;
+        border-radius: 2em;
+        color: white;
+        background-size: 200% auto;
+        background-image: linear-gradient(to right, #000000 0%, #414141 51%, #ff0 100%);
+        border: 0;
+        font-size: 13px;
+        box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+        transition: 0.15s;
+        margin-bottom:10px;
+    }
+
+        .loginBtn:hover {
+            background-position: right center;
+        }
+</style>
 <div class="main">
-    <h2>List of Elderly Details</h2>
-    @*<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search here" title="Type in to search...">*@
-    <div class="tableDesign">
-        <table id="table_id" class="content-table">
-            <thead>
-                <tr class="header">
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Contact</th>
-                    <th>Assigned Zones</th>
-                    <th>Postal Code</th>
-                    <th>Zone ID</th>
-                    <th>Region Code</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Volunteer vol in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => vol.ID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vol.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vol.Contact)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vol.AssignedZones)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vol.PostalCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vol.ZoneID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => vol.RegionCode)
-                        </td>
-                        <td style="font-weight: bold;">
-                            <a asp-controller="Admin" asp-action="AsgnVolunteer" asp-route-id="@vol.ID">Edit Assigned Zones</a>
-                        </td>
+    <form>
+        <h2>List of Volunteer Details</h2>
+        @*<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search here" title="Type in to search...">*@
+        <div class="tableDesign">
+            <table id="table_id" class="content-table">
+                <thead>
+                    <tr class="header">
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Assigned Zones</th>
+                        <th>Postal Code</th>
+                        <th>Zone ID</th>
+                        <th>Region Code</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (Volunteer vol in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => vol.ID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => vol.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => vol.Contact)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => vol.AssignedZones)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => vol.PostalCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => vol.ZoneID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => vol.RegionCode)
+                            </td>
+                            <td style="font-weight: bold;">
+                                <button asp-controller="Admin" asp-action="AsgnVolunteer" asp-route-id="@vol.ID" class="loginBtn">Edit Assigned Zones</button>
+                                <button asp-controller="Admin" asp-action="_EditVolunteer" asp-route-id="@vol.ID" class="loginBtn">Edit Volunteer Info</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
 </div>

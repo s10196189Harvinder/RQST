@@ -79,8 +79,6 @@
                 /** Called when the popup is removed from the map. */
                 onRemove() {
                     if (this.containerDiv.parentElement) {
-                        bruh = this.containerDiv;
-                        console.log(bruh);
                         var cnt = this.containerDiv.children[0].children[0];
                         cnt.classList.remove("popup-bubble")
                         cnt.innerHTML = "";

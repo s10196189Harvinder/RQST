@@ -100,9 +100,7 @@
         window.onload = function () {
             map.data.forEach(function (feature) {
                 var SD_NAME = feature.getProperty('Name');
-                console.log("SD : " + SD_NAME);
                 if (objlist.some(item => item.name == SD_NAME)) {
-                    console.log("item : " + obj.name);
                     var req = objlist.filter(obj => { return obj.name === SD_NAME });
                     feature.setProperty("requests", req[0].requests);
                     feature.setProperty("itemliststring", req[0].itemliststring);

@@ -9,7 +9,7 @@
 
 
 <body>
-    <form asp-action="CreateElderly" class="content-form">
+    <form asp-action="CreateElderly" class="content-form" >
         <div class="contentform">
             <div id="sendmessage"> The account has been created successfully! </div>
             @*Name, Gender, Email, Password, Address, Postal Code, Special Needs, Create*@
@@ -34,14 +34,14 @@
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>E-mail <span>*</span></p>
                 <span class="material-icons" id="icon-case">email</span>
-                <input type="email" asp-for="Email" class="inputbox" placeholder="Email" required data-msg="Check your input on the fields: The 'Email' field must be completed." />
+                <input type="email" asp-for="Email" class="inputbox" placeholder="Email" required data-msg="Check your input on the fields: The 'Email' field must be completed." autocomplete="new-password"/>
             </div>
             <span asp-validation-for="Email" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
 
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Contact Number <span>*</span></p>
                 <span class="material-icons" id="icon-case">phone</span>
-                <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required data-msg="Check your input on the fields: The 'Contact' field must be completed." />
+                <input type="text" asp-for="Contact" class="inputbox" placeholder="Contact" required data-msg="Check your input on the fields: The 'Contact' field must be completed." autocomplete="new-password"/>
             </div>
             <span asp-validation-for="Contact" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
         </div>  
@@ -51,7 +51,7 @@
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Password <span>*</span></p>
                 <span class="material-icons" id="icon-case">vpn_key</span>
-                <input type="password" asp-for="Password" class="inputbox" placeholder="********" required />
+                <input type="password" asp-for="Password" class="inputbox" placeholder="********" required autocomplete="new-password"/>
             </div>
             <span asp-validation-for="Password" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
 

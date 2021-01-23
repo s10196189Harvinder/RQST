@@ -91,7 +91,7 @@ namespace RQST.Controllers
                     return View();
                 }
                 await DataDALContext.postVolunteer(Name, Email, Password, Contact, PostalCode, zone.properties, AssignedZone);
-                return RedirectToAction("_ViewVolunteer");
+                return RedirectToAction("ViewVol");
             }
             else
             {
@@ -260,7 +260,7 @@ namespace RQST.Controllers
             {
                 
                 bool success = await DataDALContext.updateVolunteer(vol);
-                return RedirectToAction("_ViewVolunteer");
+                return RedirectToAction("ViewVol");
             }
 
             else
