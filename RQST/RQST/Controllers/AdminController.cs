@@ -17,13 +17,22 @@ namespace RQST.Controllers
 {
     public class AdminController : Controller
     {
+        private IDataStream _context;
+        public AdminController(IDataStream context)
+        {
+            _context = context;
+        }
         private static readonly HttpClient client = new HttpClient();
-        public static DataDAL DataDALContext = new DataDAL();
+        private DataDAL DataDALContext = new DataDAL();
+
+
+
         public async Task<IActionResult> MapAsync()
         {
             string auth = (HttpContext.Session.GetString("auth"));
             await DataDALContext.InitClientAsync(auth);
-            List<Request_NEW> reqList = await DataDALContext.getUserRequests();
+            _context.firebaseClient = DataDALContext.firebaseClient;
+            List<Request_NEW> reqList = await _context.populateReqsAsync();
             return View(reqList);
         }
         [HttpPost]

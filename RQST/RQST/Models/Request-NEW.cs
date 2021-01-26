@@ -23,6 +23,18 @@ namespace RQST.Models
                 ItemList.Add(item);
             }
         }
+        public void removeItem(items item)
+        {
+            items itemF = ItemList.Find(x => x.ID == item.ID);
+            if (itemF.Requested == item.Requested)
+            {
+                ItemList.Remove(itemF);
+            }
+            else
+            {
+                itemF.Requested -= item.Requested;
+            }
+        }
 
     }
 }
