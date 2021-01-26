@@ -252,14 +252,13 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ForgetPasswordAsync(string email)
+        public async Task<IActionResult> ForgetPasswordAsync(string Email)
         {
             if (ModelState.IsValid)
             {
-                bool success = await DataDALContext.forgetPassword(email);
+                bool success = await DataDALContext.forgetPassword(Email);
                 return RedirectToAction("_ViewElderly");
             }
-
             else
             {
                 return View();
