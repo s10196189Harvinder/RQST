@@ -1,15 +1,22 @@
-﻿<title>Add Category</title>
-<link href="~/css/loginstyle.css" rel="stylesheet" />
+﻿@model RQST.Models.Categories
 
-<div class="main" style="float:right">
-    <p style="color:green">@TempData["GMessage"]</p>
-    <form asp-controller="Admin" asp-action="AddCat" method="post">
-        <input name="category" placeholder="Category" required>
-        <input name="icon" placeholder="Icon" class="psw" required>
-        <div class="loginBtnpos">
-            <input type="submit" value="Add" class="loginBtn">
+@{
+    ViewData["Title"] = "AddCat";
+    Layout = "AdminMenu";
+}
+<link href="~/css/volunteerstyle.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<body>
+    <form asp-action="AddCat" class="content-form">
+        <div class="contentform">
+            <div class="top-form">
+                <h2>Add New Category</h2>
+            </div>
+            <div class="form-group" style="margin-bottom:0 !important">
+                <p>Category Name <span>*</span></p>
+                <span class="material-icons" id="icon-case">person</span>
+                <input type="text" asp-for="Name" class="inputbox" placeholder="Category Name" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
+            </div>
         </div>
-
-
     </form>
-</div>
+</body>
