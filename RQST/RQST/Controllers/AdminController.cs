@@ -246,6 +246,26 @@ namespace RQST.Controllers
             }
         }
 
+        public async Task<IActionResult> ForgetPasswordAsync()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgetPasswordAsync(string email)
+        {
+            if (ModelState.IsValid)
+            {
+                bool success = await DataDALContext.forgetPassword(email);
+                return RedirectToAction("_ViewElderly");
+            }
+
+            else
+            {
+                return View();
+            }
+        }
+
         public async Task<IActionResult> _EditVolunteerAsync(string? id)
         {
             

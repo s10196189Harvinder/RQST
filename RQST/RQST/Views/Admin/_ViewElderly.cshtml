@@ -20,37 +20,41 @@
                     <th>Postal Code</th>
                     <th>Special Needs</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (Elderly elderly in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Gender)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Email)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Contact)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.Address)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.PostalCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => elderly.SpecialNeeds)
-                        </td>
-                        <td style="font-weight: bold;">
-                            <a asp-controller="Admin" asp-action="_EditElderly" asp-route-id="@elderly.ID">Edit Elderly Info</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Contact)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.PostalCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => elderly.SpecialNeeds)
+                    </td>
+                    <td style="font-weight: bold;">
+                        <a asp-controller="Admin" asp-action="_EditElderly" asp-route-id="@elderly.ID">Edit Elderly Info</a>
+                    </td>
+                    <td style="font-weight: bold;">
+                        <a asp-controller="Admin" asp-action="ForgetPassword">Forget Password</a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
