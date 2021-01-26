@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RQST.DAL;
+using RQST.Hubs;
 
 namespace RQST
 {
@@ -28,6 +30,8 @@ namespace RQST
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+            services.AddSignalR();
+            services.AddTransient<IDataStream, DataStream>();
             services.AddControllersWithViews();
         }
 
@@ -56,6 +60,7 @@ namespace RQST
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapHub<MapHub>("/maphub");
             });
         }
     }
