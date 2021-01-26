@@ -8,15 +8,14 @@ namespace RQST.Models
 {
     public class items
     {
-        public items()
-        {
-        }
+        public items() {}
 
-        public items(string name, int requested, string icon, int remaining, string bgCol)
+        public items(string bgCol, string icon, int limit, string name, int requested, int remaining)
         {
             Name = name;
             Requested = requested;
             Icon = icon;
+            Limit = limit;
             stock = remaining;
             BgCol = bgCol;
         }
@@ -26,14 +25,19 @@ namespace RQST.Models
 
         [JsonProperty("requested")]
         public int Requested { get; set; }
+
         [JsonProperty("icon")]
         public string Icon { get; set; }
+        
         [JsonProperty("stock")]
         public int stock { get; set; }
+        
         [JsonProperty("bgCol")]
         public string BgCol { get; set; }
-        public string ID { get; set; }
-        
 
+        [JsonProperty("limit")]
+        public int Limit { get; set; }
+
+        public string ID { get; set; }
     }
 }

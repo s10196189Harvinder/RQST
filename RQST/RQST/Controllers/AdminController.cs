@@ -190,6 +190,12 @@ namespace RQST.Controllers
                 return View();
             }
         }
+
+        public IActionResult AddItem()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddItemAsync(items items)
         {
@@ -217,10 +223,6 @@ namespace RQST.Controllers
             
             List<Categories> catlist = await DataDALContext.getCat();
             return View(catlist);
-        }
-        public IActionResult AddItem()
-        {
-            return View();
         }
 
         public async Task<IActionResult> _EditElderlyAsync(string? id)
