@@ -42,11 +42,12 @@ namespace RQST.DAL
             await PostLog("Created Elderly");
             return true;
         }
-        public async Task<bool> AddCat(string category, string icon)   //Add Category to database - NOT IN USE CURRENTLY
+        public async Task<bool> AddCat(string name, string namezh, string icon)   //Add Category to database
         {
-            var volreq = await firebaseClient
-                .Child("categories")                                                    //Posted to /Categories/random ID/...
-                .PostAsync("{\"category\":\"" + category + "\",\"icon\":\"" + icon + "\"}");    //POST in JSON format - { "category" : "CATEGORYNAME", "icon": "ICON" }
+            Categories categories = new Categories(name, namezh, icon);
+            await firebaseClient
+                .Child("Categories")
+                .PostAsync(categories);
             await PostLog("Created Category");
             return true;
         }

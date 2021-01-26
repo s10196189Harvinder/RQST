@@ -204,10 +204,10 @@ namespace RQST.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddCatAsync(string category, string icon)
+        public async Task<IActionResult> AddCatAsync(string name, string namezh, string icon)
         {
             
-            await DataDALContext.AddCat(category, icon);
+            await DataDALContext.AddCat(name, namezh, icon);
             TempData["GMessage"] = "Created successfully !";
             return View();
         }
