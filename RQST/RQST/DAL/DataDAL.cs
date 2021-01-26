@@ -335,6 +335,27 @@ namespace RQST.DAL
             return true;
         }
 
+        public async Task<bool> forgetPassword(string email)
+        {
+            var ap = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyBjdJIn1k3ksbbZAgY-kQIwUXbD0Zo_q8w"));
+            
+            FirebaseAuthLink res;
+            try
+            {
+                await ap.SendPasswordResetEmailAsync(email);      //Attemps to create user with given email & password
+            }
+            catch
+            {
+                return false;
+            }
+
+            await firebaseClient
+                .Child("authroles")
+                .OnceAsync<Elderly>();
+            await PostLog("An email have been successfully send!");
+            return true;
+        }
+
         public async Task<Boolean> PostLog(string action)
         {
             long time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();  //Get current time in epochs
