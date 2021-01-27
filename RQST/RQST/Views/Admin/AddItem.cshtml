@@ -1,19 +1,34 @@
 ﻿@model items
+@{
+    Layout = "AdminMenu";
+}
 <title>Login</title>
-<link href="~/css/loginstyle.css" rel="stylesheet" />
 
-<div class="main" style="float:right">
-    <p style="color:green">@TempData["GMessage"]</p>
-    <form asp-controller="Admin" asp-action="AddItem" method="post">
-        <input type="text" asp-for="BgCol" placeholder="BgCol" required>
-        <input type="text" asp-for="Icon" placeholder="Icon" class="psw" required>
-        <input type="text" asp-for="Name" placeholder="Name" required>
-        <input type="text" asp-for="stock" placeholder="Remaining" required>
-        <input type="text" asp-for="Requested" placeholder="Requested" required>
-        <div class="loginBtnpos">
-            <input type="submit" value="Add" class="loginBtn">
-        </div>
+<link href="~/css/editStyle.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-
-    </form>
-</div>
+<body>
+    <div class="main" style="float:right">
+        <p style="color:green">@TempData["GMessage"]</p>
+        <form asp-controller="Admin" asp-action="AddItem" method="post">
+            <div class="contentform">
+                <div class="top-form">
+                    <h2>Add items to catalogue</h2>
+                </div>
+                <div class="leftcontact">
+                    <input type="text" asp-for="BgCol" placeholder="Background Color" required>
+                    <input type="text" asp-for="Icon" placeholder="Food Icon" required>
+                    <input type="text" asp-for="Name" placeholder="Name of Item" required>
+                </div>
+                <div class="rightcontact">
+                    <input type="text" asp-for="stock" placeholder="Remaining" required>
+                    <input type="text" asp-for="Limit" placeholder="Item Limit" required>
+                    <input type="text" asp-for="Requested" placeholder="Number of items requested" required>
+                </div>
+                <div class="loginBtnpos">
+                    <input type="submit" value="Add" class="loginBtn">
+                </div>
+            </div>
+        </form>
+    </div>
+</body>

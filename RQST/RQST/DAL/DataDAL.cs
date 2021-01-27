@@ -186,7 +186,7 @@ namespace RQST.DAL
                     foreach (KeyValuePair<string, int> kvp in currReq.Contents)
                     {
                         items newItem = itemList.Find(x => x.ID == kvp.Key);
-                        items newerItem = new items(newItem.Name, kvp.Value, newItem.Icon, newItem.stock, newItem.BgCol);
+                        items newerItem = new items(newItem.BgCol, newItem.Icon, newItem.Limit, newItem.Name, kvp.Value, newItem.stock);
                         newerItem.ID = kvp.Key;
                         currReq.addItem(newerItem);
                     }
