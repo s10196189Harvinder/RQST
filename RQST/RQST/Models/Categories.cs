@@ -14,12 +14,12 @@ namespace RQST.Models
         [JsonProperty("category")]
         public string Name { get; set; }
         [JsonProperty("category_zh")]
-        public string Name_zh { get; set; }
+        public string Namezh { get; set; }
         public string ID { get; set; }
         public Categories(string name, string namezh, string icon)
         {
             Name = name;
-            Name_zh = namezh;
+            Namezh = namezh;
             Icon = icon;
         }
     }

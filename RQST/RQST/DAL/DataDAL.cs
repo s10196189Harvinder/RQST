@@ -46,7 +46,7 @@ namespace RQST.DAL
         {
             Categories categories = new Categories(name, namezh, icon);
             await firebaseClient
-                .Child("Categories")
+                .Child("categories")
                 .PostAsync(categories);
             await PostLog("Created Category");
             return true;
