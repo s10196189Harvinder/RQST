@@ -23,7 +23,7 @@ namespace RQST.Controllers
             _context = context;
         }
         private static readonly HttpClient client = new HttpClient();
-        private DataDAL DataDALContext = new DataDAL();
+        private static DataDAL DataDALContext = new DataDAL();
 
 
 
@@ -33,6 +33,7 @@ namespace RQST.Controllers
             await DataDALContext.InitClientAsync(auth);
             _context.firebaseClient = DataDALContext.firebaseClient;
             List<Request_NEW> reqList = await _context.populateReqsAsync();
+            //List<Request_NEW> reqList = await DataDALContext.getUserRequests();
             return View(reqList);
         }
         [HttpPost]

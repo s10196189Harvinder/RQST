@@ -19,6 +19,14 @@ namespace RQST.Models
             stock = remaining;
             BgCol = bgCol;
         }
+        public items(string name, int requested, string icon, int remaining, string bgCol)
+        {
+            Name = name;
+            Requested = requested;
+            Icon = icon;
+            stock = remaining;
+            BgCol = bgCol;
+        }
 
         [JsonProperty("name")]
         public string Name { get; set; }
