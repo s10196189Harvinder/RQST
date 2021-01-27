@@ -76,6 +76,25 @@ h2 {
     margin-bottom: 20px;
 }
 
+.assignBtn {
+    cursor: pointer;
+    border-radius: 2em;
+    color: black;
+    background-size: 200% auto;
+    background-image: linear-gradient(to right, #ffffff 0%, #414141 51%, #000000 100%);
+    border: 0;
+    font-size: 13px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
+    transition: 0.15s;
+    margin-bottom: 10px;
+}
+
+.assignBtn:hover {
+    background-position: right center;
+    color: white;
+}
+
+
 /*============================================================*/
 
 /*

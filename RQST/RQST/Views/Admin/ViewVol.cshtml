@@ -5,24 +5,7 @@
 }
 
 <link href="~/css/tableDesign.css" rel="stylesheet" />
-<style>
-    .loginBtn {
-        cursor: pointer;
-        border-radius: 2em;
-        color: white;
-        background-size: 200% auto;
-        background-image: linear-gradient(to right, #000000 0%, #414141 51%, #ff0 100%);
-        border: 0;
-        font-size: 13px;
-        box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
-        transition: 0.15s;
-        margin-bottom:10px;
-    }
 
-        .loginBtn:hover {
-            background-position: right center;
-        }
-</style>
 <div class="main">
     <form>
         <h2>List of Volunteer Details</h2>
@@ -67,8 +50,8 @@
                                 @Html.DisplayFor(modelItem => vol.RegionCode)
                             </td>
                             <td style="font-weight: bold;">
-                                <button asp-controller="Admin" asp-action="AsgnVolunteer" asp-route-id="@vol.ID" class="loginBtn">Edit Assigned Zones</button>
-                                <button asp-controller="Admin" asp-action="_EditVolunteer" asp-route-id="@vol.ID" class="loginBtn">Edit Volunteer Info</button>
+                                <button asp-controller="Admin" asp-action="AsgnVolunteer" asp-route-id="@vol.ID" class="assignBtn">Edit Assigned Zones</button>
+                                <button asp-controller="Admin" asp-action="_EditVolunteer" asp-route-id="@vol.ID" class="assignBtn">Edit Volunteer Info</button>
                             </td>
                         </tr>
                     }

@@ -59,7 +59,7 @@ input {
     border-radius: 0px 5px 5px 0px;
     border: 1px solid #eee;
     margin-bottom: 15px;
-    width: 75%;
+    width: 94%;
     height: 40px;
     float: left;
     padding: 0px 15px;
@@ -116,9 +116,9 @@ i {
     font-size: 18px;
 }
 
-.createBtn:hover {
-    opacity: 0.8;
-}
+    .createBtn:hover {
+        opacity: 0.8;
+    }
 
 .top-form {
 }

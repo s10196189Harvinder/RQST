@@ -48,7 +48,8 @@
                         @Html.DisplayFor(modelItem => elderly.SpecialNeeds)
                     </td>
                     <td style="font-weight: bold;">
-                        <a asp-controller="Admin" asp-action="_EditElderly" asp-route-id="@elderly.ID">Edit Elderly Info</a>
+                        <a asp-controller="Admin" asp-action="_EditElderly" asp-route-id="@elderly.ID">Edit Info</a>
+                        <button asp-controller="Admin" asp-action="_EditElderly" asp-route-id="@elderly.ID" class="assignBtn">Edit Elderly Info</button>
                     </td>
                 </tr>
                 }

@@ -116,6 +116,11 @@ i {
     margin-bottom: 30px;
     font-size: 18px;
 }
+
+.createBtn:hover {
+    opacity: 0.8;
+}
+
 .top-form{
 
     

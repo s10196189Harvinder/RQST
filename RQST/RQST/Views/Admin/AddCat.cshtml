@@ -4,7 +4,7 @@
     ViewData["Title"] = "AddCat";
     Layout = "AdminMenu";
 }
-<link href="~/css/volunteerstyle.css" rel="stylesheet" />
+<link href="~/css/addCategory.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <body>
     <form asp-action="AddCat" class="content-form">
@@ -15,17 +15,17 @@
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Category Name <span>*</span></p>
                 <span class="material-icons" id="icon-case">person</span>
-                <input type="text" asp-for="Name" class="inputbox" placeholder="Category Name" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
+                <input type="text" asp-for="Name" class="inputbox" placeholder="Category Name" required />
             </div>
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Category Name (Translated) <span>*</span></p>
                 <span class="material-icons" id="icon-case">person</span>
-                <input type="text" asp-for="Namezh" class="inputbox" placeholder="Category Name (Chinese)" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
+                <input type="text" asp-for="Namezh" class="inputbox" placeholder="Category Name (Chinese)" required />
             </div>
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Category Icon <span>*</span></p>
                 <span class="material-icons" id="icon-case">person</span>
-                <input type="text" asp-for="Icon" class="inputbox" placeholder="Category Icon" required data-msg="Check your input on the fields: The 'Icon' field must be completed." />
+                <input type="text" asp-for="Icon" class="inputbox" placeholder="Category Icon" required />
             </div>
             <input type="submit" value="Create" class="createBtn" />
         </div>
