@@ -6,54 +6,55 @@
 <link href="~/css/tableDesign.css" rel="stylesheet" />
 
 <div class="main">
-    <h2>List of Elderly Details</h2>
-    @*<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search here" title="Type in to search...">*@
-    <div class="tableDesign">
-        <table id="table_id" class="content-table">
-            <thead>
-                <tr class="header">
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Email</th>
-                    <th>Contact</th>
-                    <th>Address</th>
-                    <th>Postal Code</th>
-                    <th>Special Needs</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Elderly elderly in Model)
-                {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => elderly.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => elderly.Gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => elderly.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => elderly.Contact)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => elderly.Address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => elderly.PostalCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => elderly.SpecialNeeds)
-                    </td>
-                    <td style="font-weight: bold;">
-                        <a asp-controller="Admin" asp-action="_EditElderly" asp-route-id="@elderly.ID">Edit Info</a>
-                        <button asp-controller="Admin" asp-action="_EditElderly" asp-route-id="@elderly.ID" class="assignBtn">Edit Elderly Info</button>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    <form>
+        <h2>List of Elderly Details</h2>
+        @*<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search here" title="Type in to search...">*@
+        <div class="tableDesign">
+            <table id="table_id" class="content-table">
+                <thead>
+                    <tr class="header">
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Address</th>
+                        <th>Postal Code</th>
+                        <th>Special Needs</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Elderly elderly in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => elderly.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => elderly.Gender)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => elderly.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => elderly.Contact)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => elderly.Address)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => elderly.PostalCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => elderly.SpecialNeeds)
+                            </td>
+                            <td style="font-weight: bold;">
+                                <button asp-controller="Admin" asp-action="_EditElderly" asp-route-id="@elderly.ID" class="assignBtn">Edit Elderly Info</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
 </div>
