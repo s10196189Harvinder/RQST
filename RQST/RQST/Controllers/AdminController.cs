@@ -116,39 +116,31 @@ namespace RQST.Controllers
         }
         public async Task<IActionResult> RequestsAsync()
         {
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-            SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
-            timer.Stop();
-            Debug.WriteLine(timer.Elapsed);
-            timer.Start();
-            List<Request_NEW> reqList = await DataDALContext.getUserRequestsMIN();
-            timer.Stop();
-            Debug.WriteLine(timer.Elapsed);
-            AreaRoot areaList = new AreaRoot();
-            List<Elderly> elderlyList = await DataDALContext.getElderly();
-            foreach (Request_NEW req in reqList)
-            {
-                SubzoneRoot zone = SZList.features.Find(x => x.properties.Name == req.ZoneID);
-                req.RegionCode = zone.properties.REGION_C;
-                Area area = areaList.arealist.Find(x => x.AreaCode == req.RegionCode);
-                if (area != null)
-                {
-                    area.ReqList.Add(req);
-                }
-                else
-                {
-                    Area nArea = new Area(req.RegionCode);
-                    nArea.ReqList.Add(req);
-                    areaList.arealist.Add(nArea);
-                }
-                foreach (Request request in req.ReqList)
-                {
-                    Elderly elder = elderlyList.Find(x => x.ID == request.SenderID);
-                    request.Sender = elder;
-                }
-            }
-            areaList.tItemsList = await DataDALContext.getItems();
+            AreaRoot areaList = await DataDALContext.getUserRequests();
+            //AreaRoot areaList = new AreaRoot();
+            //List<Elderly> elderlyList = await DataDALContext.getElderly();
+            //foreach (Request_NEW req in reqList)
+            //{
+            //    SubzoneRoot zone = SZList.features.Find(x => x.properties.Name == req.ZoneID);
+            //    req.RegionCode = zone.properties.REGION_C;
+            //    Area area = areaList.arealist.Find(x => x.AreaCode == req.RegionCode);
+            //    if (area != null)
+            //    {
+            //        area.ReqList.Add(req);
+            //    }
+            //    else
+            //    {
+            //        Area nArea = new Area(req.RegionCode);
+            //        nArea.ReqList.Add(req);
+            //        areaList.arealist.Add(nArea);
+            //    }
+            //    foreach (Request request in req.ReqList)
+            //    {
+            //        Elderly elder = elderlyList.Find(x => x.ID == request.SenderID);
+            //        request.Sender = elder;
+            //    }
+            //}
+            //areaList.tItemsList = await DataDALContext.getItems();
             return View(areaList);
         }
         public async Task<IActionResult> AddItoC(string catid)      //Add item to category page

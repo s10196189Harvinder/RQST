@@ -56,9 +56,6 @@ namespace RQST.DAL
             var reqData = await firebaseClient
                 .Child("requests")
                 .OnceAsync<IDictionary<string, Object>>();
-            var itemData = await firebaseClient
-                .Child("requestCounter")
-                .OnceAsync<IDictionary<string, string>>();
             List<items> itemListN = new List<items>();
             var fbItemList = await firebaseClient
                                     .Child("items")
@@ -81,8 +78,8 @@ namespace RQST.DAL
                     foreach (var item in currReq.Contents)
                     {
                         items itemF = itemListN.Find(x => x.ID == item.Key);
-                        items itemN = new items(itemF.Name, item.Value, itemF.Icon, itemF.Requested, itemF.BgCol);
-                        items itemR = new items(itemF.Name, item.Value, itemF.Icon, itemF.Requested, itemF.BgCol);
+                        items itemN = new items(itemF.Name, item.Value, itemF.Icon, itemF.stock, itemF.BgCol);
+                        items itemR = new items(itemF.Name, item.Value, itemF.Icon, itemF.stock, itemF.BgCol);
                         itemN.ID = item.Key;
                         itemR.ID = item.Key;
                         currReq.addItem(itemN);

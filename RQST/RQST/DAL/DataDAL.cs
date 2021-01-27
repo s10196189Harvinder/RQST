@@ -113,90 +113,64 @@ namespace RQST.DAL
             }
             return reqlist;                                                    //Returns the list of requests
         }
-
-        public async Task<List<Request_NEW>> getUserRequests()
+        public async Task<AreaRoot> getUserRequests()
         {
-            var reqData = await firebaseClient
+            SubzoneList SZList = JsonConvert.DeserializeObject<SubzoneList>(System.IO.File.ReadAllText(@"wwwroot/subzones.geojson"));     //Read subzones from JSON file and store them as list of class <Subzone>
+            AreaRoot areaList = new AreaRoot();
+            var reqList = await firebaseClient
                 .Child("requests")
                 .OnceAsync<IDictionary<string, Object>>();
-            var itemData = await firebaseClient
-                .Child("requestCounter")
-                .OnceAsync<IDictionary<string, string>>();
-            List<items> itemList = new List<items>();
-            var fbItemList = await firebaseClient
-                                    .Child("items")
-                                    .OnceAsync<items>();
-            foreach (var item in fbItemList)
+            var itemList = await firebaseClient
+                .Child("items")
+                .OnceAsync<items>();
+            List<Elderly> elderlyList = await getElderly();
+            List<items> itemListN = new List<items>();
+            AreaRoot areaRoot = new AreaRoot();
+            foreach (var item in itemList)
             {
                 items itemActual = item.Object;
                 itemActual.ID = item.Key;
-                itemList.Add(itemActual);
+                itemListN.Add(itemActual);
             }
-            List<Request_NEW> reqList = new List<Request_NEW>();
-            foreach (var area in reqData)
+            areaRoot.ItemList = itemListN;
+            foreach (var area in reqList)
             {
                 Request_NEW req = new Request_NEW();
                 req.ZoneID = area.Key;
+                SubzoneRoot subzone = SZList.features.Find(x => x.properties.Name == req.ZoneID);
+                bool found = true;
+                Area areaN = areaRoot.arealist.Find(x => x.AreaCode == subzone.properties.REGION_C);
+                if (areaN == null)
+                {
+                    found = false;
+                    areaN = new Area();
+                    areaN.AreaCode = subzone.properties.REGION_C;
+                }
                 foreach (var requestID in area.Object)
                 {
                     Request currReq = JsonConvert.DeserializeObject<Request>(requestID.Value.ToString());
                     currReq.ID = requestID.Key;
-                    req.ReqList.Add(currReq);
-                }
-                reqList.Add(req);
-            }
-            foreach (var area in itemData)
-            {
-                Request_NEW req = reqList.Find(x => x.ZoneID == area.Key);
-                foreach (var item in area.Object)
-                {
-                    items itemF = itemList.Find(x => x.ID == item.Key);
-                    itemF.Requested = Convert.ToInt32(item.Value);
-                    req.ItemList.Add(itemF);
-                }
-            }
-            return (reqList);
-        }
-
-
-        public async Task<List<Request_NEW>> getUserRequestsMIN()
-        {
-            var reqData = await firebaseClient
-                .Child("requests")
-                .OnceAsync<IDictionary<string, Object>>();
-            List<items> itemList = new List<items>();
-            var fbItemList = await firebaseClient
-                                    .Child("items")
-                                    .OnceAsync<items>();
-            foreach (var item in fbItemList)
-            {
-                items itemActual = item.Object;
-                itemActual.ID = item.Key;
-                itemList.Add(itemActual);
-            }
-            List<Request_NEW> reqList = new List<Request_NEW>();
-            foreach (var area in reqData)
-            {
-                Request_NEW req = new Request_NEW();
-                req.ZoneID = area.Key;
-                foreach (KeyValuePair<string, object> requestID in area.Object)
-                {
-                    Request currReq = JsonConvert.DeserializeObject<Request>(requestID.Value.ToString());
-                    currReq.ID = requestID.Key;
-                    foreach (KeyValuePair<string, int> kvp in currReq.Contents)
+                    currReq.Sender = elderlyList.Find(x => x.ID == currReq.SenderID);
+                    foreach (var item in currReq.Contents)
                     {
-                        items newItem = itemList.Find(x => x.ID == kvp.Key);
-                        items newerItem = new items(newItem.BgCol, newItem.Icon, newItem.Limit, newItem.Name, kvp.Value, newItem.stock);
-                        newerItem.ID = kvp.Key;
-                        currReq.addItem(newerItem);
+                        items itemF = itemListN.Find(x => x.ID == item.Key);
+                        items itemN = new items(itemF.Name, item.Value, itemF.Icon, itemF.stock, itemF.BgCol);
+                        items itemG = new items(itemF.Name, item.Value, itemF.Icon, itemF.stock, itemF.BgCol);
+                        itemN.ID = item.Key;
+                        itemG.ID = item.Key;
+                        currReq.addItem(itemN);
                     }
-                    currReq.dateCreatedD  = DateTimeOffset.FromUnixTimeSeconds(currReq.dateCreated).DateTime.ToLocalTime();
+                    currReq.dateCreatedD = DateTimeOffset.FromUnixTimeSeconds(currReq.dateCreated).Date.ToLocalTime();
                     req.ReqList.Add(currReq);
-                    
                 }
-                reqList.Add(req);
+                areaN.ReqList.Add(req);
+                if (!found)
+                {
+                    areaRoot.arealist.Add(areaN);
+                }
             }
-            return (reqList);
+            return areaRoot;
+
         }
 
         public async Task<List<Elderly>> getElderly()  //Obtains the elderly data
