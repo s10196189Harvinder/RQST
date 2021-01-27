@@ -34,7 +34,7 @@
 </body>*@
 
 <body>
-    <form  asp-controller="Admin" asp-action="AddItem" method="post">
+    <form asp-controller="Admin" asp-action="AddItem" method="post">
         <div class="contentform">
             <div id="sendmessage"> The account has been created successfully! </div>
             @*Name, Contact, Region Code, Zone ID, Completed Request, Assigned Zones, Create*@
@@ -44,20 +44,20 @@
             <div class="leftcontact">
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Background Color <span>*</span></p>
-                    <span class="material-icons" id="icon-case">person</span>
+                    <span class="material-icons" id="icon-case">palette</span>
                     <input type="text" asp-for="BgCol" placeholder="Background Color" required />
                 </div>
                 <span asp-validation-for="BgCol" class="text-danger"></span>
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Food Icon <span>*</span></p>
-                    <span class="material-icons" id="icon-case">email</span>
-                    <input type="text" asp-for="Icon" placeholder="Food Icon" required/>
+                    <span class="material-icons" id="icon-case">category</span>
+                    <input type="text" asp-for="Icon" placeholder="Food Icon" required />
                 </div>
                 <span asp-validation-for="Icon" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
 
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Name <span>*</span></p>
-                    <span class="material-icons" id="icon-case">vpn_key</span>
+                    <span class="material-icons" id="icon-case">spellcheck</span>
                     <input type="text" asp-for="Name" placeholder="Name of Item" required>
                 </div>
                 <span asp-validation-for="Name" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
@@ -65,19 +65,19 @@
             <div class="rightcontact">
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Remaining <span>*</span></p>
-                    <span class="material-icons" id="icon-case">add_location_alt</span>
+                    <span class="material-icons" id="icon-case">inventory_2</span>
                     <input type="text" asp-for="stock" placeholder="Remaining" required>
                 </div>
                 <span asp-validation-for="stock" class="text-danger"></span>
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>Item Limit <span>*</span></p>
-                    <span class="material-icons" id="icon-case">phone</span>
+                    <span class="material-icons" id="icon-case">production_quantity_limits</span>
                     <input type="text" asp-for="Limit" placeholder="Item Limit" required>
                 </div>
                 <span asp-validation-for="Limit" class="text-danger"></span>
                 <div class="form-group" style="margin-bottom:0 !important">
                     <p>No. of Items Requested <span>*</span></p>
-                    <span class="material-icons" id="icon-case">phone</span>
+                    <span class="material-icons" id="icon-case">receipt_long</span>
                     <input type="text" asp-for="Requested" placeholder="Number of items requested" required>
                 </div>
                 <span asp-validation-for="Requested" class="text-danger"></span>
