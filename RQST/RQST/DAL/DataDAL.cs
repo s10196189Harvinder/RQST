@@ -155,9 +155,7 @@ namespace RQST.DAL
                     {
                         items itemF = itemListN.Find(x => x.ID == item.Key);
                         items itemN = new items(itemF.Name, item.Value, itemF.Icon, itemF.stock, itemF.BgCol);
-                        items itemG = new items(itemF.Name, item.Value, itemF.Icon, itemF.stock, itemF.BgCol);
                         itemN.ID = item.Key;
-                        itemG.ID = item.Key;
                         currReq.addItem(itemN);
                     }
                     currReq.dateCreatedD = DateTimeOffset.FromUnixTimeSeconds(currReq.dateCreated).Date.ToLocalTime();
