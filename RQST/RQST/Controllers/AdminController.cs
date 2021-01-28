@@ -33,7 +33,7 @@ namespace RQST.Controllers
             await DataDALContext.InitClientAsync(auth);
             _context.firebaseClient = DataDALContext.firebaseClient;
             List<Request_NEW> reqList = await _context.populateReqsAsync();
-            //List<Request_NEW> reqList = await DataDALContext.getUserRequests();
+            await _context.getDataAsync();
             return View(reqList);
         }
         [HttpPost]
