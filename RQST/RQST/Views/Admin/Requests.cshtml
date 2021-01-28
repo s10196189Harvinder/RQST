@@ -11,10 +11,9 @@
         <table class="content-table">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Requested</th>
-                    <th>Stock</th>
+                    <th>Remaining Stock</th>
                     <th>Percentage</th>
                 </tr>
             </thead>
@@ -22,7 +21,6 @@
                 @foreach (items item in Model.ItemList)
                 {
                 <tr>
-                    <td><strong>@item.ID</strong></td> @*Items*@
                     <td><strong>@item.Icon  @item.Name</strong></td> @*Item Amt*@
                     <td><strong>@item.Requested</strong></td>
                     <td><strong>@item.stock</strong></td>
@@ -90,7 +88,7 @@
                         }
                         <!--This div is the container for the SubAreas - Tiong Bahru,Clementi whatever -->
                         <div class="subarea-display">
-                            <h5>@req.ZoneID</h5>
+                            <h5>@req.RegionCode</h5>
                         </div>
 
                         <div>

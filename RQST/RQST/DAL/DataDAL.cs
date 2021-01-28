@@ -138,6 +138,7 @@ namespace RQST.DAL
                 Request_NEW req = new Request_NEW();
                 req.ZoneID = area.Key;
                 SubzoneRoot subzone = SZList.features.Find(x => x.properties.Name == req.ZoneID);
+                req.RegionCode = subzone.properties.SUBZONE_N;
                 bool found = true;
                 Area areaN = areaRoot.arealist.Find(x => x.AreaCode == subzone.properties.REGION_C);
                 if (areaN == null)
