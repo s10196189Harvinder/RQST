@@ -183,8 +183,7 @@ namespace RQST.Controllers
                 bool success = await DataDALContext.AddItem(items);
                 TempData["GMessage"] = "Created successfully !";
             }
-
-            return View();
+            return RedirectToAction("Map");
         }
 
         public IActionResult AddCat()
