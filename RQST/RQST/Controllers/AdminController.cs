@@ -169,17 +169,21 @@ namespace RQST.Controllers
             }
         }
 
-        public IActionResult AddItem()
+        public async Task<IActionResult> AddItemAsync()
         {
-            return View();
+            List<Categories> catList = await DataDALContext.getCat();
+            return View(catList);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddItemAsync(items items)
         {
-            
-            await DataDALContext.AddItem(items);
-            TempData["GMessage"] = "Created successfully !";
+            if (ModelState.IsValid)
+            {
+                bool success = await DataDALContext.AddItem(items);
+                TempData["GMessage"] = "Created successfully !";
+            }
+
             return View();
         }
 

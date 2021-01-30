@@ -1,88 +1,79 @@
-﻿@model items
+﻿@model List<Categories>
 @{
+    ViewData["Title"] = "AddItem";
     Layout = "AdminMenu";
 }
-<title>Login</title>
 
-<link href="~/css/volunteerstyle.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+@{
+    List<SelectListItem> catList = new List<SelectListItem>();
 
-@*<body>
-    <div class="main" style="float:right">
-        <p style="color:green">@TempData["GMessage"]</p>
+    @foreach (Categories category in Model)
+    {
+        catList.Add(new SelectListItem
+        {
+            Value = category.Name,
+            Text = category.Name
+        });
+    }
+ }
+
+    <title>Login</title>
+
+    <link href="~/css/volunteerstyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <body>
         <form asp-controller="Admin" asp-action="AddItem" method="post">
             <div class="contentform">
+                <div id="sendmessage"> The item has been added successfully! </div>
+                @*Name, Contact, Region Code, Zone ID, Completed Request, Assigned Zones, Create*@
                 <div class="top-form">
-                    <h2>Add items to catalogue</h2>
+                    <h2>Add Items to Catalogue</h2>
                 </div>
                 <div class="leftcontact">
-                    <input type="text" asp-for="BgCol" placeholder="Background Color" required>
-                    <input type="text" asp-for="Icon" placeholder="Food Icon" required>
-                    <input type="text" asp-for="Name" placeholder="Name of Item" required>
+                    <div class="form-group" style="margin-bottom:0 !important">
+                        <p>Background Color <span>*</span></p>
+                        <span class="material-icons" id="icon-case">palette</span>
+                        <input type="text" name="Background Color" placeholder="Background Color" required data-msg="Check your input on the fields: The 'Background Color' field must be completed." />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:0 !important">
+                        <p>Name <span>*</span></p>
+                        <span class="material-icons" id="icon-case">spellcheck</span>
+                        <input type="text" name="Name" placeholder="Name of Item" required data-msg="Check your input on the fields: The 'Name' field must be completed." />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:0 !important">
+                        <p>Remaining <span>*</span></p>
+                        <span class="material-icons" id="icon-case">inventory_2</span>
+                        <input type="text" name="Stock" placeholder="Remaining" required data-msg="Check your input on the fields: The 'Stock' field must be completed." />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:0 !important">
+                        <p>Item Category <span>*</span></p>
+                        <select name="Category" asp-items="catList" class="form-control" required data-msg="Check your input on the fields: The 'Item Category' field must be completed."></select>
+                    </div>
                 </div>
                 <div class="rightcontact">
-                    <input type="text" asp-for="stock" placeholder="Remaining" required>
-                    <input type="text" asp-for="Limit" placeholder="Item Limit" required>
-                    <input type="text" asp-for="Requested" placeholder="Number of items requested" required>
+                    <div class="form-group" style="margin-bottom:0 !important">
+                        <p>Food Icon <span>*</span></p>
+                        <span class="material-icons" id="icon-case">category</span>
+                        <input type="text" name="Icon" placeholder="Food Icon" required data-msg="Check your input on the fields: The 'Icon' field must be completed." />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:0 !important">
+                        <p>Name_CL <span>*</span></p>
+                        <span class="material-icons" id="icon-case">spellcheck</span>
+                        <input type="text" name="Name_CL" placeholder="Name of Item" required data-msg="Check your input on the fields: The 'Name_CL' field must be completed." />
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:0 !important">
+                        <p>Item Limit <span>*</span></p>
+                        <span class="material-icons" id="icon-case">production_quantity_limits</span>
+                        <input type="text" name="Limit" placeholder="Item Limit" required data-msg="Check your input on the fields: The 'Limit' field must be completed." />
+                    </div>
                 </div>
-                <div class="loginBtnpos">
-                    <input type="submit" value="Add" class="loginBtn">
-                </div>
+                <input type="submit" value="Create" class="createBtn" />
             </div>
         </form>
-    </div>
-</body>*@
-
-<body>
-    <form asp-controller="Admin" asp-action="AddItem" method="post">
-        <div class="contentform">
-            <div id="sendmessage"> The account has been created successfully! </div>
-            @*Name, Contact, Region Code, Zone ID, Completed Request, Assigned Zones, Create*@
-            <div class="top-form">
-                <h2>Add Items to Catalogue</h2>
-            </div>
-            <div class="leftcontact">
-                <div class="form-group" style="margin-bottom:0 !important">
-                    <p>Background Color <span>*</span></p>
-                    <span class="material-icons" id="icon-case">palette</span>
-                    <input type="text" asp-for="BgCol" placeholder="Background Color" required />
-                </div>
-                <span asp-validation-for="BgCol" class="text-danger"></span>
-                <div class="form-group" style="margin-bottom:0 !important">
-                    <p>Food Icon <span>*</span></p>
-                    <span class="material-icons" id="icon-case">category</span>
-                    <input type="text" asp-for="Icon" placeholder="Food Icon" required />
-                </div>
-                <span asp-validation-for="Icon" class="text-danger">@*<i class="fa fa-envelope-o"></i>*@</span>
-
-                <div class="form-group" style="margin-bottom:0 !important">
-                    <p>Name <span>*</span></p>
-                    <span class="material-icons" id="icon-case">spellcheck</span>
-                    <input type="text" asp-for="Name" placeholder="Name of Item" required>
-                </div>
-                <span asp-validation-for="Name" class="text-danger">@*<i class="fa fa-info"></i>*@</span>
-            </div>
-            <div class="rightcontact">
-                <div class="form-group" style="margin-bottom:0 !important">
-                    <p>Remaining <span>*</span></p>
-                    <span class="material-icons" id="icon-case">inventory_2</span>
-                    <input type="text" asp-for="stock" placeholder="Remaining" required>
-                </div>
-                <span asp-validation-for="stock" class="text-danger"></span>
-                <div class="form-group" style="margin-bottom:0 !important">
-                    <p>Item Limit <span>*</span></p>
-                    <span class="material-icons" id="icon-case">production_quantity_limits</span>
-                    <input type="text" asp-for="Limit" placeholder="Item Limit" required>
-                </div>
-                <span asp-validation-for="Limit" class="text-danger"></span>
-                <div class="form-group" style="margin-bottom:0 !important">
-                    <p>No. of Items Requested <span>*</span></p>
-                    <span class="material-icons" id="icon-case">receipt_long</span>
-                    <input type="text" asp-for="Requested" placeholder="Number of items requested" required>
-                </div>
-                <span asp-validation-for="Requested" class="text-danger"></span>
-            </div>
-            <input type="submit" value="Create" class="createBtn" />
-        </div>
-    </form>
-</body>
+    </body>

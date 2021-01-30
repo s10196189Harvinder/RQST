@@ -154,7 +154,7 @@ namespace RQST.DAL
                     foreach (var item in currReq.Contents)
                     {
                         items itemF = itemListN.Find(x => x.ID == item.Key);
-                        items itemN = new items(itemF.Name, item.Value, itemF.Icon, itemF.stock, itemF.BgCol);
+                        items itemN = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, itemF.Category, item.Value, itemF.Requested, itemF.Limit);
                         itemN.ID = item.Key;
                         currReq.addItem(itemN);
                     }
@@ -187,14 +187,14 @@ namespace RQST.DAL
 
         public async Task<List<Categories>> getCat() //Gets all the categories
         {
-            var elderlies = await firebaseClient
+            var cats = await firebaseClient
                         .Child("categories")
                         .OnceAsync<Categories>();
             List<Categories> catlist = new List<Categories>();
-            foreach (var elderly in elderlies)
+            foreach (var cat in cats)
             {
-                elderly.Object.ID = elderly.Key;
-                catlist.Add(elderly.Object);
+                cat.Object.ID = cat.Key;
+                catlist.Add(cat.Object);
             }
             return catlist;
         }

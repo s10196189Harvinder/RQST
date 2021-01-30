@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RQST.Models
 {
@@ -10,26 +7,14 @@ namespace RQST.Models
     {
         public items() {}
 
-        public items(string bgCol, string icon, int limit, string name, int requested, int remaining)
-        {
-            Name = name;
-            Requested = requested;
-            Icon = icon;
-            Limit = limit;
-            stock = remaining;
-            BgCol = bgCol;
-        }
-        public items(string name, int requested, string icon, int remaining, string bgCol)
-        {
-            Name = name;
-            Requested = requested;
-            Icon = icon;
-            stock = remaining;
-            BgCol = bgCol;
-        }
-
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("name_zh")]
+        public string Name_CL { get; set; }
+
+        [JsonProperty("category")]
+        public string Category { get; set; }
 
         [JsonProperty("requested")]
         public int Requested { get; set; }
@@ -47,5 +32,17 @@ namespace RQST.Models
         public int Limit { get; set; }
 
         public string ID { get; set; }
+
+        public items(string bgCol, string icon, string name, string name_zh, string category, int remaining, int requested, int limit)
+        {
+            BgCol = bgCol;
+            Category = category;
+            Icon = icon;
+            Name = name;
+            Name_CL = name_zh;
+            Requested = requested;
+            Limit = limit;
+            stock = remaining;
+        }
     }
 }
