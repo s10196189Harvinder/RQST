@@ -4,6 +4,7 @@ using Firebase.Database.Query;
 using Firebase.Database.Streaming;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RQST.Hubs;
 using RQST.Models;
@@ -13,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace RQST.DAL
@@ -43,7 +45,8 @@ namespace RQST.DAL
                 {
                     if (d.EventType == Firebase.Database.Streaming.FirebaseEventType.InsertOrUpdate)
                     {
-                        _context.Clients.All.SendAsync("getData", toReq(d));
+                        ArraySegment<Byte> segment = toReqAsync(d);
+                        _context.Clients.All.SendAsync("getData", segment);
                     }
                     else
                     {
@@ -122,7 +125,7 @@ namespace RQST.DAL
             }
             return reqF;
         }
-        public Request_NEW toReq(FirebaseObject<IDictionary<string, object>> d)
+        public ArraySegment<byte> toReqAsync(FirebaseObject<IDictionary<string, object>> d)
         {
             //check if request in list
             Request_NEW req = new Request_NEW();
@@ -132,7 +135,20 @@ namespace RQST.DAL
             req.ItemList.Clear();
             foreach (var singularRequest in d.Object)
             {
-                var currReq = JsonConvert.DeserializeObject<Request>(singularRequest.Value.ToString());
+                Request currReq;
+                if (singularRequest.Value.ToString() == "System.Object")
+                {
+                    currReq = firebaseClient
+                        .Child("requests")
+                        .Child(req.ZoneID)
+                        .Child(singularRequest.Key)
+                        .OnceSingleAsync<Request>()
+                        .Result;
+                }
+                else
+                {
+                    currReq = JsonConvert.DeserializeObject<Request>(singularRequest.Value.ToString());
+                }
                 currReq.ID = singularRequest.Key;
                 foreach (var item in currReq.Contents)
                 {
@@ -141,14 +157,14 @@ namespace RQST.DAL
                     items itemR = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, itemF.Category, item.Value, itemF.Requested, itemF.Limit);
                     itemN.ID = item.Key;
                     itemR.ID = item.Key;
-                    currReq.addItem(itemN);
                     req.addItem(itemR);
                 }
                 req.ReqList.Add(currReq);
             }
             reqList.RemoveAll(x => x.ZoneID == req.ZoneID);
             reqList.Add(req);
-            return req;
+            ArraySegment<byte> bruh = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(req));
+            return bruh;
         }
     }
 }

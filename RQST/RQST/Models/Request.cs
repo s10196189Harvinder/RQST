@@ -23,6 +23,7 @@ namespace RQST.Models
 
         public long dateCreated { get; set; }
         public DateTime dateCreatedD { get; set; }
+        [JsonIgnore]
         public List<items> itemList { get; set; } = new List<items>();
         public void addItem(items item)
         {
