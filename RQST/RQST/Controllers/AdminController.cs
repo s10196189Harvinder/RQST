@@ -176,14 +176,24 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddItemAsync(items items)
+        public async Task<IActionResult> AddItemAsync(items items, string categoryID)
         {
             if (ModelState.IsValid)
             {
-                bool success = await DataDALContext.AddItem(items);
+                await DataDALContext.AddItem(items);
+                await DataDALContext.getaCat(categoryID);
+                await DataDALContext.AddItemtoCat(items.ID, categoryID);
                 TempData["GMessage"] = "Created successfully !";
             }
-            return RedirectToAction("Map");
+
+            return RedirectToAction("_ViewItemsCategory");
+        }
+
+        public async Task<IActionResult> _ViewItemsCategoryAsync()
+        {
+
+            List<items> itemlist = await DataDALContext.getItems();     //Gets authentication token (in JSON) and passes it to the DAL function getdata
+            return View(itemlist);
         }
 
         public IActionResult AddCat()
