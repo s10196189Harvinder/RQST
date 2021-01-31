@@ -176,13 +176,12 @@ namespace RQST.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddItemAsync(items items, string categoryID)
+        public async Task<IActionResult> AddItemAsync(items items, string Category)
         {
             if (ModelState.IsValid)
             {
-                await DataDALContext.AddItem(items);
-                await DataDALContext.getaCat(categoryID);
-                await DataDALContext.AddItemtoCat(items.ID, categoryID);
+                string itemID = await DataDALContext.AddItem(items);
+                await DataDALContext.AddItemtoCat(itemID, Category);
                 TempData["GMessage"] = "Created successfully !";
             }
 

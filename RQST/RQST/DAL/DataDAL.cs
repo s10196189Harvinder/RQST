@@ -53,20 +53,20 @@ namespace RQST.DAL
         }
         public async Task<bool> AddItemtoCat(string id, string categoryid)   //Adds items to categories in the DB
         {
-            var item = await firebaseClient     //POSTS to /categories/CATEGORYID/items/ITEMID/...
+            await firebaseClient     //POSTS to /categories/CATEGORYID/items/ITEMID/...
                 .Child("categories")
                 .Child(categoryid)
                 .Child("items")
-                .PostAsync(id);                 //POST to RANDOMID:ITEMID
+                .PatchAsync("{\""+id+"\":\""+id+"\"}");                //POST to RANDOMID:ITEMID
             return true;
         }
-        public async Task<bool> AddItem(items item)    //Adds item to DB
+        public async Task<string> AddItem(items item)    //Adds item to DB
         {
             var itemp = await firebaseClient
                 .Child("items")             //Posts to /items/RANDOMID/...
                 .PostAsync(item);
             await PostLog("Added Item");
-            return true;
+            return itemp.Key;
         }
         public async Task<bool> postVolunteer(string name, string email, string password, string contact, string postalcode, Subzone zone, string assignedzone)
         {
