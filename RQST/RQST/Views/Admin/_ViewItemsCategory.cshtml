@@ -10,36 +10,36 @@
         <table class="content-table">
             <thead>
                 <tr>
-                    <th>Background Color</th>
                     <th>Food Icon</th>
                     <th>Name</th>
                     <th>Total Stock</th>
                     <th>Total Requested</th>
+                    <th>Max Limit</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (items items in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => items.BgCol)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => items.Icon)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => items.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => items.stock)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => items.Requested)
-                        </td>
-                        @*<td style="font-weight: bold;">
-                                <a asp-controller="Admin" asp-action="_EditVolunteer" asp-route-id="@items.ID">Edit Volunteer Info</a>
-                            </td>*@
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => items.Icon)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => items.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => items.stock)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => items.Requested)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => items.Limit)
+                    </td>
+                    @*<td style="font-weight: bold;">
+            <a asp-controller="Admin" asp-action="_EditVolunteer" asp-route-id="@items.ID">Edit Volunteer Info</a>
+        </td>*@
+                </tr>
                 }
             </tbody>
         </table>

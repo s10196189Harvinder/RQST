@@ -13,9 +13,6 @@ namespace RQST.Models
         [JsonProperty("name_zh")]
         public string Name_CL { get; set; }
 
-        [JsonProperty("category")]
-        public string Category { get; set; }
-
         [JsonProperty("requested")]
         public int Requested { get; set; }
 
@@ -33,10 +30,9 @@ namespace RQST.Models
 
         public string ID { get; set; }
 
-        public items(string bgCol, string icon, string name, string name_zh, string category, int remaining, int requested, int limit)
+        public items(string bgCol, string icon, string name, string name_zh, int remaining, int requested, int limit)
         {
             BgCol = bgCol;
-            Category = category;
             Icon = icon;
             Name = name;
             Name_CL = name_zh;

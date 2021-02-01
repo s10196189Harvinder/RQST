@@ -183,9 +183,13 @@ namespace RQST.Controllers
                 string itemID = await DataDALContext.AddItem(items);
                 await DataDALContext.AddItemtoCat(itemID, Category);
                 TempData["GMessage"] = "Created successfully !";
+                return RedirectToAction("_ViewItemsCategory");
             }
 
-            return RedirectToAction("_ViewItemsCategory");
+            else
+            {
+                return View();
+            }
         }
 
         public async Task<IActionResult> _ViewItemsCategoryAsync()
@@ -202,10 +206,17 @@ namespace RQST.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCatAsync(string name, string namezh, string icon)
         {
-            
-            await DataDALContext.AddCat(name, namezh, icon);
-            TempData["GMessage"] = "Created successfully !";
-            return View();
+            if (ModelState.IsValid)
+            {
+                await DataDALContext.AddCat(name, namezh, icon);
+                TempData["GMessage"] = "Created successfully !";
+                return RedirectToAction("Map");
+            }
+
+            else
+            {
+                return View();
+            }
         }
 
         public async Task<IActionResult> CatViewAsync(string category, string icon)

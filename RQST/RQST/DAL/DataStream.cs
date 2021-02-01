@@ -81,8 +81,8 @@ namespace RQST.DAL
                     foreach (var item in currReq.Contents)
                     {
                         items itemF = itemListN.Find(x => x.ID == item.Key);
-                        items itemN = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, itemF.Category, item.Value, itemF.Requested, itemF.Limit);
-                        items itemR = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, itemF.Category, item.Value, itemF.Requested, itemF.Limit);
+                        items itemN = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, item.Value, itemF.Requested, itemF.Limit);
+                        items itemR = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, item.Value, itemF.Requested, itemF.Limit);
                         itemN.ID = item.Key;
                         itemR.ID = item.Key;
                         currReq.addItem(itemN);
@@ -153,8 +153,8 @@ namespace RQST.DAL
                 foreach (var item in currReq.Contents)
                 {
                     items itemF = itemList.Find(x => x.ID == item.Key);
-                    items itemN = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, itemF.Category, item.Value, itemF.Requested, itemF.Limit);
-                    items itemR = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, itemF.Category, item.Value, itemF.Requested, itemF.Limit);
+                    items itemN = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, item.Value, itemF.Requested, itemF.Limit);
+                    items itemR = new items(itemF.BgCol, itemF.Icon, itemF.Name, itemF.Name_CL, item.Value, itemF.Requested, itemF.Limit);
                     itemN.ID = item.Key;
                     itemR.ID = item.Key;
                     req.addItem(itemR);
