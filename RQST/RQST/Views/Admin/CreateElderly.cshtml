@@ -4,6 +4,23 @@
     ViewData["Title"] = "CreateElderly";
     Layout = "AdminMenu";
 }
+
+@{
+    List<SelectListItem> genderList = new List<SelectListItem>();
+
+    genderList.Add(new SelectListItem
+    {
+        Value = "M",
+        Text = "M"
+    });
+
+    genderList.Add(new SelectListItem
+    {
+        Value = "F",
+        Text = "F"
+    });
+ }
+
 <link href="~/css/elderlystyle2.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -26,8 +43,11 @@
 
             <div class="form-group" style="margin-bottom:0 !important">
                 <p>Gender <span>*</span></p>
-                <span class="material-icons" id="icon-case">wc</span>
-                <input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required data-msg="Check your input on the fields: The 'Gender' field must be completed." />
+                @*<span class="material-icons" id="icon-case">wc</span>*@
+                @*<input type="text" asp-for="Gender" class="inputbox" placeholder="Gender" required data-msg="Check your input on the fields: The 'Gender' field must be completed." />*@
+                <select name="Gender" class="form-control" asp-items="genderList" required data-msg="Check your input on the fields: The 'Gender' field must be completed.">
+                    <option disabled selected hidden>Select Your Gender</option>
+                </select>
             </div>
             <span asp-validation-for="Gender" class="text-danger"></span>
 
