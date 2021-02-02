@@ -12,12 +12,14 @@
     font-size: 15px;
     margin-top: 2px
 }
+
+.info i {
+    color: #F6AA93;
+}
+
 .form-control {
     height: calc(1.5em + .75rem + 4px) !important;
     width: 87% !important;
-}
-.info i {
-    color: #F6AA93;
 }
 
 form h2 {
@@ -108,7 +110,6 @@ i {
 }
 
 .createBtn {
-    background-color: #FFFFFF;
     color: #353535;
     text-align: center;
     width: 100%;
@@ -124,9 +125,7 @@ i {
     opacity: 0.8;
 }
 
-.top-form{
-
-    
+.top-form {
 }
 
 .leftcontact {
@@ -170,29 +169,3 @@ i {
 #sendmessage.show, .show {
     display: block;
 }
-/*
-.createBtn {
-    cursor: pointer;
-    border-radius: 5em;
-    color: #fff;
-    background: linear-gradient(to right, #000000, #333232);
-    border: 0;
-    padding-left: 40px;
-    padding-right: 40px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    font-family: 'Roboto Mono', monospace;
-    margin-left: 40%;
-    font-size: 13px;
-    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.04);
-}
-
-.createBtn:hover {
-    opacity: 0.8;
-}
-
-.createBtnpos {
-    padding-left: 345px;
-    padding-top: 35px;
-}
-*/
