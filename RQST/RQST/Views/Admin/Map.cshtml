@@ -35,6 +35,10 @@
                 zoom: 11,
             })
             map.data.addGeoJson(json);
+            map.setOptions({
+                disableDefaultUI: true,
+                zoomControl: true
+            });
             map.data.setStyle(function (feature) {
                 var requests = feature.getProperty('requests');
                 color = 'grey';
