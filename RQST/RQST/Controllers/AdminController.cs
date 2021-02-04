@@ -95,7 +95,7 @@ namespace RQST.Controllers
             {
                 
                 SubzoneRoot zone = await getZoneAsync(PostalCode);
-                if (zone != null)
+                if (zone == null)
                 {
                     TempData["Message"] = "Geocoding failed - check for valid postal code";     //If geocoding fails (no identified subzone), probably because of bad postal code. Sends error.
                     return View();
